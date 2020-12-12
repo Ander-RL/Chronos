@@ -1,9 +1,13 @@
-package arl.chronos;
+package arl.chronos.adapters;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+
+import arl.chronos.fragments.TabFragmentAlarmas;
+import arl.chronos.fragments.TabFragmentCalendario;
+import arl.chronos.fragments.TabFragmentTareas;
 
 /**
  * La clase PagerAdapter, extiende de FragmentPagerAdapter.

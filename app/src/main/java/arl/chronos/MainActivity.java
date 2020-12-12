@@ -4,12 +4,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
-import android.graphics.Typeface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.Button;
 
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.tabs.TabLayout;
+
+import arl.chronos.adapters.PagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -60,6 +64,5 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
     }
 }

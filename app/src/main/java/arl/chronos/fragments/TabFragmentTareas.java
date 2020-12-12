@@ -1,4 +1,4 @@
-package arl.chronos;
+package arl.chronos.fragments;
 
 import android.os.Bundle;
 
@@ -8,9 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class TabFragmentAlarmas extends Fragment {
+import arl.chronos.R;
 
-    public TabFragmentAlarmas() {
+public class TabFragmentTareas extends Fragment {
+
+    public TabFragmentTareas() {
         // Constructor por defecto
     }
 
@@ -18,6 +20,6 @@ public class TabFragmentAlarmas extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tab_alarmas, container, false);
+        return inflater.inflate(R.layout.fragment_tab_tareas, container, false);
     }
 }
