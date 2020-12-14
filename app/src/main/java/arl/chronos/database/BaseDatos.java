@@ -9,13 +9,14 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {Alarma.class}, version = 1) // @Database(entities = {Alarma.class, Nota.class}. version = 1)
+// @Database(entities = {Alarma.class, Nota.class}. version = 1) ExportSchema sirve para exportar la BBDD a un fichero para hacer version control.
+@Database(entities = {Alarma.class}, version = 1, exportSchema = false)
 public abstract class BaseDatos extends RoomDatabase{
 
     // Singleton. Solo se puede instanciar una vez.
     private static BaseDatos instance;
-
-    public abstract AlarmaDAO alarmaDAO();
+    // Metodo abstracto;
+    public abstract AlarmaDAO alarmaDAO(); // El codigo de este metodo es autogenerado por Room en el metodo que construye el singleton de la base de datos (getInstance).
 
     // Solo un hilo por vez puede acceder a este metodo.
     public static synchronized BaseDatos getInstance(Context context){
@@ -23,7 +24,7 @@ public abstract class BaseDatos extends RoomDatabase{
             instance = Room.databaseBuilder(context.getApplicationContext(),
                     BaseDatos.class, "base_datos")
                     .fallbackToDestructiveMigration()
-                    .addCallback(roomCallBack) // Para poblar la BBDD en un principio.
+                    .addCallback(roomCallBack) // Para poblar la BBDD en un principio (para testear la app).
                     .build();
         }
         return instance;

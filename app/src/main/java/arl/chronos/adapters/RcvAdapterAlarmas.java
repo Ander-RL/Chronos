@@ -15,23 +15,29 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import arl.chronos.R;
 import arl.chronos.classes.Alarmas;
+import arl.chronos.database.Alarma;
 
 public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.MyViewHolder> {
 
-    private ArrayList<Alarmas> listAlarmas;
+    private List<Alarma> alarmas = new ArrayList<>();
     Context context;
 
-    public RcvAdapterAlarmas(ArrayList<Alarmas> listAlarmas, Context context) {
-        this.listAlarmas = listAlarmas;
+    public RcvAdapterAlarmas(Context context){
         this.context = context;
+    }
+
+    public void setAlarmas(List<Alarma> alarmas){
+        this.alarmas = alarmas;
+        notifyDataSetChanged();
     }
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) { // Parent es RecyclerView. Context es Fragment.
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rcv_alarmas_layout, parent, false);
         MyViewHolder holder = new MyViewHolder(view);
 
@@ -40,30 +46,31 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.hora.setText(listAlarmas.get(position).getHora());
 
-        if (listAlarmas.get(position).getLunes() == true) {
+        Alarma currentAlarma = alarmas.get(position);
+
+        if (currentAlarma.getLunes() == true) {
             holder.lunes.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
         }
-        if (listAlarmas.get(position).getMartes() == true) {
+        if (currentAlarma.getMartes() == true) {
             holder.martes.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
         }
-        if (listAlarmas.get(position).getMiercoles() == true) {
+        if (currentAlarma.getMiercoles() == true) {
             holder.miercoles.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
         }
-        if (listAlarmas.get(position).getJueves() == true) {
+        if (currentAlarma.getJueves() == true) {
             holder.jueves.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
         }
-        if (listAlarmas.get(position).getViernes() == true) {
+        if (currentAlarma.getViernes() == true) {
             holder.viernes.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
         }
-        if (listAlarmas.get(position).getSabado() == true) {
+        if (currentAlarma.getSabado() == true) {
             holder.sabado.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
         }
-        if (listAlarmas.get(position).getDomingo() == true) {
+        if (currentAlarma.getDomingo() == true) {
             holder.domingo.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
         }
-        if (listAlarmas.get(position).getActivated() == true) {
+        if (currentAlarma.getActivated() == true) {
             holder.activated.setChecked(true);
         }
 
@@ -71,7 +78,7 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
 
     @Override
     public int getItemCount() {
-        return listAlarmas.size();
+        return alarmas.size();
     }
 
     // CLASE INTERNA
