@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/btn_cancelar_alarma"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="205dp"
+        android:layout_height="wrap_content"
+        android:text="Cancelar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_guardar_alarma"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="205dp"
+        android:layout_height="wrap_content"
+        android:text="Guardar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guideline_horizontal"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="205dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="48dp" />
+
+    <ImageButton
+        android:id="@+id/btn_reloj"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginTop="68dp"
+        android:adjustViewBounds="true"
+        android:backgroundTint="#00FFFFFF"
+        android:hapticFeedbackEnabled="true"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/edit_hhmm"
+        app:layout_constraintTop_toTopOf="@+id/guideline_vertical"
+        app:srcCompat="@drawable/ic_alarma" />
+
+    <EditText
+        android:id="@+id/edit_hhmm"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="72dp"
+        android:hint="hh:mm"
+        android:textAlignment="center"
+        android:inputType="datetime"
+        android:enabled="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline_vertical" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/swt_lunes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="56dp"
+        android:checked="false"
+        android:text="Lunes"
+        android:textSize="15sp"
+        android:theme="@style/SwitchButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline_vertical"
+        app:layout_constraintVertical_bias="0.406" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/swt_martes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:checked="false"
+        android:text="Martes"
+        android:textSize="15sp"
+        android:theme="@style/SwitchButton"
+        app:layout_constraintBaseline_toBaselineOf="@+id/swt_lunes"
+        app:layout_constraintStart_toEndOf="@+id/swt_lunes" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/swt_sabado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="36dp"
+        android:checked="false"
+        android:text="Sabado"
+        android:textSize="15sp"
+        android:theme="@style/SwitchButton"
+        app:layout_constraintBaseline_toBaselineOf="@+id/swt_viernes"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/swt_domingo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="36dp"
+        android:layout_marginBottom="236dp"
+        android:checked="false"
+        android:text="Domingo"
+        android:textSize="15sp"
+        android:theme="@style/SwitchButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/swt_sabado"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/swt_miercoles"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="36dp"
+        android:checked="false"
+        android:text="Miercoles"
+        android:textSize="15sp"
+        android:theme="@style/SwitchButton"
+        app:layout_constraintBaseline_toBaselineOf="@+id/swt_martes"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/swt_viernes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:checked="false"
+        android:text="Viernes"
+        android:textSize="15sp"
+        android:theme="@style/SwitchButton"
+        app:layout_constraintBaseline_toBaselineOf="@+id/swt_jueves"
+        app:layout_constraintStart_toEndOf="@+id/swt_jueves" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/swt_jueves"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginBottom="284dp"
+        android:checked="false"
+        android:text="Jueves"
+        android:textSize="15sp"
+        android:theme="@style/SwitchButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -42,4 +42,9 @@
 
     <style name="Theme.Chronos.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/blue_500</item>
+        <item name="colorControlNormal">@color/blue_900</item>
+    </style>
+
 </resources>
