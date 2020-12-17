@@ -43,8 +43,19 @@
     <style name="Theme.Chronos.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorAccent">@color/blue_500</item>
+        <!-- Color Principal -->
+        <item name="colorAccent">@color/black</item>
+        <!-- Colorea guines bajos e icono teclado -->
         <item name="colorControlNormal">@color/blue_900</item>
+        <!-- Colorea la aguja selectora -->
+        <item name="colorControlActivated">@color/blue_500</item>
+        <!-- Colorea los numeros -->
+        <!--<item name="android:colorForeground">@color/blue_900</item>-->
+    </style>
+
+    <style name="RadioButtonTheme" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="colorAccent">@color/gray</item>
+        <item name="buttonTint">@drawable/selector_radiobutton</item>
     </style>
 
 </resources>

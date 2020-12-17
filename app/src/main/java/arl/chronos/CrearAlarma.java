@@ -2,15 +2,21 @@ package arl.chronos;
 
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.widget.TextViewCompat;
 
 import java.util.Calendar;
 
@@ -24,8 +30,7 @@ public class CrearAlarma extends AppCompatActivity {
     private final String LUN = "L";          private final String MAR = "M";        private final String MIE = "X";   private final String JUE = "J";
     private final String VIE = "V";          private final String SAB = "S";        private final String DOM = "D";
     private TimePickerDialog timePicker;     private Calendar calendar;             private EditText hhmm;
-    private final String CERO = "0";         private final String DOS_PUNTOS = ":";
-
+    private final String CERO = "0";         private final String DOS_PUNTOS = ":"; boolean wasChecked;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,6 +58,7 @@ public class CrearAlarma extends AppCompatActivity {
                 intent.putExtra(HORA, hora); intent.putExtra(MIN, min);   intent.putExtra(LUN, l);
                 intent.putExtra(MAR, m);     intent.putExtra(MIE, x);     intent.putExtra(JUE, j);
                 intent.putExtra(VIE, v);     intent.putExtra(SAB, s);     intent.putExtra(DOM, d);
+                startActivity(intent);
             }
         });
 
@@ -63,15 +69,14 @@ public class CrearAlarma extends AppCompatActivity {
                 calendar = Calendar.getInstance();
                 hora = calendar.get(Calendar.HOUR_OF_DAY);
                 min = calendar.get(Calendar.MINUTE);
-                Toast.makeText(view.getContext(), "ON CLICK", Toast.LENGTH_LONG).show();
 
                 timePicker = new TimePickerDialog(CrearAlarma.this, R.style.DialogTheme,new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hh, int mm) {
                         //Formateo el hora obtenido: antepone el 0 si son menores de 10
-                        String horaFormateada =  (hh < 10)? String.valueOf(CERO + hh) : String.valueOf(hh);
+                        String horaFormateada =  (hh < 10)? (CERO + hh) : String.valueOf(hh);
                         //Formateo el minuto obtenido: antepone el 0 si son menores de 10
-                        String minutoFormateado = (mm < 10)? String.valueOf(CERO + mm):String.valueOf(mm);
+                        String minutoFormateado = (mm < 10)? (CERO + mm):String.valueOf(mm);
 
                         hhmm.setText(horaFormateada + DOS_PUNTOS + minutoFormateado);
                     }
@@ -79,7 +84,35 @@ public class CrearAlarma extends AppCompatActivity {
                 timePicker.show();
             }
         });
-
-
     }
+
+    public void onRadioButtonClick(View view) {
+
+            boolean checked = ((RadioButton) view).isChecked();
+            int id = view.getId();
+
+            if(wasChecked && checked){
+                ((RadioButton) view).setChecked(false);
+                wasChecked = false;
+
+                if(id == R.id.radio_l){l = false;}
+                if(id == R.id.radio_m){m = false;}
+                if(id == R.id.radio_x){x = false;}
+                if(id == R.id.radio_j){j = false;}
+                if(id == R.id.radio_v){v = false;}
+                if(id == R.id.radio_s){s = false;}
+                if(id == R.id.radio_d){d = false;}
+
+            }else if(checked){
+                wasChecked = true;
+
+                if(id == R.id.radio_l){l = true;}
+                if(id == R.id.radio_m){m = true;}
+                if(id == R.id.radio_x){x = true;}
+                if(id == R.id.radio_j){j = true;}
+                if(id == R.id.radio_v){v = true;}
+                if(id == R.id.radio_s){s = true;}
+                if(id == R.id.radio_d){d = true;}
+            }
+        }
 }
