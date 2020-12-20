@@ -142,7 +142,6 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
 
     public interface OnItemClickListener {
         void onItemClick(Alarma alarma);
-        //void onItemClick(SwitchMaterial mySwitch, Alarma alarma);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {

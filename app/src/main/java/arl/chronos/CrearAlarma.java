@@ -18,12 +18,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.TextViewCompat;
 
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.switchmaterial.SwitchMaterial;
+
 import java.util.Calendar;
 
 public class CrearAlarma extends AppCompatActivity {
 
-    private Button cancelar;                 private Button guardar;                 private ImageButton reloj;
-    private String hora;                     private String min;
+    private Button cancelar;                 private Button guardar;                 private ImageButton reloj;        private boolean activar;
+    private String hora = "00";              private String min = "00";
     private Boolean l;                       private Boolean m;                      private Boolean x;                private Boolean j;
     private Boolean v;                       private Boolean s;                      private Boolean d;
     private TimePickerDialog timePicker;     private Calendar calendar;              private EditText hhmm;
@@ -33,7 +36,7 @@ public class CrearAlarma extends AppCompatActivity {
     public static final String EXTRA_LUN  = "arl.chronos.EXTRA_LUN";                      public static final String EXTRA_MAR  = "arl.chronos.EXTRA_MAR";
     public static final String EXTRA_MIE  = "arl.chronos.EXTRA_MIE";                      public static final String EXTRA_JUE  = "arl.chronos.EXTRA_JUE";
     public static final String EXTRA_VIE  = "arl.chronos.EXTRA_VIE";                      public static final String EXTRA_SAB  = "arl.chronos.EXTRA_SAB";
-    public static final String EXTRA_DOM  = "arl.chronos.EXTRA_DOM";
+    public static final String EXTRA_DOM  = "arl.chronos.EXTRA_DOM";                      public static final String EXTRA_ACT  = "arl.chronos.EXTRA_ACT";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,6 +64,7 @@ public class CrearAlarma extends AppCompatActivity {
                 intent.putExtra(EXTRA_HORA, hora);  intent.putExtra(EXTRA_MIN, min);   intent.putExtra(EXTRA_LUN, l);
                 intent.putExtra(EXTRA_MAR,  m);     intent.putExtra(EXTRA_MIE, x);     intent.putExtra(EXTRA_JUE, j);
                 intent.putExtra(EXTRA_VIE,  v);     intent.putExtra(EXTRA_SAB, s);     intent.putExtra(EXTRA_DOM, d);
+                intent.putExtra(EXTRA_ACT, activar);
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -121,5 +125,14 @@ public class CrearAlarma extends AppCompatActivity {
                 if(id == R.id.radio_s){s = true;}
                 if(id == R.id.radio_d){d = true;}
             }
+        }
+
+        public void onActivarClick(View view){
+
+            boolean checked = ((SwitchMaterial) view).isActivated();
+
+            if(checked){ activar = false; }
+            if(!checked) { activar = true; }
+
         }
 }

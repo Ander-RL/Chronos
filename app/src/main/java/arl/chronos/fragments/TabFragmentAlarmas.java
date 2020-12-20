@@ -42,7 +42,7 @@ public class TabFragmentAlarmas extends Fragment {
     private ArrayList<Alarma> listAlarmas;
     private MyViewModel myViewModel;
     private View view;
-    private String hora;                     private String min;
+    private String hora;                     private String min;                     private Boolean activar;
     private Boolean l;                       private Boolean m;                      private Boolean x;                private Boolean j;
     private Boolean v;                       private Boolean s;                      private Boolean d;
 
@@ -89,7 +89,7 @@ public class TabFragmentAlarmas extends Fragment {
         });
 
         // Para poder hacer swipe a la lista de alarmas. Primer valor = 0 para que no haya Drag and Drop. Segundo valor
-        // direccion de los swips.
+        // direccion de los swipes.
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
@@ -135,8 +135,9 @@ public class TabFragmentAlarmas extends Fragment {
             v = data.getBooleanExtra(CrearAlarma.EXTRA_VIE,  false);
             s = data.getBooleanExtra(CrearAlarma.EXTRA_SAB,  false);
             d = data.getBooleanExtra(CrearAlarma.EXTRA_DOM,  false);
+            activar = data.getBooleanExtra(CrearAlarma.EXTRA_ACT,true);
 
-            Alarma alarma = new Alarma(hora, min, l, m, x, j, v, s, d, true);
+            Alarma alarma = new Alarma(hora, min, l, m, x, j, v, s, d, activar);
             myViewModel.insert(alarma);
 
             Snackbar.make(view, "Alarma creada", Snackbar.LENGTH_LONG).show();
