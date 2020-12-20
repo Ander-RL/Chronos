@@ -7,6 +7,6 @@
     android:background="@android:color/white"
     app:layout_scrollFlags="scroll|enterAlways"
     app:popupTheme="@style/AppTheme.ToolbarFront"
-    app:theme="@style/AppTheme.ToolbarFront"
+    app:theme="@style/Theme.Chronos"
     app:titleTextColor="@color/black" />
     <!--app:title="@string/app_name"-->

@@ -8,6 +8,8 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import arl.chronos.classes.Alarma;
+
 public class MyViewModel extends AndroidViewModel {
 
     private Repositorio repositorio;

@@ -1,21 +1,31 @@
 package arl.chronos;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.tabs.TabLayout;
 
 import arl.chronos.adapters.PagerAdapter;
+import arl.chronos.database.MyViewModel;
+import arl.chronos.fragments.TabFragmentAlarmas;
 
 public class MainActivity extends AppCompatActivity {
+
+    private MyViewModel myViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         // Se usa PagerAdapter para gestionar las diferentes paginas/fragmentos
-        ViewPager  viewPager = findViewById(R.id.viewpager);
+        ViewPager viewPager = findViewById(R.id.viewpager);
         PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         // Alojamos los tabfragments en el layout que nos permite movernos de izq a derecha
         viewPager.setAdapter(pagerAdapter); // El adaptador gestionara el cambio de un tab a otro
@@ -64,5 +74,27 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        myViewModel = new ViewModelProvider(this).get(MyViewModel.class);
+    }
+
+    // Gestionamos el menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.borrar_todas_alarmas_menu:
+                myViewModel.deleteAll();
+                Snackbar.make(getWindow().getDecorView().getRootView(), "Eliminadas todas las alarmas", Snackbar.LENGTH_LONG).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

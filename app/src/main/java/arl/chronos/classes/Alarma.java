@@ -1,4 +1,4 @@
-package arl.chronos.database;
+package arl.chronos.classes;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -76,6 +76,8 @@ public class Alarma {
     public Boolean getDomingo() {
         return domingo;
     }
+
+    public void setActivated(Boolean activated) {this.activated = activated;}
 
     public Boolean getActivated() {
         return activated;

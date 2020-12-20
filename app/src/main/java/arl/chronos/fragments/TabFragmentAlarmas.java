@@ -3,11 +3,12 @@ package arl.chronos.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,17 +19,18 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import arl.chronos.CrearAlarma;
-import arl.chronos.MainActivity;
 import arl.chronos.R;
 import arl.chronos.adapters.RcvAdapterAlarmas;
-import arl.chronos.classes.Alarmas;
-import arl.chronos.database.Alarma;
+import arl.chronos.classes.Alarma;
 import arl.chronos.database.MyViewModel;
+
+import static android.app.Activity.RESULT_OK;
 
 public class TabFragmentAlarmas extends Fragment {
 
@@ -37,8 +39,15 @@ public class TabFragmentAlarmas extends Fragment {
     private RecyclerView recyclerView;
     private RcvAdapterAlarmas rcvAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<Alarmas> listAlarmas;
+    private ArrayList<Alarma> listAlarmas;
     private MyViewModel myViewModel;
+    private View view;
+    private String hora;                     private String min;
+    private Boolean l;                       private Boolean m;                      private Boolean x;                private Boolean j;
+    private Boolean v;                       private Boolean s;                      private Boolean d;
+
+    public static final int ADD_ALARMAS_REQUEST = 1;
+    public static final int EDIT_ALARMAS_REQUEST = 2;
 
     public TabFragmentAlarmas() {
         // Constructor por defecto
@@ -48,16 +57,14 @@ public class TabFragmentAlarmas extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_tab_alarmas, container, false);
+        view = inflater.inflate(R.layout.fragment_tab_alarmas, container, false);
 
         fab = view.findViewById(R.id.fab_alarmas);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                //        .setAction("Action", null).show();
                 Intent intent = new Intent(view.getContext(), CrearAlarma.class);
-                startActivity(intent);
+                startActivityForResult(intent, ADD_ALARMAS_REQUEST);
             }
         });
 
@@ -81,6 +88,64 @@ public class TabFragmentAlarmas extends Fragment {
             }
         });
 
+        // Para poder hacer swipe a la lista de alarmas. Primer valor = 0 para que no haya Drag and Drop. Segundo valor
+        // direccion de los swips.
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                myViewModel.delete(rcvAdapter.getAlarmaAt(viewHolder.getAdapterPosition()));
+                Snackbar.make(view, "Alarma borrada", Snackbar.LENGTH_LONG).show();
+            }
+        }).attachToRecyclerView(recyclerView);
+
+        // Edita la alarma seleccionada
+        rcvAdapter.setOnItemClickListener(new RcvAdapterAlarmas.OnItemClickListener() {
+            @Override
+            public void onItemClick(Alarma alarma) { // TODO FUNCIONA SI TOCAS SOBRE EL SWITCH, SE GUARDA EL ESTADO DE ESA ALARMA
+                if(alarma.getActivated()){
+                    //Toast.makeText(getContext(), "Switch on", Toast.LENGTH_SHORT).show();
+                    alarma.setActivated(false);
+                } else {
+                    //Toast.makeText(getContext(), "Switch off", Toast.LENGTH_SHORT).show();
+                    alarma.setActivated(true);
+                }
+                myViewModel.update(alarma);
+            }
+        });
+
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == ADD_ALARMAS_REQUEST && resultCode == RESULT_OK){
+            hora = data.getStringExtra(CrearAlarma.EXTRA_HORA);
+            min = data.getStringExtra(CrearAlarma.EXTRA_MIN);
+            l = data.getBooleanExtra(CrearAlarma.EXTRA_LUN,  false);
+            m = data.getBooleanExtra(CrearAlarma.EXTRA_MAR,  false);
+            x = data.getBooleanExtra(CrearAlarma.EXTRA_MIE,  false);
+            j = data.getBooleanExtra(CrearAlarma.EXTRA_JUE,  false);
+            v = data.getBooleanExtra(CrearAlarma.EXTRA_VIE,  false);
+            s = data.getBooleanExtra(CrearAlarma.EXTRA_SAB,  false);
+            d = data.getBooleanExtra(CrearAlarma.EXTRA_DOM,  false);
+
+            Alarma alarma = new Alarma(hora, min, l, m, x, j, v, s, d, true);
+            myViewModel.insert(alarma);
+
+            Snackbar.make(view, "Alarma creada", Snackbar.LENGTH_LONG).show();
+        } else {
+            Snackbar.make(view, "Alarma no creada", Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    public MyViewModel getMyViewModel() {
+        return myViewModel;
     }
 }

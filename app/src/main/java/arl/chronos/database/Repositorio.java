@@ -7,6 +7,8 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import arl.chronos.classes.Alarma;
+
 // Gestiona la recogida y envio de los datos entre la BBDD y la Interfaz de Usuario (UI). La Activity accede al ViewModel y este ultimo al repositorio.
 public class Repositorio {
 

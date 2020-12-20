@@ -9,6 +9,7 @@
 
     <!--//////////////// Titulos /////////////////////-->
     <string name="repetir_alarma">Repetir:</string>
+    <string name="activar_alarma">Activar:</string>
 
     <!--//////////////// EditText /////////////////////-->
     <string name="description_boton_reloj">Boton reloj</string>
