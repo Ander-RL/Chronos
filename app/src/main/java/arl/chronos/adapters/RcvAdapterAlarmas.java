@@ -67,7 +67,7 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
 
         holder.hora.setText(currentAlarma.getHora() + ":" + currentAlarma.getMinuto());
         ho = currentAlarma.getHora();
-        mi = currentAlarma.getHora();
+        mi = currentAlarma.getMinuto();
 
         if (currentAlarma.getLunes() == true) {
             holder.lunes.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
