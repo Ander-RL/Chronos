@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,9 +43,11 @@ public class TabFragmentAlarmas extends Fragment {
     private ArrayList<Alarma> listAlarmas;
     private MyViewModel myViewModel;
     private View view;
-    private String hora;                     private String min;                     private Boolean activar;
+    private int hora;                        private int min;                        private Boolean activar;
     private Boolean l;                       private Boolean m;                      private Boolean x;                private Boolean j;
     private Boolean v;                       private Boolean s;                      private Boolean d;
+    private final String CERO = "0";         private final String DOS_PUNTOS = ":";
+    private String horaFormateada = "";      private String minutoFormateado = "";
 
     public static final int ADD_ALARMAS_REQUEST = 1;
     public static final int EDIT_ALARMAS_REQUEST = 2;
@@ -126,8 +129,8 @@ public class TabFragmentAlarmas extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == ADD_ALARMAS_REQUEST && resultCode == RESULT_OK){
-            hora = data.getStringExtra(CrearAlarma.EXTRA_HORA);
-            min = data.getStringExtra(CrearAlarma.EXTRA_MIN);
+            hora = data.getIntExtra(CrearAlarma.EXTRA_HORA, 0);
+            min = data.getIntExtra(CrearAlarma.EXTRA_MIN, 0);
             l = data.getBooleanExtra(CrearAlarma.EXTRA_LUN,  false);
             m = data.getBooleanExtra(CrearAlarma.EXTRA_MAR,  false);
             x = data.getBooleanExtra(CrearAlarma.EXTRA_MIE,  false);
@@ -137,7 +140,16 @@ public class TabFragmentAlarmas extends Fragment {
             d = data.getBooleanExtra(CrearAlarma.EXTRA_DOM,  false);
             activar = data.getBooleanExtra(CrearAlarma.EXTRA_ACT,true);
 
-            Alarma alarma = new Alarma(hora, min, l, m, x, j, v, s, d, activar);
+            Log.d("//////////RECIBIR//////", hora + ":" + min);
+
+            //Formateo el hora obtenido: antepone el 0 si son menores de 10
+            String horaFormateada =  (hora < 10)? (CERO + hora) : String.valueOf(hora);
+            //Formateo el minuto obtenido: antepone el 0 si son menores de 10
+            String minutoFormateado = (min < 10)? (CERO + min):String.valueOf(min);
+
+            Log.d("//////////RECIBIR//////", horaFormateada + ":" + minutoFormateado);
+
+            Alarma alarma = new Alarma(horaFormateada, minutoFormateado, l, m, x, j, v, s, d, activar);
             myViewModel.insert(alarma);
 
             Snackbar.make(view, "Alarma creada", Snackbar.LENGTH_LONG).show();

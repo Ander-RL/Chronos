@@ -1,6 +1,9 @@
 package arl.chronos.adapters;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +19,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import arl.chronos.R;
 import arl.chronos.classes.Alarma;
+import arl.chronos.classes.AlertReceiver;
 import arl.chronos.database.MyViewModel;
 import arl.chronos.fragments.TabFragmentAlarmas;
 
@@ -28,6 +33,9 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
     private List<Alarma> alarmas = new ArrayList<>();
     private OnItemClickListener listener;
     Context context;
+    private String ho;                       private String mi;
+    private Boolean l;                       private Boolean m;                      private Boolean x;                private Boolean j;
+    private Boolean v;                       private Boolean s;                      private Boolean d;
 
     public RcvAdapterAlarmas(Context context) {
         this.context = context;
@@ -58,30 +66,48 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
         Alarma currentAlarma = alarmas.get(position);
 
         holder.hora.setText(currentAlarma.getHora() + ":" + currentAlarma.getMinuto());
+        ho = currentAlarma.getHora();
+        mi = currentAlarma.getHora();
 
         if (currentAlarma.getLunes() == true) {
             holder.lunes.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
+            l = true;
         }
         if (currentAlarma.getMartes() == true) {
             holder.martes.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
+            m = true;
         }
         if (currentAlarma.getMiercoles() == true) {
             holder.miercoles.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
+            x = true;
         }
         if (currentAlarma.getJueves() == true) {
             holder.jueves.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
+            j = true;
         }
         if (currentAlarma.getViernes() == true) {
             holder.viernes.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
+            v = true;
         }
         if (currentAlarma.getSabado() == true) {
             holder.sabado.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
+            s = true;
         }
         if (currentAlarma.getDomingo() == true) {
             holder.domingo.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
+            d = true;
         }
         if (currentAlarma.getActivated() == true) {
             holder.activated.setChecked(true);
+            //startAlarma(fechaAlarma(Integer.parseInt(ho), Integer.parseInt(mi), l, m, x, j, v, s, d)); // TODO ARREGLAR
+            if(!ho.isEmpty() && !mi.isEmpty()){
+                startAlarma(fechaAlarma(Integer.parseInt(ho), Integer.parseInt(mi)));
+                Toast.makeText(context, Integer.parseInt(ho)+":"+Integer.parseInt(mi), Toast.LENGTH_LONG).show();
+            }
+        } else {
+            holder.activated.setChecked(false);
+            //cancelAlarma();
+            cancelAlarma();
         }
 
     }
@@ -116,7 +142,7 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
             domingo = itemView.findViewById(R.id.tv_domingo);
             activated = itemView.findViewById(R.id.activated);
 
-            /*itemView.setOnClickListener(new View.OnClickListener() { // TODO FUNCIONA SI TOCAS SOBRE LA ALARMA
+            /*itemView.setOnClickListener(new View.OnClickListener() { // FUNCIONA SI TOCAS SOBRE LA ALARMA
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();
@@ -127,7 +153,7 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
                 }
             });*/
 
-            activated.setOnClickListener(new View.OnClickListener() {// TODO FUNCIONA SI TOCAS SOBRE EL SWITCH
+            activated.setOnClickListener(new View.OnClickListener() {// FUNCIONA SI TOCAS SOBRE EL SWITCH
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();
@@ -148,4 +174,45 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
         this.listener = listener;
     }
 
+    /*private Calendar fechaAlarma(int hora, int min, Boolean l, Boolean m, Boolean x, Boolean j, Boolean v, Boolean s, Boolean d){
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, hora);
+        c.set(Calendar.MINUTE, min);
+        c.set(Calendar.SECOND, 0);
+
+        if(l){c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);}  // TODO ARREGLAR
+        if(m){c.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);}
+        if(x){c.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);}
+        if(j){c.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);}
+        if(v){c.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);}
+        if(s){c.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);}
+        if(d){c.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);}
+
+        return c;
+    }*/
+
+    private Calendar fechaAlarma(int hora, int min){
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, hora);
+        c.set(Calendar.MINUTE, min);
+        c.set(Calendar.SECOND, 0);
+
+        return c;
+    }
+
+    private void startAlarma(Calendar c){
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent, 0);
+
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+    }
+
+    private void cancelAlarma(){
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent, 0);
+
+        alarmManager.cancel(pendingIntent);
+    }
 }

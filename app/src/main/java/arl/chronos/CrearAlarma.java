@@ -26,11 +26,12 @@ import java.util.Calendar;
 public class CrearAlarma extends AppCompatActivity {
 
     private Button cancelar;                 private Button guardar;                 private ImageButton reloj;        private boolean activar;
-    private String hora = "00";              private String min = "00";
+    private int hora;                        private int min;
     private Boolean l;                       private Boolean m;                      private Boolean x;                private Boolean j;
     private Boolean v;                       private Boolean s;                      private Boolean d;
     private TimePickerDialog timePicker;     private Calendar calendar;              private EditText hhmm;
     private final String CERO = "0";         private final String DOS_PUNTOS = ":";  boolean wasChecked;
+    private String horaFormateada;           private String minutoFormateado;
 
     public static final String EXTRA_HORA = "arl.chronos.EXTRA_HORA";                     public static final String EXTRA_MIN  = "arl.chronos.EXTRA_MIN";
     public static final String EXTRA_LUN  = "arl.chronos.EXTRA_LUN";                      public static final String EXTRA_MAR  = "arl.chronos.EXTRA_MAR";
@@ -75,8 +76,8 @@ public class CrearAlarma extends AppCompatActivity {
             public void onClick(View view) {
 
                 calendar = Calendar.getInstance();
-                 int horas = calendar.get(Calendar.HOUR_OF_DAY);
-                 int mins = calendar.get(Calendar.MINUTE);
+                int horas = calendar.get(Calendar.HOUR_OF_DAY);
+                int mins = calendar.get(Calendar.MINUTE);
 
                 timePicker = new TimePickerDialog(CrearAlarma.this, R.style.DialogTheme,new TimePickerDialog.OnTimeSetListener() {
                     @Override
@@ -86,10 +87,12 @@ public class CrearAlarma extends AppCompatActivity {
                         //Formateo el minuto obtenido: antepone el 0 si son menores de 10
                         String minutoFormateado = (mm < 10)? (CERO + mm):String.valueOf(mm);
 
+                        Toast.makeText(getApplicationContext(), horaFormateada + DOS_PUNTOS + minutoFormateado, Toast.LENGTH_LONG).show();
                         hhmm.setText(horaFormateada + DOS_PUNTOS + minutoFormateado);
 
-                        hora = horaFormateada;
-                        min  = minutoFormateado;
+                        hora = hh;
+                        min  = mm;
+                        //Toast.makeText(getApplicationContext(), hh + ":" + mm, Toast.LENGTH_LONG).show();
                     }
                 }, horas, mins, true);
                 timePicker.show();
