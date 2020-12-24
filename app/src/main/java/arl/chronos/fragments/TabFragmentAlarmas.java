@@ -161,4 +161,8 @@ public class TabFragmentAlarmas extends Fragment {
     public MyViewModel getMyViewModel() {
         return myViewModel;
     }
+
+    public String getMensaje(){
+        return horaFormateada + DOS_PUNTOS + minutoFormateado;
+    }
 }

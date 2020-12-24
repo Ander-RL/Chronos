@@ -36,6 +36,7 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
     private String ho;                       private String mi;
     private Boolean l;                       private Boolean m;                      private Boolean x;                private Boolean j;
     private Boolean v;                       private Boolean s;                      private Boolean d;
+    public static final String MENSAJE = "mensaje_alarma";
 
     public RcvAdapterAlarmas(Context context) {
         this.context = context;
@@ -102,7 +103,7 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
             //startAlarma(fechaAlarma(Integer.parseInt(ho), Integer.parseInt(mi), l, m, x, j, v, s, d)); // TODO ARREGLAR
             if(!ho.isEmpty() && !mi.isEmpty()){
                 startAlarma(fechaAlarma(Integer.parseInt(ho), Integer.parseInt(mi)));
-                Toast.makeText(context, Integer.parseInt(ho)+":"+Integer.parseInt(mi), Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, Integer.parseInt(ho)+":"+Integer.parseInt(mi), Toast.LENGTH_LONG).show();
             }
         } else {
             holder.activated.setChecked(false);
@@ -159,7 +160,7 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
                     int position = getAdapterPosition();
                     if (listener != null && position != RecyclerView.NO_POSITION) {
                         listener.onItemClick(alarmas.get(position));
-                        Toast.makeText(context, getAdapterPosition() + " Position", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, getAdapterPosition() + " Position", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -203,7 +204,8 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
     private void startAlarma(Calendar c){
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlertReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent, 0);
+        intent.putExtra(MENSAJE, ho + ":" + mi);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT); // FLAG envia la info de putExtra
 
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
     }
@@ -211,7 +213,7 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
     private void cancelAlarma(){
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlertReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         alarmManager.cancel(pendingIntent);
     }

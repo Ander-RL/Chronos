@@ -6,6 +6,8 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.os.Build;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
@@ -17,10 +19,13 @@ public class NotificationHelper extends ContextWrapper {
     public static final String CANAL_ID = "canalID1";
     public static final String CANAL_NOMBRE = "Alarma";
     public static final String TITULO_NOTIF = "Alarma";
+    private String mensaje;
     private NotificationManager manager;
 
-    public NotificationHelper(Context base) {
+    public NotificationHelper(Context base, String mensaje) {
         super(base);
+        this.mensaje = mensaje;
+        Toast.makeText(base, mensaje, Toast.LENGTH_SHORT).show();
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             crearCanal();
         }
@@ -47,7 +52,8 @@ public class NotificationHelper extends ContextWrapper {
     public NotificationCompat.Builder getCanalNotification(){
         return new NotificationCompat.Builder(getApplicationContext(), CANAL_ID)
                 .setContentTitle(TITULO_NOTIF)
-                .setSmallIcon(R.drawable.ic_alarma);
-                //.setContentText(hora)
+                .setContentText(mensaje)
+                .setSmallIcon(R.drawable.ic_alarm)
+                .setPriority(Notification.PRIORITY_DEFAULT);
     }
 }
