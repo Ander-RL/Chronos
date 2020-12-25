@@ -3,6 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/borrar_todas_alarmas_menu"
-        android:title="Borrar todas las notas"
+        android:title="@string/borrar_todas_las_alarmas"
         app:showAsAction="never"/>
 </menu>

@@ -27,5 +27,6 @@
     <string name="btn_radio_d">D</string>
     <string name="btn_guardar">Guardar</string>
     <string name="btn_cancelar">Cancelar</string>
+    <string name="borrar_todas_las_alarmas">Borrar todas las alarmas</string>
 
 </resources>

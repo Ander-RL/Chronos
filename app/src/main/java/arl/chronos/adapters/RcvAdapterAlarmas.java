@@ -33,9 +33,15 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
     private List<Alarma> alarmas = new ArrayList<>();
     private OnItemClickListener listener;
     Context context;
-    private String ho;                       private String mi;
-    private Boolean l;                       private Boolean m;                      private Boolean x;                private Boolean j;
-    private Boolean v;                       private Boolean s;                      private Boolean d;
+    private String ho;
+    private String mi;
+    private Boolean l = false;
+    private Boolean m = false;
+    private Boolean x = false;
+    private Boolean j = false;
+    private Boolean v = false;
+    private Boolean s = false;
+    private Boolean d = false;
     public static final String MENSAJE = "mensaje_alarma";
 
     public RcvAdapterAlarmas(Context context) {
@@ -100,10 +106,16 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
         }
         if (currentAlarma.getActivated() == true) {
             holder.activated.setChecked(true);
-            //startAlarma(fechaAlarma(Integer.parseInt(ho), Integer.parseInt(mi), l, m, x, j, v, s, d)); // TODO ARREGLAR
-            if(!ho.isEmpty() && !mi.isEmpty()){
-                startAlarma(fechaAlarma(Integer.parseInt(ho), Integer.parseInt(mi)));
-                //Toast.makeText(context, Integer.parseInt(ho)+":"+Integer.parseInt(mi), Toast.LENGTH_LONG).show();
+
+            // Comprueba el día de la semana con los días elegidos para la alarma
+            if (diaAlarma(currentAlarma)) {
+                // Para que no funcione en caso de que no haya valores
+                if (!ho.isEmpty() && !mi.isEmpty()) {
+                    // Para que las alarmas activas con hora anterior a la actual no se ejecuten
+                    if (!fechaAlarma(Integer.parseInt(ho), Integer.parseInt(mi)).before(Calendar.getInstance())) {
+                        startAlarma(fechaAlarma(Integer.parseInt(ho), Integer.parseInt(mi)));
+                    }
+                }
             }
         } else {
             holder.activated.setChecked(false);
@@ -175,24 +187,7 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
         this.listener = listener;
     }
 
-    /*private Calendar fechaAlarma(int hora, int min, Boolean l, Boolean m, Boolean x, Boolean j, Boolean v, Boolean s, Boolean d){
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.HOUR_OF_DAY, hora);
-        c.set(Calendar.MINUTE, min);
-        c.set(Calendar.SECOND, 0);
-
-        if(l){c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);}  // TODO ARREGLAR
-        if(m){c.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);}
-        if(x){c.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);}
-        if(j){c.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);}
-        if(v){c.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);}
-        if(s){c.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);}
-        if(d){c.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);}
-
-        return c;
-    }*/
-
-    private Calendar fechaAlarma(int hora, int min){
+    private Calendar fechaAlarma(int hora, int min) {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.HOUR_OF_DAY, hora);
         c.set(Calendar.MINUTE, min);
@@ -201,7 +196,7 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
         return c;
     }
 
-    private void startAlarma(Calendar c){
+    private void startAlarma(Calendar c) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlertReceiver.class);
         intent.putExtra(MENSAJE, ho + ":" + mi);
@@ -210,11 +205,35 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
     }
 
-    private void cancelAlarma(){
+    private void cancelAlarma() {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlertReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         alarmManager.cancel(pendingIntent);
+    }
+
+    private Boolean diaAlarma(Alarma alarma) {
+        Calendar c = Calendar.getInstance();
+        int dia = c.get(Calendar.DAY_OF_WEEK);
+
+        switch (dia) {
+            case Calendar.MONDAY:
+                return alarma.getLunes();
+            case Calendar.TUESDAY:
+                return alarma.getMartes();
+            case Calendar.WEDNESDAY:
+                return alarma.getMiercoles();
+            case Calendar.THURSDAY:
+                return alarma.getJueves();
+            case Calendar.FRIDAY:
+                return alarma.getViernes();
+            case Calendar.SATURDAY:
+                return alarma.getSabado();
+            case Calendar.SUNDAY:
+                return alarma.getDomingo();
+            default:
+                return false;
+        }
     }
 }

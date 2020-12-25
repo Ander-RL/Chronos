@@ -140,14 +140,14 @@ public class TabFragmentAlarmas extends Fragment {
             d = data.getBooleanExtra(CrearAlarma.EXTRA_DOM,  false);
             activar = data.getBooleanExtra(CrearAlarma.EXTRA_ACT,true);
 
-            Log.d("//////////RECIBIR//////", hora + ":" + min);
+            //Log.d("//////////RECIBIR//////", hora + ":" + min);
 
             //Formateo el hora obtenido: antepone el 0 si son menores de 10
             String horaFormateada =  (hora < 10)? (CERO + hora) : String.valueOf(hora);
             //Formateo el minuto obtenido: antepone el 0 si son menores de 10
             String minutoFormateado = (min < 10)? (CERO + min):String.valueOf(min);
 
-            Log.d("//////////RECIBIR//////", horaFormateada + ":" + minutoFormateado);
+            //Log.d("//////////RECIBIR//////", horaFormateada + ":" + minutoFormateado);
 
             Alarma alarma = new Alarma(horaFormateada, minutoFormateado, l, m, x, j, v, s, d, activar);
             myViewModel.insert(alarma);

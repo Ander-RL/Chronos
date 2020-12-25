@@ -25,7 +25,6 @@ public class NotificationHelper extends ContextWrapper {
     public NotificationHelper(Context base, String mensaje) {
         super(base);
         this.mensaje = mensaje;
-        Toast.makeText(base, mensaje, Toast.LENGTH_SHORT).show();
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             crearCanal();
         }

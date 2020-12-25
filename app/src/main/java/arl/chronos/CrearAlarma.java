@@ -25,10 +25,10 @@ import java.util.Calendar;
 
 public class CrearAlarma extends AppCompatActivity {
 
-    private Button cancelar;                 private Button guardar;                 private ImageButton reloj;        private boolean activar;
-    private int hora;                        private int min;
-    private Boolean l;                       private Boolean m;                      private Boolean x;                private Boolean j;
-    private Boolean v;                       private Boolean s;                      private Boolean d;
+    private Button cancelar;                 private Button guardar;                 private ImageButton reloj;
+    private boolean activar;                 private int hora;                       private int min;
+    private Boolean l = false;               private Boolean m = false;              private Boolean x = false;        private Boolean j = false;
+    private Boolean v = false;               private Boolean s = false;              private Boolean d = false;
     private TimePickerDialog timePicker;     private Calendar calendar;              private EditText hhmm;
     private final String CERO = "0";         private final String DOS_PUNTOS = ":";  boolean wasChecked;
     private String horaFormateada;           private String minutoFormateado;
@@ -87,7 +87,7 @@ public class CrearAlarma extends AppCompatActivity {
                         //Formateo el minuto obtenido: antepone el 0 si son menores de 10
                         String minutoFormateado = (mm < 10)? (CERO + mm):String.valueOf(mm);
 
-                        Toast.makeText(getApplicationContext(), horaFormateada + DOS_PUNTOS + minutoFormateado, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(), horaFormateada + DOS_PUNTOS + minutoFormateado, Toast.LENGTH_LONG).show();
                         hhmm.setText(horaFormateada + DOS_PUNTOS + minutoFormateado);
 
                         hora = hh;
