@@ -113,14 +113,14 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
                 if (!ho.isEmpty() && !mi.isEmpty()) {
                     // Para que las alarmas activas con hora anterior a la actual no se ejecuten
                     if (!fechaAlarma(Integer.parseInt(ho), Integer.parseInt(mi)).before(Calendar.getInstance())) {
-                        startAlarma(fechaAlarma(Integer.parseInt(ho), Integer.parseInt(mi)));
+                        startAlarma(fechaAlarma(Integer.parseInt(ho), Integer.parseInt(mi)), currentAlarma.getId());
                     }
                 }
             }
         } else {
             holder.activated.setChecked(false);
             //cancelAlarma();
-            cancelAlarma();
+            cancelAlarma(currentAlarma.getId());
         }
 
     }
@@ -196,19 +196,19 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
         return c;
     }
 
-    private void startAlarma(Calendar c) {
+    private void startAlarma(Calendar c, int code) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlertReceiver.class);
         intent.putExtra(MENSAJE, ho + ":" + mi);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT); // FLAG envia la info de putExtra
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, code, intent, PendingIntent.FLAG_UPDATE_CURRENT); // FLAG envia la info de putExtra
 
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
     }
 
-    private void cancelAlarma() {
+    private void cancelAlarma(int code) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlertReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, code, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         alarmManager.cancel(pendingIntent);
     }

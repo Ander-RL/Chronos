@@ -11,8 +11,16 @@
     <string name="repetir_alarma">Repetir:</string>
     <string name="activar_alarma">Activar:</string>
 
-    <!--//////////////// EditText /////////////////////-->
+    <!--//////////////// TextView & EditText /////////////////////-->
     <string name="description_boton_reloj">Boton reloj</string>
+    <string name="hora_rcv_tv">00:00</string>
+    <string name="lunes_rcv_tv">L</string>
+    <string name="martes_rcv_tv">M</string>
+    <string name="miercoles_rcv_tv">X</string>
+    <string name="jueves_rcv_tv">J</string>
+    <string name="viernes_rcv_tv">V</string>
+    <string name="sabado_rcv_tv">S</string>
+    <string name="domingo_rcv_tv">D</string>
 
     <!--//////////////// Botones /////////////////////-->
     <string name="hh_mm">hh:mm</string>
