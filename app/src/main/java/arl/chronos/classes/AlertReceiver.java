@@ -10,14 +10,16 @@ import arl.chronos.adapters.RcvAdapterAlarmas;
 
 public class AlertReceiver extends BroadcastReceiver {
     private String mensaje;
+    private int id;
 
     @Override
     public void onReceive(Context context, Intent intent) {
 
         mensaje = intent.getStringExtra("mensaje_alarma");
+        id = intent.getIntExtra("id_alarma",1);
 
-        NotificationHelper notificationHelper = new NotificationHelper(context, mensaje);
+        NotificationHelper notificationHelper = new NotificationHelper(context, mensaje, id);
         NotificationCompat.Builder nb = notificationHelper.getCanalNotification();
-        notificationHelper.getManager().notify(1, nb.build());
+        notificationHelper.getManager().notify(id, nb.build());
     }
 }

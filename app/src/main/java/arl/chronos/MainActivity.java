@@ -20,6 +20,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.tabs.TabLayout;
 
 import arl.chronos.adapters.PagerAdapter;
+import arl.chronos.classes.NotificationReceiver;
 import arl.chronos.database.MyViewModel;
 import arl.chronos.fragments.TabFragmentAlarmas;
 

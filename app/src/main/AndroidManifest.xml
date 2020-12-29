@@ -29,6 +29,7 @@
         </activity>
 
         <receiver android:name=".classes.AlertReceiver"/>
+        <receiver android:name=".classes.NotificationReceiver"/>
 
     </application>
 
