@@ -7,14 +7,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationCompatExtras;
 
 import arl.chronos.MainActivity;
 import arl.chronos.R;
@@ -25,7 +22,10 @@ public class NotificationHelper extends ContextWrapper {
     public static final String CANAL_NOMBRE = "Canal Notificaciones Alarma";
     public static final String TITULO_NOTIF = "Alarma";
     public static final String CANCELAR = "cancelar";
+    public static final String POSTPONER = "postponer";
+    public static final String HORA = "hora";
     public static final String ID_ALARMA = "id_alarma";
+    public static final String ID_INTENT = "id_intent";
     private String mensaje;
     private int id;
     private NotificationManager manager;
@@ -61,11 +61,19 @@ public class NotificationHelper extends ContextWrapper {
         // Se crea un pending intent para abrir la app al clickar en la notificacion
         Intent intent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, id, intent, 0);
-        // Se crea un pending intent para ejecutar el codigo del broadcast NotificationReceiver (botones)
-        Intent broadcastIntent = new Intent(this, NotificationReceiver.class);
-        broadcastIntent.putExtra(CANCELAR, mensaje);
-        broadcastIntent.putExtra(ID_ALARMA, id);
-        PendingIntent broadcastPendingIntent = PendingIntent.getBroadcast(this, id, broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        // Se crea un pending intent para ejecutar el codigo del broadcast NotificationReceiver (boton cancelar)
+        Intent cancelButtonIntent = new Intent(this, NotificationReceiverCancelar.class);
+        cancelButtonIntent.putExtra(ID_INTENT, CANCELAR);
+        cancelButtonIntent.putExtra(HORA, mensaje);
+        cancelButtonIntent.putExtra(ID_ALARMA, id);
+        PendingIntent cancelButtonPendingIntent = PendingIntent.getBroadcast(this, id, cancelButtonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        // Se crea un pending intent para ejecutar el codigo del broadcast NotificationReceiver (boton posponer)
+        Intent postponerButtonIntent = new Intent(this, NotificationReceiver.class);
+        postponerButtonIntent.putExtra(ID_INTENT, POSTPONER);
+        postponerButtonIntent.putExtra(HORA, mensaje);
+        postponerButtonIntent.putExtra(ID_ALARMA, id);
+        PendingIntent postponerButtonPendingIntent = PendingIntent.getBroadcast(this, id, postponerButtonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Log.d("NOTIF_RECEIV", "Helper -> id = " + id + " Mensaje = " + mensaje);
         // Se crea y devuelve la notificacion
         return new NotificationCompat.Builder(getApplicationContext(), CANAL_ID)
                 .setContentTitle(TITULO_NOTIF)
@@ -75,6 +83,7 @@ public class NotificationHelper extends ContextWrapper {
                 .setColor(getResources().getColor(R.color.blue_500, getTheme()))
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true) // Cuando se toca la notificacion se borra/elimina/quita esa notificacion
-                .addAction(R.mipmap.ic_launcher, CANCELAR, broadcastPendingIntent);
+                .addAction(R.mipmap.ic_launcher, CANCELAR, cancelButtonPendingIntent)
+                .addAction(R.mipmap.ic_launcher, POSTPONER, postponerButtonPendingIntent);
     }
 }

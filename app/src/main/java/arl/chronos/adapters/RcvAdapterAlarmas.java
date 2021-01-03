@@ -35,6 +35,10 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
     Context context;
     private String ho;
     private String mi;
+    private int hor;
+    private int min;
+    private int seg;
+    private static boolean repetirAlarma = true;
     private Boolean l = false;
     private Boolean m = false;
     private Boolean x = false;
@@ -77,6 +81,10 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
         ho = currentAlarma.getHora();
         mi = currentAlarma.getMinuto();
 
+        hor = Integer.parseInt(ho);
+        min = Integer.parseInt(mi);
+        seg = 0;
+
         if (currentAlarma.getLunes() == true) {
             holder.lunes.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
             l = true;
@@ -113,9 +121,12 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
                 // Para que no funcione en caso de que no haya valores
                 if (!ho.isEmpty() && !mi.isEmpty()) {
                     // Para que las alarmas activas con hora anterior a la actual no se ejecuten
-                    if (!fechaAlarma(Integer.parseInt(ho), Integer.parseInt(mi)).before(Calendar.getInstance())) {
-                        startAlarma(fechaAlarma(Integer.parseInt(ho), Integer.parseInt(mi)), currentAlarma.getId());
+                    if (!fechaAlarma(hor, min, seg).before(Calendar.getInstance())) {
+                        startAlarma(fechaAlarma(hor, min, seg), currentAlarma.getId());
                     }
+                        /*if (!fechaAlarma(Integer.parseInt(ho), Integer.parseInt(mi)).before(Calendar.getInstance())) {
+                            startAlarma(fechaAlarma(Integer.parseInt(ho), Integer.parseInt(mi)), currentAlarma.getId());
+                        }*/
                 }
             }
         } else {
@@ -188,25 +199,26 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
         this.listener = listener;
     }
 
-    private Calendar fechaAlarma(int hora, int min) {
+    private Calendar fechaAlarma(int hora, int min, int seg) {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.HOUR_OF_DAY, hora);
         c.set(Calendar.MINUTE, min);
-        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.SECOND, seg);
 
         return c;
     }
 
     private void startAlarma(Calendar c, int code) {
+
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlertReceiver.class);
         intent.putExtra(MENSAJE, ho + ":" + mi);
         intent.putExtra(ID_ALARMA, code);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, code, intent, PendingIntent.FLAG_UPDATE_CURRENT); // FLAG envia la info de putExtra
 
-        //alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
         // Alarma que se repite cada minuto (Tmin = 1 minuto)
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), 60000, pendingIntent);
+        //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), 60000, pendingIntent); // Demasiado inexacta
     }
 
     private void cancelAlarma(int code) {

@@ -30,7 +30,7 @@ public class CrearAlarma extends AppCompatActivity {
     private Boolean l = false;               private Boolean m = false;              private Boolean x = false;        private Boolean j = false;
     private Boolean v = false;               private Boolean s = false;              private Boolean d = false;
     private TimePickerDialog timePicker;     private Calendar calendar;              private EditText hhmm;
-    private final String CERO = "0";         private final String DOS_PUNTOS = ":";  boolean wasChecked;
+    private final String CERO = "0";         private final String DOS_PUNTOS = ":";
     private String horaFormateada;           private String minutoFormateado;
 
     public static final String EXTRA_HORA = "arl.chronos.EXTRA_HORA";                     public static final String EXTRA_MIN  = "arl.chronos.EXTRA_MIN";
@@ -103,30 +103,30 @@ public class CrearAlarma extends AppCompatActivity {
     public void onRadioButtonClick(View view) {
 
             boolean checked = ((RadioButton) view).isChecked();
+            boolean active = view.isActivated();
             int id = view.getId();
 
-            if(wasChecked && checked){
+            if(active && checked){
                 ((RadioButton) view).setChecked(false);
-                wasChecked = false;
 
-                if(id == R.id.radio_l){l = false;}
-                if(id == R.id.radio_m){m = false;}
-                if(id == R.id.radio_x){x = false;}
-                if(id == R.id.radio_j){j = false;}
-                if(id == R.id.radio_v){v = false;}
-                if(id == R.id.radio_s){s = false;}
-                if(id == R.id.radio_d){d = false;}
+                if(id == R.id.radio_l){l = false; view.setActivated(false);}
+                if(id == R.id.radio_m){m = false; view.setActivated(false);}
+                if(id == R.id.radio_x){x = false; view.setActivated(false);}
+                if(id == R.id.radio_j){j = false; view.setActivated(false);}
+                if(id == R.id.radio_v){v = false; view.setActivated(false);}
+                if(id == R.id.radio_s){s = false; view.setActivated(false);}
+                if(id == R.id.radio_d){d = false; view.setActivated(false);}
 
-            }else if(checked){
-                wasChecked = true;
+            }else if(!active && checked){
+                ((RadioButton) view).setChecked(true);
 
-                if(id == R.id.radio_l){l = true;}
-                if(id == R.id.radio_m){m = true;}
-                if(id == R.id.radio_x){x = true;}
-                if(id == R.id.radio_j){j = true;}
-                if(id == R.id.radio_v){v = true;}
-                if(id == R.id.radio_s){s = true;}
-                if(id == R.id.radio_d){d = true;}
+                if(id == R.id.radio_l){l = true; view.setActivated(true);}
+                if(id == R.id.radio_m){m = true; view.setActivated(true);}
+                if(id == R.id.radio_x){x = true; view.setActivated(true);}
+                if(id == R.id.radio_j){j = true; view.setActivated(true);}
+                if(id == R.id.radio_v){v = true; view.setActivated(true);}
+                if(id == R.id.radio_s){s = true; view.setActivated(true);}
+                if(id == R.id.radio_d){d = true; view.setActivated(true);}
             }
         }
 

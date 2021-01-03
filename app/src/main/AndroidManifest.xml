@@ -30,6 +30,7 @@
 
         <receiver android:name=".classes.AlertReceiver"/>
         <receiver android:name=".classes.NotificationReceiver"/>
+        <receiver android:name=".classes.NotificationReceiverCancelar"/>
 
     </application>
 
