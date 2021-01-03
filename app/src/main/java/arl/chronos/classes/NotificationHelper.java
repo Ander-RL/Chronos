@@ -7,6 +7,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
@@ -44,6 +46,7 @@ public class NotificationHelper extends ContextWrapper {
         NotificationChannel canal = new NotificationChannel(CANAL_ID, CANAL_NOMBRE, NotificationManager.IMPORTANCE_HIGH);
         canal.enableLights(true);
         canal.enableVibration(true);
+        canal.setVibrationPattern(new long[] {2000,2000,2000,2000,2000}); // No funciona. Vibra igual.
         canal.setLightColor(R.color.blue_500);
         canal.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
 
@@ -73,13 +76,14 @@ public class NotificationHelper extends ContextWrapper {
         postponerButtonIntent.putExtra(HORA, mensaje);
         postponerButtonIntent.putExtra(ID_ALARMA, id);
         PendingIntent postponerButtonPendingIntent = PendingIntent.getBroadcast(this, id, postponerButtonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        Log.d("NOTIF_RECEIV", "Helper -> id = " + id + " Mensaje = " + mensaje);
+        Log.d("NOTIF_RECEIV", "Helper -> id = " + id + " / Mensaje = " + mensaje);
         // Se crea y devuelve la notificacion
         return new NotificationCompat.Builder(getApplicationContext(), CANAL_ID)
                 .setContentTitle(TITULO_NOTIF)
                 .setContentText(mensaje)
                 .setSmallIcon(R.drawable.ic_alarm)
                 .setPriority(Notification.PRIORITY_HIGH)
+                .setVibrate(new long[] {2000,2000,2000,2000,2000}) // No funciona. Vibra igual.
                 .setColor(getResources().getColor(R.color.blue_500, getTheme()))
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true) // Cuando se toca la notificacion se borra/elimina/quita esa notificacion

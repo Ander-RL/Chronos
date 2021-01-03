@@ -12,7 +12,6 @@ import arl.chronos.adapters.RcvAdapterAlarmas;
 public class AlertReceiver extends BroadcastReceiver {
     private String mensaje;
     private int id;
-    public static boolean repetirAlarma = true;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -22,15 +21,7 @@ public class AlertReceiver extends BroadcastReceiver {
 
         NotificationHelper notificationHelper = new NotificationHelper(context, mensaje, id);
         NotificationCompat.Builder nb = notificationHelper.getCanalNotification();
+        Log.d("NOTIF_RECEIV", "AlertReceiver -> id = " + id + " / Mensaje = " + mensaje);
         notificationHelper.getManager().notify(id, nb.build());
-        Log.d("NOTIF_RECEIV", "AlertReceiver -> id = " + id + " Mensaje = " + mensaje);
-        /*//do {
-            notificationHelper.getManager().notify(id, nb.build());
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        //} while (repetirAlarma); // TODO Arreglar, bucle infinito*/
     }
 }

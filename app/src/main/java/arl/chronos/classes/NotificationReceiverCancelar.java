@@ -24,6 +24,7 @@ public class NotificationReceiverCancelar extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         c = Calendar.getInstance();
 
         mensaje = intent.getStringExtra(NotificationHelper.ID_INTENT);
@@ -32,17 +33,15 @@ public class NotificationReceiverCancelar extends BroadcastReceiver {
 
         if (mensaje.equals(NotificationHelper.CANCELAR)) {
 
-            Log.d("NOTIF_RECEIV", "cancelar1");
-
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             Intent intentCancelar = new Intent(context, AlertReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intentCancelar, PendingIntent.FLAG_UPDATE_CURRENT);
             alarmManager.cancel(pendingIntent);
 
-            AlertReceiver.repetirAlarma = false;
+            notificationManager.cancel(id);
 
-            Toast.makeText(context, "Alarma " + hora + " cancelada", Toast.LENGTH_SHORT).show();
-            Log.d("NOTIF_RECEIV", "cancelar2 -> id = " + id + " Mensaje = " + mensaje + " Hora = " + hora);
+            Toast.makeText(context, "Alarma cancelada", Toast.LENGTH_SHORT).show();
+            Log.d("NOTIF_RECEIV", "Cancelar -> id = " + id + " / Mensaje = " + mensaje + " / Hora = " + hora);
 
         }
     }
