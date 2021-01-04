@@ -34,11 +34,14 @@ public class NotificationReceiverCancelar extends BroadcastReceiver {
         if (mensaje.equals(NotificationHelper.CANCELAR)) {
 
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            Intent intentCancelar = new Intent(context, AlertReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intentCancelar, PendingIntent.FLAG_UPDATE_CURRENT);
-            alarmManager.cancel(pendingIntent);
 
-            notificationManager.cancel(id);
+            Intent intentCancelar = new Intent(context, AlertReceiver.class);
+            intentCancelar.putExtra("parar", "si");
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intentCancelar, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            alarmManager.cancel(pendingIntent); // Cancela la alarma y ya no vuelve a sonar ese día? Probrar
+
+            notificationManager.cancel(id); // Cierra la notificacion
 
             Toast.makeText(context, "Alarma cancelada", Toast.LENGTH_SHORT).show();
             Log.d("NOTIF_RECEIV", "Cancelar -> id = " + id + " / Mensaje = " + mensaje + " / Hora = " + hora);
