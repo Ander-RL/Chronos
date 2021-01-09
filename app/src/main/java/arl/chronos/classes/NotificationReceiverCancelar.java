@@ -23,9 +23,6 @@ public class NotificationReceiverCancelar extends BroadcastReceiver {
     private int id;
     private String mensaje;
     private String hora;
-    private long threadId;
-    private Thread thread;
-    private SharedPreferences sharedPref;
     private Vibrator vibrator;
 
     @Override
@@ -36,7 +33,6 @@ public class NotificationReceiverCancelar extends BroadcastReceiver {
         mensaje = intent.getStringExtra(NotificationHelper.ID_INTENT);
         hora = intent.getStringExtra(NotificationHelper.HORA);
         id = intent.getIntExtra(NotificationHelper.ID_ALARMA, 0);
-        sharedPref = context.getSharedPreferences("thread_id", Context.MODE_PRIVATE);
 
         if (mensaje.equals(NotificationHelper.CANCELAR)) {
 
@@ -50,12 +46,6 @@ public class NotificationReceiverCancelar extends BroadcastReceiver {
 
             vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
             vibrator.cancel();
-
-            /*threadId = sharedPref.getLong("thead_id", 0);
-
-            for (Thread t : Thread.getAllStackTraces().keySet()){
-                if(t.getId() == threadId){t.interrupt();}
-            }*/
 
             notificationManager.cancel(id); // Cierra la notificacion
 

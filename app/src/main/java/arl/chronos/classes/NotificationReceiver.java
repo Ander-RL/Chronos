@@ -29,6 +29,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         c = Calendar.getInstance();
 
         mensaje = intent.getStringExtra(NotificationHelper.ID_INTENT);
@@ -38,12 +39,6 @@ public class NotificationReceiver extends BroadcastReceiver {
         if (mensaje.equals(NotificationHelper.POSTPONER)) {
 
             Toast.makeText(context, "Alarma postpuesta 15 minutos", Toast.LENGTH_SHORT).show();
-
-            /*// Se cancela la alarma que se repite
-            AlarmManager alarmManagerRepeat = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            Intent intentCancelar = new Intent(context, AlertReceiver.class);
-            PendingIntent pendingIntentRepeat = PendingIntent.getBroadcast(context, id, intentCancelar, PendingIntent.FLAG_UPDATE_CURRENT);
-            alarmManagerRepeat.cancel(pendingIntentRepeat);*/
 
             // Se crea una alarma para que suene en 15 minutos
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -55,8 +50,10 @@ public class NotificationReceiver extends BroadcastReceiver {
 
             vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
             vibrator.cancel();
+            
+            notificationManager.cancel(id);
 
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis() + (2000), pendingIntent); // TODO Postponer a 15000 milisegundos
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis() + (1000*60*15), pendingIntent); // Se activa en 15 minutos
             Log.d("NOTIF_RECEIV", "Postponer -> id = " + id + " / Mensaje = " + mensaje + " / Hora = " + hora);
         }
     }
