@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Vibrator;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -21,6 +22,7 @@ public class NotificationReceiver extends BroadcastReceiver {
     private int id;
     private String mensaje;
     private String hora;
+    private Vibrator vibrator;
 
     public static final String ID_ALARMA = "id_alarma";
     public static final String MENSAJE = "mensaje_alarma";
@@ -50,6 +52,9 @@ public class NotificationReceiver extends BroadcastReceiver {
             newIntent.putExtra(ID_ALARMA, id);
             newIntent.putExtra("parar", "si");
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, newIntent, PendingIntent.FLAG_UPDATE_CURRENT); // FLAG envia la info de putExtra
+
+            vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+            vibrator.cancel();
 
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis() + (2000), pendingIntent); // TODO Postponer a 15000 milisegundos
             Log.d("NOTIF_RECEIV", "Postponer -> id = " + id + " / Mensaje = " + mensaje + " / Hora = " + hora);
