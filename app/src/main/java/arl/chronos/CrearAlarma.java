@@ -11,9 +11,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.TextViewCompat;
@@ -23,6 +25,8 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.Calendar;
 
+import arl.chronos.classes.Alarma;
+
 public class CrearAlarma extends AppCompatActivity {
 
     private Button cancelar;                 private Button guardar;                 private ImageButton reloj;
@@ -30,14 +34,20 @@ public class CrearAlarma extends AppCompatActivity {
     private Boolean l = false;               private Boolean m = false;              private Boolean x = false;        private Boolean j = false;
     private Boolean v = false;               private Boolean s = false;              private Boolean d = false;
     private TimePickerDialog timePicker;     private Calendar calendar;              private EditText hhmm;
-    private final String CERO = "0";         private final String DOS_PUNTOS = ":";
+    private final String CERO = "0";         private final String DOS_PUNTOS = ":";  private SwitchMaterial sonidoSwitch;
     private String horaFormateada;           private String minutoFormateado;
+    private TextView selectorSonido;         private TextView tvNombreSonido;
+    private String nombreSonido;             private Boolean sonar;
+
+    private final int ESCOGER_SONIDO_CODE = 1;
+
 
     public static final String EXTRA_HORA = "arl.chronos.EXTRA_HORA";                     public static final String EXTRA_MIN  = "arl.chronos.EXTRA_MIN";
     public static final String EXTRA_LUN  = "arl.chronos.EXTRA_LUN";                      public static final String EXTRA_MAR  = "arl.chronos.EXTRA_MAR";
     public static final String EXTRA_MIE  = "arl.chronos.EXTRA_MIE";                      public static final String EXTRA_JUE  = "arl.chronos.EXTRA_JUE";
     public static final String EXTRA_VIE  = "arl.chronos.EXTRA_VIE";                      public static final String EXTRA_SAB  = "arl.chronos.EXTRA_SAB";
     public static final String EXTRA_DOM  = "arl.chronos.EXTRA_DOM";                      public static final String EXTRA_ACT  = "arl.chronos.EXTRA_ACT";
+    public static final String EXTRA_SONIDO = "arl.chronos.EXTRA_SONIDO";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +58,10 @@ public class CrearAlarma extends AppCompatActivity {
         guardar  = findViewById(R.id.btn_guardar_alarma);
         reloj    = findViewById(R.id.btn_reloj);
         hhmm     = findViewById(R.id.edit_hhmm);
+
+        selectorSonido = findViewById(R.id.tv_selector);
+        sonidoSwitch   = findViewById(R.id.sonido);
+        tvNombreSonido = findViewById(R.id.tv_nombre_sonido);
 
         cancelar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +79,8 @@ public class CrearAlarma extends AppCompatActivity {
                 intent.putExtra(EXTRA_HORA, hora);  intent.putExtra(EXTRA_MIN, min);   intent.putExtra(EXTRA_LUN, l);
                 intent.putExtra(EXTRA_MAR,  m);     intent.putExtra(EXTRA_MIE, x);     intent.putExtra(EXTRA_JUE, j);
                 intent.putExtra(EXTRA_VIE,  v);     intent.putExtra(EXTRA_SAB, s);     intent.putExtra(EXTRA_DOM, d);
-                intent.putExtra(EXTRA_ACT, activar);
+                intent.putExtra(EXTRA_ACT, activar);intent.putExtra(EXTRA_SONIDO, nombreSonido);
+
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -97,6 +112,12 @@ public class CrearAlarma extends AppCompatActivity {
                 }, horas, mins, true);
                 timePicker.show();
             }
+        });
+
+        // Se lanza la actividad para escoger el sonido de la alarma
+        selectorSonido.setOnClickListener(view -> {
+            Intent intent = new Intent();
+            startActivityForResult(intent, ESCOGER_SONIDO_CODE); // TODO Solicitar Permiso de accesso a memoria antes de lanzar activity.
         });
     }
 
@@ -138,4 +159,16 @@ public class CrearAlarma extends AppCompatActivity {
             if(!checked) { activar = true; }
 
         }
+
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == ESCOGER_SONIDO_CODE && resultCode == RESULT_OK){
+            nombreSonido = data.getStringExtra(EscogerSonido.EXTRA_NOMBRE_SONIDO);
+            tvNombreSonido.setText(nombreSonido);
+        } else {
+            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();;
+        }
+    }
 }

@@ -10,6 +10,7 @@
     <!--//////////////// Titulos /////////////////////-->
     <string name="repetir_alarma">Repetir:</string>
     <string name="activar_alarma">Activar:</string>
+    <string name="activar_sonido">Sonido:</string>
 
     <!--//////////////// TextView & EditText /////////////////////-->
     <string name="description_boton_reloj">Boton reloj</string>
@@ -21,9 +22,7 @@
     <string name="viernes_rcv_tv">V</string>
     <string name="sabado_rcv_tv">S</string>
     <string name="domingo_rcv_tv">D</string>
-
-    <!--//////////////// Botones /////////////////////-->
-    <string name="hh_mm">hh:mm</string>
+    <string name="tv_ningun_sonido">Ningun sonido seleccionado</string>
 
     <!--//////////////// Botones /////////////////////-->
     <string name="btn_radio_l">L</string>
@@ -35,6 +34,8 @@
     <string name="btn_radio_d">D</string>
     <string name="btn_guardar">Guardar</string>
     <string name="btn_cancelar">Cancelar</string>
+    <string name="btn_aceptar">Aceptar</string>
     <string name="borrar_todas_las_alarmas">Borrar todas las alarmas</string>
+    <string name="hh_mm">hh:mm</string>
 
 </resources>

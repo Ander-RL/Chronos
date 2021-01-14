@@ -47,7 +47,7 @@ public class TabFragmentAlarmas extends Fragment {
     private Boolean l;                       private Boolean m;                      private Boolean x;                private Boolean j;
     private Boolean v;                       private Boolean s;                      private Boolean d;
     private final String CERO = "0";         private final String DOS_PUNTOS = ":";
-    private String horaFormateada = "";      private String minutoFormateado = "";
+    private String horaFormateada = "";      private String minutoFormateado = "";   private String nombreSonido;
 
     public static final int ADD_ALARMAS_REQUEST = 1;
     public static final int EDIT_ALARMAS_REQUEST = 2;
@@ -139,6 +139,7 @@ public class TabFragmentAlarmas extends Fragment {
             s = data.getBooleanExtra(CrearAlarma.EXTRA_SAB,  false);
             d = data.getBooleanExtra(CrearAlarma.EXTRA_DOM,  false);
             activar = data.getBooleanExtra(CrearAlarma.EXTRA_ACT,true);
+            nombreSonido = data.getStringExtra(CrearAlarma.EXTRA_SONIDO); // TODO insertar nombre alarma a la alarma
 
             //Log.d("//////////RECIBIR//////", hora + ":" + min);
 
@@ -149,7 +150,7 @@ public class TabFragmentAlarmas extends Fragment {
 
             //Log.d("//////////RECIBIR//////", horaFormateada + ":" + minutoFormateado);
 
-            Alarma alarma = new Alarma(horaFormateada, minutoFormateado, l, m, x, j, v, s, d, activar);
+            Alarma alarma = new Alarma(horaFormateada, minutoFormateado, l, m, x, j, v, s, d, activar); // TODO insertar nombre alarma
             myViewModel.insert(alarma);
 
             Snackbar.make(view, "Alarma creada", Snackbar.LENGTH_LONG).show();

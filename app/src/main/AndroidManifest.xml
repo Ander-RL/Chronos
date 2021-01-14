@@ -3,6 +3,7 @@
     package="arl.chronos">
 
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -11,8 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Chronos">
-
-        <!-- Activities -->
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -29,10 +28,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+        <activity
+            android:name=".EscogerSonido"
+            android:parentActivityName=".CrearAlarma">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".CrearAlarma" />
+        </activity>
 
-        <receiver android:name=".classes.AlertReceiver"/>
-        <receiver android:name=".classes.NotificationReceiver"/>
-        <receiver android:name=".classes.NotificationReceiverCancelar"/>
+        <receiver android:name=".classes.AlertReceiver" />
+        <receiver android:name=".classes.NotificationReceiver" />
+        <receiver android:name=".classes.NotificationReceiverCancelar" />
 
     </application>
 
