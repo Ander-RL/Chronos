@@ -50,16 +50,26 @@
         android:id="@+id/tv_sonido_elegido"
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:gravity="center_vertical|center_horizontal"
         android:text="@string/tv_ningun_sonido"
         android:textColor="@color/blue_500"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:gravity="center_vertical|center_horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcv_sonidos"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="48dp"
+        android:layout_marginBottom="48dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_sonido_elegido"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline_vertical" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

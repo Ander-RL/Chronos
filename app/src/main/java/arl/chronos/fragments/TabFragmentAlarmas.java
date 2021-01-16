@@ -71,7 +71,7 @@ public class TabFragmentAlarmas extends Fragment {
             }
         });
 
-        listAlarmas = new ArrayList<>();
+        listAlarmas = new ArrayList<>(); // TODO Eliminar porque no se usa???
 
         recyclerView = view.findViewById(R.id.rcv_alarmas);
         recyclerView.setHasFixedSize(true);

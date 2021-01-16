@@ -12,6 +12,12 @@
     <string name="activar_alarma">Activar:</string>
     <string name="activar_sonido">Sonido:</string>
 
+    <!--//////////////// Alertas /////////////////////-->
+    <string name="permiso_storage">Permiso necesario</string>
+    <string name="permiso_mensaje">
+        Para escoger un sonido, es necesario conceder permiso a la aplicación para acceder a la memoria.
+    </string>
+
     <!--//////////////// TextView & EditText /////////////////////-->
     <string name="description_boton_reloj">Boton reloj</string>
     <string name="hora_rcv_tv">00:00</string>
@@ -23,6 +29,7 @@
     <string name="sabado_rcv_tv">S</string>
     <string name="domingo_rcv_tv">D</string>
     <string name="tv_ningun_sonido">Ningun sonido seleccionado</string>
+    <string name="tv_place_holder">Place Holder</string>
 
     <!--//////////////// Botones /////////////////////-->
     <string name="btn_radio_l">L</string>
