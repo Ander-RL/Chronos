@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -42,7 +43,7 @@ public class CrearAlarma extends AppCompatActivity {
     private final String CERO = "0";         private final String DOS_PUNTOS = ":";  private SwitchMaterial sonidoSwitch;
     private String horaFormateada;           private String minutoFormateado;
     private TextView selectorSonido;         private TextView tvNombreSonido;
-    private String nombreSonido;             private Boolean sonar;
+    private String nombreSonido;             private Boolean sonar;                  private Uri sonidoUri;
 
     private final int ESCOGER_SONIDO_CODE = 1;
     private final int STORAGE_PERMISSION_CODE = 1;
@@ -53,6 +54,8 @@ public class CrearAlarma extends AppCompatActivity {
     public static final String EXTRA_VIE  = "arl.chronos.EXTRA_VIE";                      public static final String EXTRA_SAB  = "arl.chronos.EXTRA_SAB";
     public static final String EXTRA_DOM  = "arl.chronos.EXTRA_DOM";                      public static final String EXTRA_ACT  = "arl.chronos.EXTRA_ACT";
     public static final String EXTRA_SONIDO = "arl.chronos.EXTRA_SONIDO";
+    public static final String EXTRA_SONAR = "arl.chronos.EXTRA_SONAR";
+    public static final String EXTRA_URI = "arl.chronos.EXTRA_URI";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,7 +87,10 @@ public class CrearAlarma extends AppCompatActivity {
                 intent.putExtra(EXTRA_HORA, hora);  intent.putExtra(EXTRA_MIN, min);   intent.putExtra(EXTRA_LUN, l);
                 intent.putExtra(EXTRA_MAR,  m);     intent.putExtra(EXTRA_MIE, x);     intent.putExtra(EXTRA_JUE, j);
                 intent.putExtra(EXTRA_VIE,  v);     intent.putExtra(EXTRA_SAB, s);     intent.putExtra(EXTRA_DOM, d);
-                intent.putExtra(EXTRA_ACT, activar);intent.putExtra(EXTRA_SONIDO, nombreSonido);
+                intent.putExtra(EXTRA_ACT, activar);
+                intent.putExtra(EXTRA_SONIDO, nombreSonido);
+                intent.putExtra(EXTRA_URI, sonidoUri.toString());
+                intent.putExtra(EXTRA_SONAR, sonar);
 
                 setResult(RESULT_OK, intent);
                 finish();
@@ -121,8 +127,11 @@ public class CrearAlarma extends AppCompatActivity {
 
         // Se lanza la actividad para escoger el sonido de la alarma
         selectorSonido.setOnClickListener(view -> {
-            // Antes de lanzar la actividad, se comprueba si se tiene permiso para acceder a EXTERNAL_STORAGE
-            if (ContextCompat.checkSelfPermission(getApplicationContext(),
+            Intent intent = new Intent(this, EscogerSonido.class);
+            startActivityForResult(intent, ESCOGER_SONIDO_CODE);
+            // TODO NO IMPLEMENTADO TODAVIA
+            // Antes de lanzar la actividad, se comprueba si se tiene permiso para acceder a EXTERNAL_STORAGE.
+            /*if (ContextCompat.checkSelfPermission(getApplicationContext(),
                     Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
 
                 Intent intent = new Intent(this, EscogerSonido.class);
@@ -130,7 +139,7 @@ public class CrearAlarma extends AppCompatActivity {
 
             } else {
                 requestPermission();
-            }
+            }*/
 
         });
     }
@@ -203,12 +212,20 @@ public class CrearAlarma extends AppCompatActivity {
 
         }
 
+        public void onActivarSonido(View view) {
+            boolean checked = view.isActivated();
+
+            if(checked){ sonar = false; }
+            if(!checked) { sonar = true; }
+        }
+
         @Override
         public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == ESCOGER_SONIDO_CODE && resultCode == RESULT_OK){
             nombreSonido = data.getStringExtra(EscogerSonido.EXTRA_NOMBRE_SONIDO);
+            sonidoUri = Uri.parse(data.getStringExtra(EscogerSonido.EXTRA_URI_SONIDO)); // Se transforma el String de vuelta a URI
             tvNombreSonido.setText(nombreSonido);
         } else {
             Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();;

@@ -1,6 +1,7 @@
 package arl.chronos.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.radiobutton.MaterialRadioButton;
 
 import java.util.ArrayList;
 
@@ -17,11 +17,13 @@ import arl.chronos.R;
 import arl.chronos.classes.Sonido;
 
 public class RcvAdapterSonidos extends RecyclerView.Adapter<RcvAdapterSonidos.ViewHolderSonidos> {
-    private Context context;
+    //private Context context;
+    private Sonido currentSonido;
     private ArrayList<Sonido> sonidoList;
+    private OnSonidoClickListener listener;
 
-    public RcvAdapterSonidos(Context context) {
-        this.context = context;
+    public RcvAdapterSonidos() {
+        //this.context = context;
     }
 
     public void setSonidos(ArrayList<Sonido> sonidoList) {
@@ -39,7 +41,7 @@ public class RcvAdapterSonidos extends RecyclerView.Adapter<RcvAdapterSonidos.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderSonidos holder, int position) {
-        Sonido currentSonido = sonidoList.get(position);
+        currentSonido = sonidoList.get(position);
 
         holder.sonido.setText(currentSonido.getNombre());
 
@@ -52,14 +54,33 @@ public class RcvAdapterSonidos extends RecyclerView.Adapter<RcvAdapterSonidos.Vi
 
     public class ViewHolderSonidos extends RecyclerView.ViewHolder {
         TextView sonido;
-        MaterialRadioButton radioButton;
+        TextView sonidoElegido;
 
         public ViewHolderSonidos(@NonNull View itemView) {
             super(itemView);
             sonido = itemView.findViewById(R.id.tv_sonido);
-            radioButton = itemView.findViewById(R.id.rcv_radio_button);
+            sonidoElegido = itemView.findViewById(R.id.tv_sonido_elegido);
 
-            radioButton.setOnClickListener(view -> view.setActivated(true));
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    currentSonido = sonidoList.get(position); // Actualiza el sonido actual. De lo contrario siempre pasa el mismo por cada trozo de RecyclerView
+
+                    if (listener != null && position != RecyclerView.NO_POSITION) {
+                        listener.onSonidoClick(sonido.getText().toString(), currentSonido.getUri().toString());
+                    }
+                    Log.d("//////////SONIDOS//////", sonido.getText().toString() + " ---> Posicion: " + position + " ---> Uri: " + currentSonido.getUri().toString());
+                }
+            });
         }
+    }
+
+    public interface OnSonidoClickListener {
+        void onSonidoClick(String nombreSonido, String sonidoUri);
+    }
+
+    public void setOnSonidoClickListener(OnSonidoClickListener listener) {
+        this.listener = listener;
     }
 }

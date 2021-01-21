@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import arl.chronos.CrearAlarma;
 import arl.chronos.R;
 import arl.chronos.classes.Alarma;
 import arl.chronos.classes.AlertReceiver;
@@ -47,6 +48,9 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
     private Boolean v = false;
     private Boolean s = false;
     private Boolean d = false;
+    private String nombreSonido;
+    private String sonidoUri;
+    private Boolean sonar;
 
     public static final String MENSAJE = "mensaje_alarma";
     public static final String ID_ALARMA = "id_alarma";
@@ -83,6 +87,9 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
         holder.hora.setText(currentAlarma.getHora() + ":" + currentAlarma.getMinuto());
         ho = currentAlarma.getHora();
         mi = currentAlarma.getMinuto();
+        nombreSonido = currentAlarma.getNombreSonido();
+        sonidoUri = currentAlarma.getSonidoUri();
+        sonar = currentAlarma.getSonar();
 
         hor = Integer.parseInt(ho);
         min = Integer.parseInt(mi);
@@ -218,6 +225,9 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
         intent.putExtra(MENSAJE, ho + ":" + mi);
         intent.putExtra(ID_ALARMA, code);
         intent.putExtra(PARAR, "no");
+        intent.putExtra(CrearAlarma.EXTRA_SONIDO, nombreSonido);
+        intent.putExtra(CrearAlarma.EXTRA_URI, sonidoUri);
+        intent.putExtra(CrearAlarma.EXTRA_SONAR, sonar);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, code, intent, PendingIntent.FLAG_UPDATE_CURRENT); // FLAG envia la info de putExtra
 
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);

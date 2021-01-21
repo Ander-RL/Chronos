@@ -17,6 +17,10 @@ public class AlertReceiver extends BroadcastReceiver {
     private int id;
     private String parar;
     private Vibrator vibrator;
+    private String nombreSonido;
+    private String sonidoUri;
+    private Boolean sonar;
+    private ServicioSonido servicioSonido;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -25,8 +29,11 @@ public class AlertReceiver extends BroadcastReceiver {
         id = intent.getIntExtra(RcvAdapterAlarmas.ID_ALARMA, 0);
         parar = intent.getStringExtra("parar");
 
+
         vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         vibrator.vibrate(new long[]{500, 1000, 500, 1000}, 0);
+
+        // TODO Crear Service para Musica.
 
         NotificationHelper notificationHelper = new NotificationHelper(context, mensaje, id);
         NotificationCompat.Builder nb = notificationHelper.getCanalNotification();

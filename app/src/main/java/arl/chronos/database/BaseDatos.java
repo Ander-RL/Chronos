@@ -12,7 +12,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import arl.chronos.classes.Alarma;
 
 // @Database(entities = {Alarma.class, Nota.class}. version = 1) ExportSchema sirve para exportar la BBDD a un fichero para hacer version control.
-@Database(entities = {Alarma.class}, version = 1, exportSchema = false)
+@Database(entities = {Alarma.class}, version = 2, exportSchema = false)
 public abstract class BaseDatos extends RoomDatabase{
 
     // Singleton. Solo se puede instanciar una vez.
@@ -50,8 +50,8 @@ public abstract class BaseDatos extends RoomDatabase{
 
         @Override
         protected Void doInBackground(Void... voids) {
-            alarmaDAO.insert(new Alarma("05", "34", true, false, false, true, false, false, false, true));
-            alarmaDAO.insert(new Alarma("15", "09", false, true, true, true, false, false, true, false));
+            alarmaDAO.insert(new Alarma("05", "34", true, false, false, true, false, false, false, true, null, null, false));
+            alarmaDAO.insert(new Alarma("15", "09", false, true, true, true, false, false, true, false, null, null, false));
             return null;
         }
     }

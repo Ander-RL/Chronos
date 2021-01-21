@@ -18,8 +18,12 @@ public class Alarma {
     private Boolean sabado;
     private Boolean domingo;
     private Boolean activated;
+    private String nombreSonido;
+    private String sonidoUri;
+    private Boolean sonar;
 
-    public Alarma(String hora, String minuto, Boolean lunes, Boolean martes, Boolean miercoles, Boolean jueves, Boolean viernes, Boolean sabado, Boolean domingo, Boolean activated) {
+    public Alarma(String hora, String minuto, Boolean lunes, Boolean martes, Boolean miercoles, Boolean jueves, Boolean viernes, Boolean sabado, Boolean domingo,
+                  Boolean activated, String nombreSonido, String sonidoUri, Boolean sonar) {
         // id se genera automaticamente
         this.hora = hora;
         this.minuto = minuto;
@@ -31,6 +35,9 @@ public class Alarma {
         this.sabado = sabado;
         this.domingo = domingo;
         this.activated = activated;
+        this.nombreSonido = nombreSonido;
+        this.sonidoUri = sonidoUri;
+        this.sonar = sonar;
     }
     // Porque id es el unico parametro que no esta en el constructor
     public void setId(int id) {
@@ -81,5 +88,21 @@ public class Alarma {
 
     public Boolean getActivated() {
         return activated;
+    }
+
+    public String getNombreSonido() {
+        return nombreSonido;
+    }
+
+    public String getSonidoUri() {
+        return sonidoUri;
+    }
+
+    public Boolean getSonar() {
+        return sonar;
+    }
+
+    public void setSonar(Boolean sonar) {
+        this.sonar = sonar;
     }
 }

@@ -311,8 +311,9 @@
 
     <TextView
         android:id="@+id/tv_selector"
-        android:layout_width="410dp"
+        android:layout_width="0dp"
         android:layout_height="79dp"
+        android:layout_marginEnd="80dp"
         android:textColor="@color/blue_500"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -329,7 +330,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:drawableTint="@drawable/selector_radiobutton"
-        android:onClick="onActivarClick"
+        android:onClick="onActivarSonido"
         android:theme="@style/SwitchButton"
         app:layout_constraintBaseline_toBaselineOf="@+id/tv_sonido"
         app:layout_constraintEnd_toEndOf="parent" />

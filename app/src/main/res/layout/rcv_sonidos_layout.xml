@@ -9,29 +9,19 @@
         android:id="@+id/tv_sonido"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="16dp"
         android:text="@string/tv_place_holder"
-        android:textSize="25sp"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.radiobutton.MaterialRadioButton
-        android:id="@+id/rcv_radio_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:gravity="center"
-        app:layout_constraintBaseline_toBaselineOf="@+id/tv_sonido"
-        app:layout_constraintEnd_toStartOf="@+id/tv_sonido"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <View
         android:id="@+id/dividerSonido"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginStart="70dp"
+        android:layout_marginTop="50dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="2dp" />

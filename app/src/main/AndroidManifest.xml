@@ -3,7 +3,7 @@
     package="arl.chronos">
 
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!--<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />-->
 
     <application
         android:allowBackup="true"
@@ -40,6 +40,8 @@
         <receiver android:name=".classes.AlertReceiver" />
         <receiver android:name=".classes.NotificationReceiver" />
         <receiver android:name=".classes.NotificationReceiverCancelar" />
+
+        <service android:name=".classes.ServicioSonido"/>
 
     </application>
 
