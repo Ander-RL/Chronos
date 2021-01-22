@@ -65,6 +65,7 @@ public class EscogerSonido extends AppCompatActivity {
             @Override
             public void onSonidoClick(String nombreSonido, String sonidoUri) {
                 sonidoElegido.setText(nombreSonido);
+                aceptar.setEnabled(true);
 
                 Intent intentServicio = new Intent(getApplicationContext(), ServicioSonido.class);
                 intentServicio.putExtra(EXTRA_NOMBRE_SONIDO, nombreSonido);
@@ -75,11 +76,25 @@ public class EscogerSonido extends AppCompatActivity {
         });
 
         cancelar.setOnClickListener(view -> {
+
+            Intent intentServicio = new Intent(getApplicationContext(), ServicioSonido.class);
+            intentServicio.setAction(".classes.ServicioSonido");
+            stopService(intentServicio);
+
             Intent intent = new Intent(this, CrearAlarma.class);
             startActivity(intent);
         });
 
+        if (sonidoElegido.getText().equals(getResources().getString(R.string.tv_ningun_sonido))) {
+            aceptar.setEnabled(false);
+        }
+
         aceptar.setOnClickListener(view -> {
+
+            Intent intentServicio = new Intent(getApplicationContext(), ServicioSonido.class);
+            intentServicio.setAction(".classes.ServicioSonido");
+            stopService(intentServicio);
+
             nombreSonido = sonidoElegido.getText().toString();
             Intent intent = new Intent(this, CrearAlarma.class);
             intent.putExtra(EXTRA_NOMBRE_SONIDO, nombreSonido);
@@ -87,7 +102,6 @@ public class EscogerSonido extends AppCompatActivity {
             setResult(RESULT_OK, intent);
             finish();
         });
-
     }
 
     public ArrayList<Sonido> getSonidoList() {

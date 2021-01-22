@@ -10,6 +10,8 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
+import arl.chronos.CrearAlarma;
+import arl.chronos.EscogerSonido;
 import arl.chronos.adapters.RcvAdapterAlarmas;
 
 public class AlertReceiver extends BroadcastReceiver {
@@ -28,16 +30,27 @@ public class AlertReceiver extends BroadcastReceiver {
         mensaje = intent.getStringExtra("mensaje_alarma");
         id = intent.getIntExtra(RcvAdapterAlarmas.ID_ALARMA, 0);
         parar = intent.getStringExtra("parar");
-
+        nombreSonido = intent.getStringExtra(CrearAlarma.EXTRA_SONIDO);
+        sonidoUri = intent.getStringExtra(CrearAlarma.EXTRA_URI);
+        sonar = intent.getBooleanExtra(CrearAlarma.EXTRA_SONAR, false);
 
         vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         vibrator.vibrate(new long[]{500, 1000, 500, 1000}, 0);
 
-        // TODO Crear Service para Musica.
+        Log.d("/////ALERT RECIVER/////",  nombreSonido + " ---> Uri: " + sonidoUri + " ---> Sonar: " + sonar);
+
+        // Crea Service para reproducir Musica.
+        if (sonar && !nombreSonido.equals("")) {
+            Intent intentServicio = new Intent(context, ServicioSonido.class);
+            intentServicio.putExtra(EscogerSonido.EXTRA_NOMBRE_SONIDO, nombreSonido);
+            intentServicio.putExtra(EscogerSonido.EXTRA_URI_SONIDO, sonidoUri);
+            intentServicio.setAction(".classes.ServicioSonido");
+            context.startService(intentServicio);
+        }
 
         NotificationHelper notificationHelper = new NotificationHelper(context, mensaje, id);
         NotificationCompat.Builder nb = notificationHelper.getCanalNotification();
-        Log.d("NOTIF_RECEIV", "AlertReceiver -> id = " + id + " / Mensaje = " + mensaje + " / Parar = " + parar);
+        Log.d("/////ALERT RECIVER/////", "AlertReceiver -> id = " + id + " / Mensaje = " + mensaje + " / Parar = " + parar);
         notificationHelper.getManager().notify(id, nb.build());
     }
 }

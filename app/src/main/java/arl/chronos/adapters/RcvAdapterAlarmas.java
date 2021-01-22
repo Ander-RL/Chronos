@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -219,6 +220,8 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
     }
 
     private void startAlarma(Calendar c, int code) {
+
+        Log.d("/////ADAPTER ALARM/////",  nombreSonido + " ---> Uri: " + sonidoUri + " ---> Sonar: " + sonar);
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlertReceiver.class);

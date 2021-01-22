@@ -36,7 +36,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         hora = intent.getStringExtra(NotificationHelper.HORA);
         id = intent.getIntExtra(NotificationHelper.ID_ALARMA, 0);
 
-        if (mensaje.equals(NotificationHelper.POSTPONER)) {
+        if (mensaje.equals(NotificationHelper.POSPONER)) {
 
             Toast.makeText(context, "Alarma postpuesta 15 minutos", Toast.LENGTH_SHORT).show();
 
@@ -47,6 +47,10 @@ public class NotificationReceiver extends BroadcastReceiver {
             newIntent.putExtra(ID_ALARMA, id);
             newIntent.putExtra("parar", "si");
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, newIntent, PendingIntent.FLAG_UPDATE_CURRENT); // FLAG envia la info de putExtra
+
+            Intent intentServicio = new Intent(context, ServicioSonido.class);
+            intentServicio.setAction(".classes.ServicioSonido");
+            context.stopService(intentServicio);
 
             vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
             vibrator.cancel();

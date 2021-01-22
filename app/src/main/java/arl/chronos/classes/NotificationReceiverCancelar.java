@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
+import arl.chronos.EscogerSonido;
 import arl.chronos.adapters.RcvAdapterAlarmas;
 
 
@@ -43,6 +44,10 @@ public class NotificationReceiverCancelar extends BroadcastReceiver {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intentCancelar, PendingIntent.FLAG_UPDATE_CURRENT);
 
             alarmManager.cancel(pendingIntent); // Cancela la alarma y ya no vuelve a sonar ese día? Probrar
+
+            Intent intentServicio = new Intent(context, ServicioSonido.class);
+            intentServicio.setAction(".classes.ServicioSonido");
+            context.stopService(intentServicio);
 
             vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
             vibrator.cancel();

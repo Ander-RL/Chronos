@@ -155,7 +155,7 @@ public class TabFragmentAlarmas extends Fragment {
 
             //Log.d("//////////RECIBIR//////", horaFormateada + ":" + minutoFormateado);
 
-            Alarma alarma = new Alarma(horaFormateada, minutoFormateado, l, m, x, j, v, s, d, activar, nombreSonido, sonidoUri.toString(), sonar); // TODO insertar nombre, Uri String y Activacion sonido alarma
+            Alarma alarma = new Alarma(horaFormateada, minutoFormateado, l, m, x, j, v, s, d, activar, nombreSonido, sonidoUri.toString(), sonar);
             myViewModel.insert(alarma);
 
             Snackbar.make(view, "Alarma creada", Snackbar.LENGTH_LONG).show();

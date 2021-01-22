@@ -24,7 +24,7 @@ public class NotificationHelper extends ContextWrapper {
     public static final String CANAL_NOMBRE = "Canal Notificaciones Alarma";
     public static final String TITULO_NOTIF = "Alarma";
     public static final String CANCELAR = "cancelar";
-    public static final String POSTPONER = "postponer";
+    public static final String POSPONER = "posponer";
     public static final String HORA = "hora";
     public static final String ID_ALARMA = "id_alarma";
     public static final String ID_INTENT = "id_intent";
@@ -72,11 +72,11 @@ public class NotificationHelper extends ContextWrapper {
         PendingIntent cancelButtonPendingIntent = PendingIntent.getBroadcast(this, id, cancelButtonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         // Se crea un pending intent para ejecutar el codigo del broadcast NotificationReceiver (boton posponer)
         Intent postponerButtonIntent = new Intent(this, NotificationReceiver.class);
-        postponerButtonIntent.putExtra(ID_INTENT, POSTPONER);
+        postponerButtonIntent.putExtra(ID_INTENT, POSPONER);
         postponerButtonIntent.putExtra(HORA, mensaje);
         postponerButtonIntent.putExtra(ID_ALARMA, id);
         PendingIntent postponerButtonPendingIntent = PendingIntent.getBroadcast(this, id, postponerButtonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        Log.d("NOTIF_RECEIV", "Helper -> id = " + id + " / Mensaje = " + mensaje);
+        Log.d("/////NOTIF HELPER/////", "Helper -> id = " + id + " / Mensaje = " + mensaje);
         // Se crea y devuelve la notificacion
         return new NotificationCompat.Builder(getApplicationContext(), CANAL_ID)
                 .setContentTitle(TITULO_NOTIF)
@@ -88,6 +88,6 @@ public class NotificationHelper extends ContextWrapper {
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true) // Cuando se toca la notificacion se borra/elimina/quita esa notificacion
                 .addAction(R.mipmap.ic_launcher, CANCELAR, cancelButtonPendingIntent)
-                .addAction(R.mipmap.ic_launcher, POSTPONER, postponerButtonPendingIntent);
+                .addAction(R.mipmap.ic_launcher, POSPONER, postponerButtonPendingIntent);
     }
 }

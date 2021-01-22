@@ -71,6 +71,7 @@ public class ServicioSonido extends Service {
     public void onDestroy() {
         super.onDestroy();
         mediaPlayer.stop();
+        mediaPlayer.reset();
         mediaPlayer.release();
     }
 }
