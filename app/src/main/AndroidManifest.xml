@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CrearAlarma"
+            android:name=".CrearEditarAlarma"
             android:parentActivityName=".MainActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -30,11 +30,11 @@
         </activity>
         <activity
             android:name=".EscogerSonido"
-            android:parentActivityName=".CrearAlarma">
+            android:parentActivityName=".CrearEditarAlarma">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".CrearAlarma" />
+                android:value=".CrearEditarAlarma" />
         </activity>
 
         <receiver android:name=".classes.AlertReceiver" />

@@ -5,11 +5,9 @@ import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
-import android.content.res.Resources;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,17 +21,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.widget.TextViewCompat;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.Calendar;
 
-import arl.chronos.classes.Alarma;
-
-public class CrearAlarma extends AppCompatActivity {
+public class CrearEditarAlarma extends AppCompatActivity {
 
     private Button cancelar;
     private Button guardar;
@@ -61,10 +54,10 @@ public class CrearAlarma extends AppCompatActivity {
     private String nombreSonido;
     private Boolean sonar;
     private Uri sonidoUri;
-
     private final int ESCOGER_SONIDO_CODE = 1;
     private final int STORAGE_PERMISSION_CODE = 1;
 
+    public static final String EXTRA_ID = "arl.chronos.EXTRA_ID";
     public static final String EXTRA_HORA = "arl.chronos.EXTRA_HORA";
     public static final String EXTRA_MIN = "arl.chronos.EXTRA_MIN";
     public static final String EXTRA_LUN = "arl.chronos.EXTRA_LUN";
@@ -93,6 +86,55 @@ public class CrearAlarma extends AppCompatActivity {
         sonidoSwitch = findViewById(R.id.sonido);
         tvNombreSonido = findViewById(R.id.tv_nombre_sonido);
 
+        // Si se edita la alarma, se entra en esta condición
+        Intent intentEditarAlarma = getIntent();
+
+        if (intentEditarAlarma.hasExtra(EXTRA_ID)){
+            Log.d("EDITALARMA", "L: " + intentEditarAlarma.getBooleanExtra(EXTRA_LUN, false) +
+                    "  M: " + intentEditarAlarma.getBooleanExtra(EXTRA_MAR, false) +
+                    "  X: " + intentEditarAlarma.getBooleanExtra(EXTRA_MIE, false) +
+                    "  J: " + intentEditarAlarma.getBooleanExtra(EXTRA_JUE, false) +
+                    "  V: " + intentEditarAlarma.getBooleanExtra(EXTRA_VIE, false) +
+                    "  S: " + intentEditarAlarma.getBooleanExtra(EXTRA_SAB, false) +
+                    "  D: " + intentEditarAlarma.getBooleanExtra(EXTRA_DOM, false) +
+                    "  Acivar: " + intentEditarAlarma.getBooleanExtra(EXTRA_ACT, false) +
+                    "  Sonido: " + intentEditarAlarma.getStringExtra(EXTRA_SONIDO) +
+                    "  Uri: " + intentEditarAlarma.getBooleanExtra(EXTRA_URI, false)+
+                    "  Sonar: " + intentEditarAlarma.getBooleanExtra(EXTRA_SONAR, false) +
+                    "  Hora: " + intentEditarAlarma.getStringExtra(EXTRA_HORA) +
+                    ":" + intentEditarAlarma.getStringExtra(EXTRA_MIN));
+
+            String h = intentEditarAlarma.getStringExtra(EXTRA_HORA);
+            String m  = intentEditarAlarma.getStringExtra(EXTRA_MIN);
+            String tiempo = h + DOS_PUNTOS + m;
+            // Se añaden a estas variables para que luego se pasen de vuelta correctamente y por separado.
+            hora = Integer.parseInt(h);
+            min  = Integer.parseInt(m);
+            // Se pone la hora en el textview
+            hhmm.setText(tiempo);
+            tvNombreSonido.setText(intentEditarAlarma.getStringExtra(EXTRA_SONIDO));
+            sonidoSwitch.setChecked(intentEditarAlarma.getBooleanExtra(EXTRA_SONAR, false));
+            sonidoUri = Uri.parse(intentEditarAlarma.getStringExtra(EXTRA_URI));
+
+            RadioButton rL = findViewById(R.id.radio_l);
+            RadioButton rM = findViewById(R.id.radio_m);
+            RadioButton rX = findViewById(R.id.radio_x);
+            RadioButton rJ = findViewById(R.id.radio_j);
+            RadioButton rV = findViewById(R.id.radio_v);
+            RadioButton rS = findViewById(R.id.radio_s);
+            RadioButton rD = findViewById(R.id.radio_d);
+            rL.setChecked(intentEditarAlarma.getBooleanExtra(EXTRA_LUN, false));
+            rM.setChecked(intentEditarAlarma.getBooleanExtra(EXTRA_MAR, false));
+            rX.setChecked(intentEditarAlarma.getBooleanExtra(EXTRA_MIE, false));
+            rJ.setChecked(intentEditarAlarma.getBooleanExtra(EXTRA_JUE, false));
+            rV.setChecked(intentEditarAlarma.getBooleanExtra(EXTRA_VIE, false));
+            rS.setChecked(intentEditarAlarma.getBooleanExtra(EXTRA_SAB, false));
+            rD.setChecked(intentEditarAlarma.getBooleanExtra(EXTRA_DOM, false));
+
+            SwitchMaterial activar = findViewById(R.id.activar);
+            activar.setChecked(intentEditarAlarma.getBooleanExtra(EXTRA_ACT, false));
+        }
+
         cancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,6 +146,7 @@ public class CrearAlarma extends AppCompatActivity {
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d("EDITALARMA", "hora: " + hora + "  min: " + min);
 
                 Intent intent = new Intent(view.getContext(), MainActivity.class);
                 intent.putExtra(EXTRA_HORA, hora);
@@ -117,7 +160,9 @@ public class CrearAlarma extends AppCompatActivity {
                 intent.putExtra(EXTRA_DOM, d);
                 intent.putExtra(EXTRA_ACT, activar);
 
-                if (nombreSonido.equals(getResources().getString(R.string.tv_ningun_sonido))) {
+                nombreSonido = tvNombreSonido.getText().toString();
+
+                if (nombreSonido.equals(getResources().getString(R.string.tv_ningun_sonido)) || nombreSonido.equals("")) {
                     intent.putExtra(EXTRA_SONIDO, "");
                     intent.putExtra(EXTRA_URI, "");
                 } else {
@@ -125,6 +170,11 @@ public class CrearAlarma extends AppCompatActivity {
                     intent.putExtra(EXTRA_URI, sonidoUri.toString());
                 }
                 intent.putExtra(EXTRA_SONAR, sonar);
+
+                int id = getIntent().getIntExtra(EXTRA_ID, -1);
+                if (id != -1) {
+                    intent.putExtra(EXTRA_ID, id);
+                }
 
                 setResult(RESULT_OK, intent);
                 finish();
@@ -139,7 +189,7 @@ public class CrearAlarma extends AppCompatActivity {
                 int horas = calendar.get(Calendar.HOUR_OF_DAY);
                 int mins = calendar.get(Calendar.MINUTE);
 
-                timePicker = new TimePickerDialog(CrearAlarma.this, R.style.DialogTheme, new TimePickerDialog.OnTimeSetListener() {
+                timePicker = new TimePickerDialog(CrearEditarAlarma.this, R.style.DialogTheme, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hh, int mm) {
                         //Formateo el hora obtenido: antepone el 0 si son menores de 10
@@ -187,7 +237,7 @@ public class CrearAlarma extends AppCompatActivity {
                     .setMessage(R.string.permiso_mensaje)
                     .setPositiveButton("Ok", (dialogInterface, i) -> {
                         ActivityCompat.requestPermissions(
-                                CrearAlarma.this,
+                                CrearEditarAlarma.this,
                                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
                     })
                     .setNegativeButton("Cancelar", (dialogInterface, i) -> {

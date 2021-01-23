@@ -3,14 +3,12 @@ package arl.chronos.classes;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
-import arl.chronos.CrearAlarma;
+import arl.chronos.CrearEditarAlarma;
 import arl.chronos.EscogerSonido;
 import arl.chronos.adapters.RcvAdapterAlarmas;
 
@@ -30,9 +28,9 @@ public class AlertReceiver extends BroadcastReceiver {
         mensaje = intent.getStringExtra("mensaje_alarma");
         id = intent.getIntExtra(RcvAdapterAlarmas.ID_ALARMA, 0);
         parar = intent.getStringExtra("parar");
-        nombreSonido = intent.getStringExtra(CrearAlarma.EXTRA_SONIDO);
-        sonidoUri = intent.getStringExtra(CrearAlarma.EXTRA_URI);
-        sonar = intent.getBooleanExtra(CrearAlarma.EXTRA_SONAR, false);
+        nombreSonido = intent.getStringExtra(CrearEditarAlarma.EXTRA_SONIDO);
+        sonidoUri = intent.getStringExtra(CrearEditarAlarma.EXTRA_URI);
+        sonar = intent.getBooleanExtra(CrearEditarAlarma.EXTRA_SONAR, false);
 
         vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         vibrator.vibrate(new long[]{500, 1000, 500, 1000}, 0);

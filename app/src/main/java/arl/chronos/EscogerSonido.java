@@ -4,21 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.PendingIntent;
-import android.app.Service;
 import android.content.ContentUris;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -81,7 +75,7 @@ public class EscogerSonido extends AppCompatActivity {
             intentServicio.setAction(".classes.ServicioSonido");
             stopService(intentServicio);
 
-            Intent intent = new Intent(this, CrearAlarma.class);
+            Intent intent = new Intent(this, CrearEditarAlarma.class);
             startActivity(intent);
         });
 
@@ -96,7 +90,7 @@ public class EscogerSonido extends AppCompatActivity {
             stopService(intentServicio);
 
             nombreSonido = sonidoElegido.getText().toString();
-            Intent intent = new Intent(this, CrearAlarma.class);
+            Intent intent = new Intent(this, CrearEditarAlarma.class);
             intent.putExtra(EXTRA_NOMBRE_SONIDO, nombreSonido);
             intent.putExtra(EXTRA_URI_SONIDO, localizarSonido(nombreSonido).toString()); // Se transforma la URI en String
             setResult(RESULT_OK, intent);

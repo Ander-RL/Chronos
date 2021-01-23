@@ -21,12 +21,11 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import arl.chronos.CrearAlarma;
+import arl.chronos.CrearEditarAlarma;
 import arl.chronos.R;
 import arl.chronos.adapters.RcvAdapterAlarmas;
 import arl.chronos.classes.Alarma;
@@ -44,11 +43,21 @@ public class TabFragmentAlarmas extends Fragment {
     private ArrayList<Alarma> listAlarmas;
     private MyViewModel myViewModel;
     private View view;
-    private int hora;                        private int min;                        private Boolean activar;
-    private Boolean l;                       private Boolean m;                      private Boolean x;                private Boolean j;
-    private Boolean v;                       private Boolean s;                      private Boolean d;
-    private final String CERO = "0";         private final String DOS_PUNTOS = ":";
-    private String horaFormateada = "";      private String minutoFormateado = "";   private String nombreSonido;
+    private int hora;
+    private int min;
+    private Boolean activar;
+    private Boolean l;
+    private Boolean m;
+    private Boolean x;
+    private Boolean j;
+    private Boolean v;
+    private Boolean s;
+    private Boolean d;
+    private final String CERO = "0";
+    private final String DOS_PUNTOS = ":";
+    private String horaFormateada = "";
+    private String minutoFormateado = "";
+    private String nombreSonido;
     private Uri sonidoUri;
     private Boolean sonar;
 
@@ -69,7 +78,7 @@ public class TabFragmentAlarmas extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), CrearAlarma.class);
+                Intent intent = new Intent(view.getContext(), CrearEditarAlarma.class);
                 startActivityForResult(intent, ADD_ALARMAS_REQUEST);
             }
         });
@@ -112,15 +121,37 @@ public class TabFragmentAlarmas extends Fragment {
         // Edita la alarma seleccionada
         rcvAdapter.setOnItemClickListener(new RcvAdapterAlarmas.OnItemClickListener() {
             @Override
-            public void onItemClick(Alarma alarma) { // TODO FUNCIONA SI TOCAS SOBRE EL SWITCH, SE GUARDA EL ESTADO DE ESA ALARMA
-                if(alarma.getActivated()){
-                    //Toast.makeText(getContext(), "Switch on", Toast.LENGTH_SHORT).show();
-                    alarma.setActivated(false);
-                } else {
-                    //Toast.makeText(getContext(), "Switch off", Toast.LENGTH_SHORT).show();
-                    alarma.setActivated(true);
+            public void onItemClick(Alarma alarma, Boolean editar) {
+                if (!editar) { // Si se clicka en el switch
+                    if (alarma.getActivated()) {
+                        alarma.setActivated(false);
+                    } else {
+                        alarma.setActivated(true);
+                    }
+                    myViewModel.update(alarma);
+                } else { // Si se clicka fuera del switch
+                    // Vuelve a la activy de crear alarmas con los datos de la alarma clickada
+
+                    Log.d("TABFRAGMENT_EDITALARMA", alarma.getHora() + ":" + alarma.getMinuto() + " id: " + alarma.getId() +
+                            " Nombre Sonido: " + alarma.getNombreSonido() + " Uri: " + alarma.getSonidoUri() + " Sonar: " + alarma.getSonar());
+
+                    Intent intent = new Intent(getContext(), CrearEditarAlarma.class);
+                    intent.putExtra(CrearEditarAlarma.EXTRA_ID, alarma.getId());
+                    intent.putExtra(CrearEditarAlarma.EXTRA_HORA, alarma.getHora());
+                    intent.putExtra(CrearEditarAlarma.EXTRA_MIN, alarma.getMinuto());
+                    intent.putExtra(CrearEditarAlarma.EXTRA_LUN, alarma.getLunes());
+                    intent.putExtra(CrearEditarAlarma.EXTRA_MAR, alarma.getMartes());
+                    intent.putExtra(CrearEditarAlarma.EXTRA_MIE, alarma.getMiercoles());
+                    intent.putExtra(CrearEditarAlarma.EXTRA_JUE, alarma.getJueves());
+                    intent.putExtra(CrearEditarAlarma.EXTRA_VIE, alarma.getViernes());
+                    intent.putExtra(CrearEditarAlarma.EXTRA_SAB, alarma.getSabado());
+                    intent.putExtra(CrearEditarAlarma.EXTRA_DOM, alarma.getDomingo());
+                    intent.putExtra(CrearEditarAlarma.EXTRA_ACT, alarma.getActivated());
+                    intent.putExtra(CrearEditarAlarma.EXTRA_SONIDO, alarma.getNombreSonido());
+                    intent.putExtra(CrearEditarAlarma.EXTRA_URI, alarma.getSonidoUri());
+                    intent.putExtra(CrearEditarAlarma.EXTRA_SONAR, alarma.getSonar());
+                    startActivityForResult(intent, EDIT_ALARMAS_REQUEST);
                 }
-                myViewModel.update(alarma);
             }
         });
 
@@ -130,35 +161,70 @@ public class TabFragmentAlarmas extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == ADD_ALARMAS_REQUEST && resultCode == RESULT_OK){
-            hora = data.getIntExtra(CrearAlarma.EXTRA_HORA, 0);
-            min = data.getIntExtra(CrearAlarma.EXTRA_MIN, 0);
-            l = data.getBooleanExtra(CrearAlarma.EXTRA_LUN,  false);
-            m = data.getBooleanExtra(CrearAlarma.EXTRA_MAR,  false);
-            x = data.getBooleanExtra(CrearAlarma.EXTRA_MIE,  false);
-            j = data.getBooleanExtra(CrearAlarma.EXTRA_JUE,  false);
-            v = data.getBooleanExtra(CrearAlarma.EXTRA_VIE,  false);
-            s = data.getBooleanExtra(CrearAlarma.EXTRA_SAB,  false);
-            d = data.getBooleanExtra(CrearAlarma.EXTRA_DOM,  false);
-            activar = data.getBooleanExtra(CrearAlarma.EXTRA_ACT,true);
-            nombreSonido = data.getStringExtra(CrearAlarma.EXTRA_SONIDO);
-            sonidoUri = Uri.parse(data.getStringExtra(CrearAlarma.EXTRA_URI));
-            sonar = data.getBooleanExtra(CrearAlarma.EXTRA_SONAR, false);
-
-            //Log.d("//////////RECIBIR//////", hora + ":" + min);
+        // En caso de que se retorne de crear la alarma
+        if (requestCode == ADD_ALARMAS_REQUEST && resultCode == RESULT_OK) {
+            hora = data.getIntExtra(CrearEditarAlarma.EXTRA_HORA, 0);
+            min = data.getIntExtra(CrearEditarAlarma.EXTRA_MIN, 0);
+            l = data.getBooleanExtra(CrearEditarAlarma.EXTRA_LUN, false);
+            m = data.getBooleanExtra(CrearEditarAlarma.EXTRA_MAR, false);
+            x = data.getBooleanExtra(CrearEditarAlarma.EXTRA_MIE, false);
+            j = data.getBooleanExtra(CrearEditarAlarma.EXTRA_JUE, false);
+            v = data.getBooleanExtra(CrearEditarAlarma.EXTRA_VIE, false);
+            s = data.getBooleanExtra(CrearEditarAlarma.EXTRA_SAB, false);
+            d = data.getBooleanExtra(CrearEditarAlarma.EXTRA_DOM, false);
+            activar = data.getBooleanExtra(CrearEditarAlarma.EXTRA_ACT, true);
+            nombreSonido = data.getStringExtra(CrearEditarAlarma.EXTRA_SONIDO);
+            sonidoUri = Uri.parse(data.getStringExtra(CrearEditarAlarma.EXTRA_URI));
+            sonar = data.getBooleanExtra(CrearEditarAlarma.EXTRA_SONAR, false);
+            
+            //Log.d("//////////TABFRAGMENT_RESULT//////", hora + ":" + min);
 
             //Formateo el hora obtenido: antepone el 0 si son menores de 10
-            String horaFormateada =  (hora < 10)? (CERO + hora) : String.valueOf(hora);
+            String horaFormateada = (hora < 10) ? (CERO + hora) : String.valueOf(hora);
             //Formateo el minuto obtenido: antepone el 0 si son menores de 10
-            String minutoFormateado = (min < 10)? (CERO + min):String.valueOf(min);
+            String minutoFormateado = (min < 10) ? (CERO + min) : String.valueOf(min);
 
-            //Log.d("//////////RECIBIR//////", horaFormateada + ":" + minutoFormateado);
+            //Log.d("//////////TABFRAGMENT_RESULT//////", horaFormateada + ":" + minutoFormateado);
 
             Alarma alarma = new Alarma(horaFormateada, minutoFormateado, l, m, x, j, v, s, d, activar, nombreSonido, sonidoUri.toString(), sonar);
             myViewModel.insert(alarma);
 
             Snackbar.make(view, "Alarma creada", Snackbar.LENGTH_LONG).show();
+
+        // En caso de que se retorne de modificar la alarma
+        } else if (requestCode == EDIT_ALARMAS_REQUEST && resultCode == RESULT_OK) {
+
+            int id = data.getIntExtra(CrearEditarAlarma.EXTRA_ID, -1);
+
+            if (id == -1) {
+                Toast.makeText(getContext(), "No se pudo actualizar la alarma", Toast.LENGTH_SHORT).show();
+            }
+
+            hora = data.getIntExtra(CrearEditarAlarma.EXTRA_HORA, 0);
+            min = data.getIntExtra(CrearEditarAlarma.EXTRA_MIN, 0);
+            l = data.getBooleanExtra(CrearEditarAlarma.EXTRA_LUN, false);
+            m = data.getBooleanExtra(CrearEditarAlarma.EXTRA_MAR, false);
+            x = data.getBooleanExtra(CrearEditarAlarma.EXTRA_MIE, false);
+            j = data.getBooleanExtra(CrearEditarAlarma.EXTRA_JUE, false);
+            v = data.getBooleanExtra(CrearEditarAlarma.EXTRA_VIE, false);
+            s = data.getBooleanExtra(CrearEditarAlarma.EXTRA_SAB, false);
+            d = data.getBooleanExtra(CrearEditarAlarma.EXTRA_DOM, false);
+            activar = data.getBooleanExtra(CrearEditarAlarma.EXTRA_ACT, true);
+            nombreSonido = data.getStringExtra(CrearEditarAlarma.EXTRA_SONIDO);
+            sonidoUri = Uri.parse(data.getStringExtra(CrearEditarAlarma.EXTRA_URI));
+            sonar = data.getBooleanExtra(CrearEditarAlarma.EXTRA_SONAR, false);
+
+            //Formateo el hora obtenido: antepone el 0 si son menores de 10
+            String horaFormateada = (hora < 10) ? (CERO + hora) : String.valueOf(hora);
+            //Formateo el minuto obtenido: antepone el 0 si son menores de 10
+            String minutoFormateado = (min < 10) ? (CERO + min) : String.valueOf(min);
+
+            Alarma alarma = new Alarma(horaFormateada, minutoFormateado, l, m, x, j, v, s, d, activar, nombreSonido, sonidoUri.toString(), sonar);
+            alarma.setId(id); // Necesario para que ROOM pueda identificar la entrada para actualizar la alarma
+            myViewModel.update(alarma);
+
+            Snackbar.make(view, "Alarma actualizada", Snackbar.LENGTH_LONG).show();
+
         } else {
             Snackbar.make(view, "Alarma no creada", Snackbar.LENGTH_LONG).show();
         }
@@ -168,7 +234,7 @@ public class TabFragmentAlarmas extends Fragment {
         return myViewModel;
     }
 
-    public String getMensaje(){
+    public String getMensaje() {
         return horaFormateada + DOS_PUNTOS + minutoFormateado;
     }
 }

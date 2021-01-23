@@ -4,18 +4,14 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Vibrator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -24,12 +20,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import arl.chronos.CrearAlarma;
+import arl.chronos.CrearEditarAlarma;
 import arl.chronos.R;
 import arl.chronos.classes.Alarma;
 import arl.chronos.classes.AlertReceiver;
-import arl.chronos.database.MyViewModel;
-import arl.chronos.fragments.TabFragmentAlarmas;
 
 public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.MyViewHolder> {
 
@@ -41,7 +35,7 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
     private int hor;
     private int min;
     private int seg;
-    private static boolean repetirAlarma = true;
+    //private static boolean repetirAlarma = true;
     private Boolean l = false;
     private Boolean m = false;
     private Boolean x = false;
@@ -164,6 +158,7 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
         TextView viernes;
         TextView sabado;
         TextView domingo;
+        TextView editarAlarma;
         SwitchMaterial activated;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -177,24 +172,25 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
             sabado = itemView.findViewById(R.id.tv_sabado);
             domingo = itemView.findViewById(R.id.tv_domingo);
             activated = itemView.findViewById(R.id.activated);
+            editarAlarma = itemView.findViewById(R.id.tv_editar_alarma);
 
-            /*itemView.setOnClickListener(new View.OnClickListener() { // FUNCIONA SI TOCAS SOBRE LA ALARMA
+            editarAlarma.setOnClickListener(new View.OnClickListener() { // FUNCIONA SI TOCAS SOBRE LA ALARMA
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();
                     if (listener != null && position != RecyclerView.NO_POSITION) {
-                        listener.onItemClick(alarmas.get(position));
-                        Toast.makeText(context, getAdapterPosition() + " Position", Toast.LENGTH_SHORT).show();
+                        listener.onItemClick(alarmas.get(position), true);
+                        //Toast.makeText(context, getAdapterPosition() + " Position", Toast.LENGTH_SHORT).show();
                     }
                 }
-            });*/
+            });
 
             activated.setOnClickListener(new View.OnClickListener() {// FUNCIONA SI TOCAS SOBRE EL SWITCH
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();
                     if (listener != null && position != RecyclerView.NO_POSITION) {
-                        listener.onItemClick(alarmas.get(position));
+                        listener.onItemClick(alarmas.get(position), false);
                         //Toast.makeText(context, getAdapterPosition() + " Position", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -203,7 +199,7 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
     }
 
     public interface OnItemClickListener {
-        void onItemClick(Alarma alarma);
+        void onItemClick(Alarma alarma, Boolean editar);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -221,16 +217,16 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
 
     private void startAlarma(Calendar c, int code) {
 
-        Log.d("/////ADAPTER ALARM/////",  nombreSonido + " ---> Uri: " + sonidoUri + " ---> Sonar: " + sonar);
+        Log.d("/////ADAPTER ALARM/////", nombreSonido + " ---> Uri: " + sonidoUri + " ---> Sonar: " + sonar);
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlertReceiver.class);
         intent.putExtra(MENSAJE, ho + ":" + mi);
         intent.putExtra(ID_ALARMA, code);
         intent.putExtra(PARAR, "no");
-        intent.putExtra(CrearAlarma.EXTRA_SONIDO, nombreSonido);
-        intent.putExtra(CrearAlarma.EXTRA_URI, sonidoUri);
-        intent.putExtra(CrearAlarma.EXTRA_SONAR, sonar);
+        intent.putExtra(CrearEditarAlarma.EXTRA_SONIDO, nombreSonido);
+        intent.putExtra(CrearEditarAlarma.EXTRA_URI, sonidoUri);
+        intent.putExtra(CrearEditarAlarma.EXTRA_SONAR, sonar);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, code, intent, PendingIntent.FLAG_UPDATE_CURRENT); // FLAG envia la info de putExtra
 
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);

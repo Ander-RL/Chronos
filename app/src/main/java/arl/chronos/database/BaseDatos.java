@@ -50,8 +50,8 @@ public abstract class BaseDatos extends RoomDatabase{
 
         @Override
         protected Void doInBackground(Void... voids) {
-            alarmaDAO.insert(new Alarma("05", "34", true, false, false, true, false, false, false, true, null, null, false));
-            alarmaDAO.insert(new Alarma("15", "09", false, true, true, true, false, false, true, false, null, null, false));
+            alarmaDAO.insert(new Alarma("05", "34", true, false, false, true, false, false, false, true, "", "", false));
+            alarmaDAO.insert(new Alarma("15", "09", false, true, true, true, false, false, true, false, "", "", false));
             return null;
         }
     }
