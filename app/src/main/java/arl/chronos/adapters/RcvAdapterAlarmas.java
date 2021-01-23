@@ -46,6 +46,7 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
     private String nombreSonido;
     private String sonidoUri;
     private Boolean sonar;
+    private Boolean activar;
 
     public static final String MENSAJE = "mensaje_alarma";
     public static final String ID_ALARMA = "id_alarma";
@@ -85,6 +86,7 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
         nombreSonido = currentAlarma.getNombreSonido();
         sonidoUri = currentAlarma.getSonidoUri();
         sonar = currentAlarma.getSonar();
+        activar = currentAlarma.getActivated();
 
         hor = Integer.parseInt(ho);
         min = Integer.parseInt(mi);

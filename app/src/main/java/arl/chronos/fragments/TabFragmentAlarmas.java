@@ -176,7 +176,7 @@ public class TabFragmentAlarmas extends Fragment {
             nombreSonido = data.getStringExtra(CrearEditarAlarma.EXTRA_SONIDO);
             sonidoUri = Uri.parse(data.getStringExtra(CrearEditarAlarma.EXTRA_URI));
             sonar = data.getBooleanExtra(CrearEditarAlarma.EXTRA_SONAR, false);
-            
+
             //Log.d("//////////TABFRAGMENT_RESULT//////", hora + ":" + min);
 
             //Formateo el hora obtenido: antepone el 0 si son menores de 10

@@ -104,16 +104,17 @@ public class CrearEditarAlarma extends AppCompatActivity {
                     "  Hora: " + intentEditarAlarma.getStringExtra(EXTRA_HORA) +
                     ":" + intentEditarAlarma.getStringExtra(EXTRA_MIN));
 
-            String h = intentEditarAlarma.getStringExtra(EXTRA_HORA);
-            String m  = intentEditarAlarma.getStringExtra(EXTRA_MIN);
-            String tiempo = h + DOS_PUNTOS + m;
+            String ho = intentEditarAlarma.getStringExtra(EXTRA_HORA);
+            String mi  = intentEditarAlarma.getStringExtra(EXTRA_MIN);
+            String tiempo = ho + DOS_PUNTOS + mi;
             // Se añaden a estas variables para que luego se pasen de vuelta correctamente y por separado.
-            hora = Integer.parseInt(h);
-            min  = Integer.parseInt(m);
+            hora = Integer.parseInt(ho);
+            min  = Integer.parseInt(mi);
             // Se pone la hora en el textview
             hhmm.setText(tiempo);
             tvNombreSonido.setText(intentEditarAlarma.getStringExtra(EXTRA_SONIDO));
-            sonidoSwitch.setChecked(intentEditarAlarma.getBooleanExtra(EXTRA_SONAR, false));
+            sonar = intentEditarAlarma.getBooleanExtra(EXTRA_SONAR, false);
+            sonidoSwitch.setChecked(sonar);
             sonidoUri = Uri.parse(intentEditarAlarma.getStringExtra(EXTRA_URI));
 
             RadioButton rL = findViewById(R.id.radio_l);
@@ -123,16 +124,24 @@ public class CrearEditarAlarma extends AppCompatActivity {
             RadioButton rV = findViewById(R.id.radio_v);
             RadioButton rS = findViewById(R.id.radio_s);
             RadioButton rD = findViewById(R.id.radio_d);
-            rL.setChecked(intentEditarAlarma.getBooleanExtra(EXTRA_LUN, false));
-            rM.setChecked(intentEditarAlarma.getBooleanExtra(EXTRA_MAR, false));
-            rX.setChecked(intentEditarAlarma.getBooleanExtra(EXTRA_MIE, false));
-            rJ.setChecked(intentEditarAlarma.getBooleanExtra(EXTRA_JUE, false));
-            rV.setChecked(intentEditarAlarma.getBooleanExtra(EXTRA_VIE, false));
-            rS.setChecked(intentEditarAlarma.getBooleanExtra(EXTRA_SAB, false));
-            rD.setChecked(intentEditarAlarma.getBooleanExtra(EXTRA_DOM, false));
+            l = intentEditarAlarma.getBooleanExtra(EXTRA_LUN, false);
+            m = intentEditarAlarma.getBooleanExtra(EXTRA_MAR, false);
+            x = intentEditarAlarma.getBooleanExtra(EXTRA_MIE, false);
+            j = intentEditarAlarma.getBooleanExtra(EXTRA_JUE, false);
+            v = intentEditarAlarma.getBooleanExtra(EXTRA_VIE, false);
+            s = intentEditarAlarma.getBooleanExtra(EXTRA_SAB, false);
+            d = intentEditarAlarma.getBooleanExtra(EXTRA_DOM, false);
+            rL.setChecked(l);
+            rM.setChecked(m);
+            rX.setChecked(x);
+            rJ.setChecked(j);
+            rV.setChecked(v);
+            rS.setChecked(s);
+            rD.setChecked(d);
 
-            SwitchMaterial activar = findViewById(R.id.activar);
-            activar.setChecked(intentEditarAlarma.getBooleanExtra(EXTRA_ACT, false));
+            SwitchMaterial activarAlarma = findViewById(R.id.activar);
+            activar = intentEditarAlarma.getBooleanExtra(EXTRA_ACT, false);
+            activarAlarma.setChecked(activar);
         }
 
         cancelar.setOnClickListener(new View.OnClickListener() {
@@ -146,7 +155,7 @@ public class CrearEditarAlarma extends AppCompatActivity {
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("EDITALARMA", "hora: " + hora + "  min: " + min);
+                Log.d("EDITALARMA", "hora: " + hora + "  min: " + min + "  activar: " + activar + "  sonar: " + sonar);
 
                 Intent intent = new Intent(view.getContext(), MainActivity.class);
                 intent.putExtra(EXTRA_HORA, hora);
@@ -335,27 +344,29 @@ public class CrearEditarAlarma extends AppCompatActivity {
     }
 
     public void onActivarClick(View view) {
+        SwitchMaterial toggle = (SwitchMaterial) view;
+        boolean checked = toggle.isChecked();
 
-        boolean checked = ((SwitchMaterial) view).isActivated();
-
-        if (checked) {
+        if (!checked) {
             activar = false;
         }
-        if (!checked) {
+        if (checked) {
             activar = true;
         }
-
+        Log.d("EDITALARMA", "hora: " + hora + "  min: " + min + "  activar: " + activar);
     }
 
     public void onActivarSonido(View view) {
-        boolean checked = view.isActivated();
+        SwitchMaterial toggle = (SwitchMaterial) view;
+        boolean checked = toggle.isChecked();
 
-        if (checked) {
+        if (!checked) {
             sonar = false;
         }
-        if (!checked) {
+        if (checked) {
             sonar = true;
         }
+        Log.d("EDITALARMA", "hora: " + hora + "  min: " + min + "  sonar: " + sonar);
     }
 
     @Override
