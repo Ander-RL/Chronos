@@ -13,7 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Chronos">
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,7 +24,9 @@
         </activity>
         <activity
             android:name=".CrearEditarAlarma"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -30,7 +34,9 @@
         </activity>
         <activity
             android:name=".EscogerSonido"
-            android:parentActivityName=".CrearEditarAlarma">
+            android:parentActivityName=".CrearEditarAlarma"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

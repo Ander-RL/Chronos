@@ -7,9 +7,9 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import arl.chronos.fragments.TabFragmentAlarmas;
 import arl.chronos.fragments.TabFragmentCalendario;
-import arl.chronos.fragments.TabFragmentTareas;
+import arl.chronos.fragments.TabFragmentCrono;
 
-/**
+/*
  * La clase PagerAdapter, extiende de FragmentPagerAdapter.
  * Su funcion es acoger las paginas/fragments que iran dentro
  * del ViewPager(layout que permite mover de izq a derch).
@@ -23,10 +23,8 @@ public class PagerAdapter extends FragmentPagerAdapter {
         this.numTabs = numTabs;
     }
 
-    /**
+    /*
      * Devuelve el Fragment asociado con la posicion especificada.
-     * @param position
-     * @return new TabFragment
      */
 
     @NonNull
@@ -34,15 +32,14 @@ public class PagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0: return new TabFragmentAlarmas();
-            case 1: return new TabFragmentTareas();
+            case 1: return new TabFragmentCrono();
             case 2: return new TabFragmentCalendario();
             default: return null;
         }
     }
 
-    /**
+    /*
      * Devuelve el numero de views disponibles.
-     * @return
      */
 
     @Override

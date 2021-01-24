@@ -71,7 +71,7 @@ public class TabFragmentAlarmas extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // Inflar el Layout para este Fragment
         view = inflater.inflate(R.layout.fragment_tab_alarmas, container, false);
 
         fab = view.findViewById(R.id.fab_alarmas);
@@ -83,7 +83,7 @@ public class TabFragmentAlarmas extends Fragment {
             }
         });
 
-        listAlarmas = new ArrayList<>(); // TODO Eliminar porque no se usa???
+        //listAlarmas = new ArrayList<>();
 
         recyclerView = view.findViewById(R.id.rcv_alarmas);
         recyclerView.setHasFixedSize(true);

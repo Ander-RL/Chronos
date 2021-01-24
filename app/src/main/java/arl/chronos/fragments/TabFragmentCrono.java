@@ -10,16 +10,16 @@ import android.view.ViewGroup;
 
 import arl.chronos.R;
 
-public class TabFragmentTareas extends Fragment {
+public class TabFragmentCrono extends Fragment {
 
-    public TabFragmentTareas() {
+    public TabFragmentCrono() {
         // Constructor por defecto
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // Inflar el Layout para este Fragment
         return inflater.inflate(R.layout.fragment_tab_crono, container, false);
     }
 }
