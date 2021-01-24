@@ -37,9 +37,9 @@
                 android:value=".CrearEditarAlarma" />
         </activity>
 
-        <receiver android:name=".classes.AlertReceiver" />
-        <receiver android:name=".classes.NotificationReceiver" />
-        <receiver android:name=".classes.NotificationReceiverCancelar" />
+        <receiver android:name=".receiver.AlertReceiver" />
+        <receiver android:name=".receiver.NotificationReceiver" />
+        <receiver android:name=".receiver.NotificationReceiverCancelar" />
 
         <service android:name=".classes.ServicioSonido"/>
 

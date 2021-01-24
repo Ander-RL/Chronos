@@ -1,4 +1,4 @@
-package arl.chronos.classes;
+package arl.chronos.receiver;
 
 import android.app.AlarmManager;
 import android.app.NotificationManager;
@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
-import arl.chronos.adapters.RcvAdapterAlarmas;
+import arl.chronos.classes.ServicioSonido;
 
 
 // Clase para para añadir funcionalidades a las notificaciones (botones)

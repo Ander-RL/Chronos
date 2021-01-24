@@ -23,7 +23,7 @@ import java.util.List;
 import arl.chronos.CrearEditarAlarma;
 import arl.chronos.R;
 import arl.chronos.classes.Alarma;
-import arl.chronos.classes.AlertReceiver;
+import arl.chronos.receiver.AlertReceiver;
 
 public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.MyViewHolder> {
 

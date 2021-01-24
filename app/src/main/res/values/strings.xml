@@ -3,7 +3,7 @@
 
     <!--//////////////// Encabezados TabFragments /////////////////////-->
     <string name="tabfragment_alarmas">Alarmas</string>
-    <string name="tabfragment_tareas">Tareas</string>
+    <string name="tabfragment_crono">Crono</string>
     <string name="tabfragment_calendario">Calendario</string>
     <string name="title_activity_alarmas">AlarmasActivity</string>
 

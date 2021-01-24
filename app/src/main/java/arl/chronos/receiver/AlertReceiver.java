@@ -1,4 +1,4 @@
-package arl.chronos.classes;
+package arl.chronos.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat;
 import arl.chronos.CrearEditarAlarma;
 import arl.chronos.EscogerSonido;
 import arl.chronos.adapters.RcvAdapterAlarmas;
+import arl.chronos.classes.ServicioSonido;
 
 public class AlertReceiver extends BroadcastReceiver {
     private String mensaje;
