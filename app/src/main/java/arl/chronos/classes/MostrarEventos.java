@@ -1,6 +1,10 @@
 package arl.chronos.classes;
 
 import android.util.Log;
+import android.view.View;
+
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
@@ -10,6 +14,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import arl.chronos.R;
+import arl.chronos.database.MyViewModel;
 
 // Mostrar eventos en el calendario
 public class MostrarEventos implements Runnable {
@@ -21,10 +26,6 @@ public class MostrarEventos implements Runnable {
         this.calendarView = calendarView;
         this.eventos = eventos;
         this.listAlarmas = listAlarmas;
-    }
-
-    public List<EventDay> getEventos() {
-        return eventos;
     }
 
     @Override

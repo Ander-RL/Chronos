@@ -10,7 +10,7 @@
     <com.applandeo.materialcalendarview.CalendarView
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:forwardButtonSrc="@drawable/ic_arrow_forward"
         app:previousButtonSrc="@drawable/ic_arrow_back"
         app:headerColor="@color/white"
@@ -20,11 +20,5 @@
         app:datePicker="true"
         app:eventsEnabled="true"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_calendario"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/calendarView"/>
 
 </RelativeLayout>

@@ -5,20 +5,22 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStore;
+import androidx.lifecycle.ViewModelStoreOwner;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
-import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import arl.chronos.R;
 import arl.chronos.classes.Alarma;
@@ -32,8 +34,8 @@ public class TabFragmentCalendario extends Fragment {
     private CalendarView calendarView;
     private MyViewModel myViewModel;
     private ArrayList<Alarma> listAlarmas = new ArrayList<>();
-    private MostrarEventos mostrarEventos;
     private Thread popularCalendario;
+    private ExecutorService executorService;
 
     public TabFragmentCalendario() {
         // Constructor por defecto
@@ -44,7 +46,6 @@ public class TabFragmentCalendario extends Fragment {
                              Bundle savedInstanceState) {
         // Inflar el Layout para este Fragment
         view = inflater.inflate(R.layout.fragment_tab_calendario, container, false);
-
         // Se recoge la lista de la base de datos mediante ViewModel y se pasa la lista
         myViewModel = new ViewModelProvider(this).get(MyViewModel.class);
         myViewModel.getTodasAlarmas().observe(getViewLifecycleOwner(), new Observer<List<Alarma>>() {
@@ -57,9 +58,11 @@ public class TabFragmentCalendario extends Fragment {
         Log.d("FragmentCalendario", "onCreateView()");
 
         calendarView = (CalendarView) view.findViewById(R.id.calendarView);
-        mostrarEventos = new MostrarEventos(calendarView, eventos, listAlarmas);
-        popularCalendario = new Thread(mostrarEventos);
-        popularCalendario.start();
+        //popularCalendario = new Thread(new MostrarEventos(calendarView, eventos, listAlarmas));
+        //popularCalendario.start();
+
+        executorService = Executors.newSingleThreadExecutor();
+        executorService.execute(new MostrarEventos(calendarView, eventos, listAlarmas));
         /*calendarView.setOnDayClickListener(new OnDayClickListener() {
             @Override
             public void onDayClick(EventDay eventDay) {
@@ -74,7 +77,8 @@ public class TabFragmentCalendario extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        popularCalendario.interrupt();
+        //popularCalendario.interrupt();
+        executorService.shutdown();
     }
 
     @Override
