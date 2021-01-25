@@ -47,7 +47,7 @@
         <receiver android:name=".receiver.NotificationReceiver" />
         <receiver android:name=".receiver.NotificationReceiverCancelar" />
 
-        <service android:name=".classes.ServicioSonido"/>
+        <service android:name=".service.ServicioSonido"/>
 
     </application>
 

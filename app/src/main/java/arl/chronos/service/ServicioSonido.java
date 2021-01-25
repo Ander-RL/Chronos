@@ -1,4 +1,4 @@
-package arl.chronos.classes;
+package arl.chronos.service;
 
 import android.app.Service;
 import android.content.Context;
@@ -16,18 +16,11 @@ import arl.chronos.EscogerSonido;
 
 public class ServicioSonido extends Service {
     private MediaPlayer mediaPlayer;
-    private Context context;
     private String nombreSonido;
     private String sonidoUri;
 
     public ServicioSonido() {
     }
-
-    /*public ServicioSonido(Context context, String nombreSonido, String sonidoUri){
-        this.context = context;
-        this.nombreSonido = nombreSonido;
-        this.sonidoUri = sonidoUri;
-    }*/
 
     @Nullable
     @Override

@@ -17,7 +17,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import arl.chronos.adapters.RcvAdapterSonidos;
-import arl.chronos.classes.ServicioSonido;
+import arl.chronos.service.ServicioSonido;
 import arl.chronos.classes.Sonido;
 
 public class EscogerSonido extends AppCompatActivity {

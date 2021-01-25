@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
-import arl.chronos.classes.ServicioSonido;
+import arl.chronos.service.ServicioSonido;
 
 
 // Clase para para añadir funcionalidades a las notificaciones (botones)
