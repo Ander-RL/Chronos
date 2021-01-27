@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relative_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -11,14 +12,14 @@
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:forwardButtonSrc="@drawable/ic_arrow_forward"
-        app:previousButtonSrc="@drawable/ic_arrow_back"
-        app:headerColor="@color/white"
-        app:headerLabelColor="@color/black"
-        app:selectionColor="@color/blue_500"
-        app:todayLabelColor="@color/blue_500"
         app:datePicker="true"
         app:eventsEnabled="true"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:forwardButtonSrc="@drawable/ic_arrow_forward"
+        app:headerColor="@color/white"
+        app:headerLabelColor="@color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:previousButtonSrc="@drawable/ic_arrow_back"
+        app:selectionColor="@color/blue_500"
+        app:todayLabelColor="@color/blue_500" />
 
-</RelativeLayout>
+</LinearLayout>

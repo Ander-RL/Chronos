@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import arl.chronos.classes.Alarma;
 // Este ViewModel es para las alarmas. Otras operaciones tendrían su propio ViewModel

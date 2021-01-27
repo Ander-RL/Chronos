@@ -1,5 +1,7 @@
 package arl.chronos.classes;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 
@@ -39,9 +41,9 @@ public class MostrarEventos implements Runnable {
                         calendar.set(Calendar.DAY_OF_WEEK, 2);
                         calendar.set(Calendar.WEEK_OF_MONTH, i);
                         eventos.add(new EventDay(calendar, R.drawable.ic_alarm));
-                        Log.d("CALENDARIO", "Year = " + calendar.get(Calendar.YEAR) +
+                        /*Log.d("CALENDARIO", "Year = " + calendar.get(Calendar.YEAR) +
                                 " --- Month = " + calendar.get(Calendar.MONTH) + " --- Week = " + calendar.get(Calendar.WEEK_OF_MONTH) +
-                                " --- Day = " + calendar.get(Calendar.DAY_OF_WEEK));
+                                " --- Day = " + calendar.get(Calendar.DAY_OF_WEEK));*/
                     }
                 }
                 if (alarma.getMartes()) {
@@ -100,6 +102,13 @@ public class MostrarEventos implements Runnable {
                 }
             }
         }
-        calendarView.setEvents(eventos);
+        // Para que actualice el elemento del UI Thread y evitas crashes
+        calendarView.post(new Runnable() {
+            @Override
+            public void run() {
+                calendarView.setEvents(eventos);
+            }
+        });
+        //new Handler(Looper.getMainLooper()).post(() -> {calendarView.setEvents(eventos);});
     }
 }
