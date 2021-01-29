@@ -54,6 +54,16 @@
     <string name="material_calendar_saturday">S</string>
     <string name="material_calendar_sunday">D</string>
 
+    <string-array name="material_calendar_day_array">
+        <item>L</item>
+        <item>M</item>
+        <item>X</item>
+        <item>J</item>
+        <item>V</item>
+        <item>S</item>
+        <item>D</item>
+    </string-array>
+
     <array name="material_calendar_months_array">
         <item>Enero</item>
         <item>Febrero</item>

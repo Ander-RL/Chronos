@@ -1,4 +1,4 @@
-package arl.chronos.classes;
+/*package arl.chronos.classes;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -43,7 +43,7 @@ public class MostrarEventos implements Runnable {
                         eventos.add(new EventDay(calendar, R.drawable.ic_alarm));
                         /*Log.d("CALENDARIO", "Year = " + calendar.get(Calendar.YEAR) +
                                 " --- Month = " + calendar.get(Calendar.MONTH) + " --- Week = " + calendar.get(Calendar.WEEK_OF_MONTH) +
-                                " --- Day = " + calendar.get(Calendar.DAY_OF_WEEK));*/
+                                " --- Day = " + calendar.get(Calendar.DAY_OF_WEEK));
                     }
                 }
                 if (alarma.getMartes()) {
@@ -112,3 +112,4 @@ public class MostrarEventos implements Runnable {
         //new Handler(Looper.getMainLooper()).post(() -> {calendarView.setEvents(eventos);});
     }
 }
+*/

@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "arl.chronos"
-        minSdkVersion 24
+        minSdkVersion 26
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -31,6 +31,7 @@ android {
 dependencies {
     def lifecycle_version = "2.2.0"
     def room_version = "2.2.5"
+    def calendar_version = "2.0.0"
 
     // MyViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
@@ -45,7 +46,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     // CalendarView
-    implementation 'com.applandeo:material-calendar-view:1.7.0'
+    //implementation 'com.applandeo:material-calendar-view:1.7.0'
+    implementation "com.github.prolificinteractive:material-calendarview:$calendar_version"
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
