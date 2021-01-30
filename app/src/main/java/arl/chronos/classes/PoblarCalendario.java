@@ -46,10 +46,7 @@ public class PoblarCalendario implements Callable<HashSet<CalendarDay>> {
         //int year = calendar.get(Calendar.YEAR);
 
         for (Alarma alarma : listAlarmas) {
-            //for (int j = 0; j < 12; j++) {
-            //for (int j = 0; j < 4; j++) {
             for (int i = 1; i <= 5; i++) {
-                //for (int k = 1; k <= 7; k++) {
 
                 /*calendar.set(Calendar.WEEK_OF_MONTH, i);
                 calendar.set(Calendar.DAY_OF_WEEK, 1);
@@ -62,30 +59,43 @@ public class PoblarCalendario implements Callable<HashSet<CalendarDay>> {
                 // Domingo
                 if (alarma.getDomingo() && alarma.getActivated()) {
 
-                    calendar.set(Calendar.WEEK_OF_MONTH, i);
-                    calendar.set(Calendar.DAY_OF_WEEK, 1);
-                    LocalDate time = LocalDate.of(year, month, calendar.get(Calendar.DAY_OF_MONTH));
-                    int dayOfWeek = time.getDayOfWeek().getValue();
-                    int diff = 7 - dayOfWeek;
-                    int day = calendar.get(Calendar.DAY_OF_MONTH) + diff;
-                    int maxDays = time.getMonth().maxLength();
+                    YearMonth yearMonthObject = YearMonth.of(year, month);
+                    int maxDays = yearMonthObject.lengthOfMonth();
+                    int cont = 0;
+                    int day = 1;
+                    LocalDate time;
 
-
-                    if (!(day > maxDays)) {
-                        days.add(CalendarDay.from(year, month, day));
+                    while (cont < maxDays) {
+                        time = LocalDate.of(year, month, day + cont);
+                        String weekDay = time.getDayOfWeek().toString();
+                        if (weekDay.equals("SUNDAY")) {
+                            days.add(CalendarDay.from(year, month, day + cont));
+                        }
+                        cont++;
                     }
-
-
                 }
 
                 // Lunes
                 if (alarma.getLunes() && alarma.getActivated()) {
 
+                    YearMonth yearMonthObject = YearMonth.of(year, month);
+                    int maxDays = yearMonthObject.lengthOfMonth();
+                    int cont = 0;
+                    int day = 1;
+                    LocalDate time;
 
-                    calendar.set(Calendar.WEEK_OF_MONTH, i);
+                    while (cont < maxDays) {
+                        time = LocalDate.of(year, month, day + cont);
+                        String weekDay = time.getDayOfWeek().toString();
+                        if (weekDay.equals("MONDAY")) {
+                            days.add(CalendarDay.from(year, month, day + cont));
+                        }
+                        cont++;
+                    }
+                    /*calendar.set(Calendar.WEEK_OF_MONTH, i);
                     calendar.set(Calendar.DAY_OF_WEEK, 2);
 
-                    YearMonth yearMonthObject = YearMonth.of(2021, 6);
+                    YearMonth yearMonthObject = YearMonth.of(year, month);
                     int maxDays = yearMonthObject.lengthOfMonth();
 
                     LocalDate time;
@@ -96,17 +106,17 @@ public class PoblarCalendario implements Callable<HashSet<CalendarDay>> {
                     } else {
                         int oldDay = dayOfMonth;
                         dayOfMonth = oldDay - (oldDay - maxDays);
-                        Log.d("FragmentCalendario", " max = " + maxDays + "  dayOfMonth = " + dayOfMonth);
+                        //Log.d("FragmentCalendario", " max = " + maxDays + "  dayOfMonth = " + dayOfMonth);
                         time = LocalDate.of(year, month, dayOfMonth);
                     }
 
                     int dayOfWeek = time.getDayOfWeek().getValue();
                     int diff = 1 - dayOfWeek;
                     int day = dayOfMonth + diff;
-                    Log.d("FragmentCalendario", " diff = " + diff + "  dayOfWeek = " + dayOfWeek + "  day = " + day);
+                    //Log.d("FragmentCalendario", " diff = " + diff + "  dayOfWeek = " + dayOfWeek + "  day = " + day);
                     if (!(day > maxDays) && !(day < 1)) {
                         days.add(CalendarDay.from(year, month, day));
-                    }
+                    }*/
                     /*for (CalendarDay d : days) {
                         Log.d("FragmentCalendario", "day = " + d.getDay()
                                 + "   dayOfWeek = " + calendar.get(Calendar.DAY_OF_WEEK)
@@ -122,10 +132,173 @@ public class PoblarCalendario implements Callable<HashSet<CalendarDay>> {
                                 + "   maxDays = " + maxDays);
                     }*/
                 }
+
+                // Martes
+                if (alarma.getMartes() && alarma.getActivated()) {
+                    YearMonth yearMonthObject = YearMonth.of(year, month);
+                    int maxDays = yearMonthObject.lengthOfMonth();
+                    int cont = 0;
+                    int day = 1;
+                    LocalDate time;
+
+                    while (cont < maxDays) {
+                        time = LocalDate.of(year, month, day + cont);
+                        String weekDay = time.getDayOfWeek().toString();
+                        if (weekDay.equals("TUESDAY")) {
+                            days.add(CalendarDay.from(year, month, day + cont));
+                        }
+                        cont++;
+                    }
+                    /*calendar.set(Calendar.WEEK_OF_MONTH, i);
+                    calendar.set(Calendar.DAY_OF_WEEK, 3);
+
+                    YearMonth yearMonthObject = YearMonth.of(year, month);
+                    int maxDays = yearMonthObject.lengthOfMonth();
+
+                    LocalDate time;
+
+                    int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+                    if (dayOfMonth <= maxDays) {
+                        time = LocalDate.of(year, month, dayOfMonth);
+                    } else {
+                        int oldDay = dayOfMonth;
+                        dayOfMonth = oldDay - (oldDay - maxDays);
+                        time = LocalDate.of(year, month, dayOfMonth);
+                    }
+
+                    int dayOfWeek = time.getDayOfWeek().getValue();
+                    int diff = 2 - dayOfWeek;
+                    int day = dayOfMonth + diff;
+                    if (!(day > maxDays) && !(day < 1)) {
+                        days.add(CalendarDay.from(year, month, day));
+                    }*/
+                }
+
+                // Miercoles
+                if (alarma.getMiercoles() && alarma.getActivated()) {
+                    YearMonth yearMonthObject = YearMonth.of(year, month);
+                    int maxDays = yearMonthObject.lengthOfMonth();
+                    int cont = 0;
+                    int day = 1;
+                    LocalDate time;
+
+                    while (cont < maxDays) {
+                        time = LocalDate.of(year, month, day + cont);
+                        String weekDay = time.getDayOfWeek().toString();
+                        if (weekDay.equals("WEDNESDAY")) {
+                            days.add(CalendarDay.from(year, month, day + cont));
+                            //Log.d("FragmentCalendario", "day en if = " + day);
+                        }
+                        cont++;
+                        //Log.d("FragmentCalendario", "cont = " + cont + "  day = " + day + "  weekDay = " + weekDay + "  maxDays = " + maxDays);
+                    }
+                }
+                /*if (alarma.getMiercoles() && alarma.getActivated()) {
+
+                    calendar.set(Calendar.WEEK_OF_MONTH, i);
+                    calendar.set(Calendar.DAY_OF_WEEK, 4);
+
+                    YearMonth yearMonthObject = YearMonth.of(year, month);
+                    int maxDays = yearMonthObject.lengthOfMonth();
+
+                    LocalDate time;
+
+                    int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+                    Log.d("FragmentCalendario", "dayOfMonth inicial = " + dayOfMonth);
+                    if (dayOfMonth <= maxDays) {
+                        time = LocalDate.of(year, month, dayOfMonth);
+                        Log.d("FragmentCalendario", "dentro del if + dayOfMonth = " + dayOfMonth);
+                    } else {
+                        int oldDay = dayOfMonth;
+                        dayOfMonth = oldDay - (oldDay - maxDays);
+                        time = LocalDate.of(year, month, dayOfMonth);
+                    }
+
+                    int dayOfWeek = time.getDayOfWeek().getValue();
+                    int diff = 3 - dayOfWeek;
+                    int day = dayOfMonth + diff;
+                    Log.d("FragmentCalendario", "max = " + maxDays +
+                            "  dayOfMonth = " + dayOfMonth +
+                            "  diff = " + diff +
+                            "  dayOfWeek = " + dayOfWeek +
+                            "  day = " + day +
+                            "  miercoles = " + time.getDayOfWeek() +
+                            "  n = " + time.getDayOfWeek().getValue());
+                    if (!(day > maxDays) && !(day < 1)) {
+                        days.add(CalendarDay.from(year, month, day));
+                    }
+
+                    if (day == 0) {
+                        int monthN = time.getMonth().getValue();
+                        Log.d("FragmentCalendario", "monthN = " + monthN);
+                        String weekDay = time.getDayOfWeek().toString();
+                        int cont = 0;
+                        Log.d("FragmentCalendario", "weekDay = " + weekDay);
+                        while (!weekDay.equals("WEDNESDAY")) {
+                            day = maxDays - cont;
+                            time = LocalDate.of(year, month, day);
+                            weekDay = time.getDayOfWeek().toString();
+                            Log.d("FragmentCalendario", "day = " + day + "   weekDay = " + weekDay);
+                            cont++;
+                        }
+                        days.add(CalendarDay.from(year, month, day));
+                    }
+                }*/
+
+                // Jueves
+                if (alarma.getJueves() && alarma.getActivated()) {
+                    YearMonth yearMonthObject = YearMonth.of(year, month);
+                    int maxDays = yearMonthObject.lengthOfMonth();
+                    int cont = 0;
+                    int day = 1;
+                    LocalDate time;
+
+                    while (cont < maxDays) {
+                        time = LocalDate.of(year, month, day + cont);
+                        String weekDay = time.getDayOfWeek().toString();
+                        if (weekDay.equals("THURSDAY")) {
+                            days.add(CalendarDay.from(year, month, day + cont));
+                        }
+                        cont++;
+                    }
+                }
+
+                // Viernes
+                if (alarma.getViernes() && alarma.getActivated()) {
+                    YearMonth yearMonthObject = YearMonth.of(year, month);
+                    int maxDays = yearMonthObject.lengthOfMonth();
+                    int cont = 0;
+                    int day = 1;
+                    LocalDate time;
+
+                    while (cont < maxDays) {
+                        time = LocalDate.of(year, month, day + cont);
+                        String weekDay = time.getDayOfWeek().toString();
+                        if (weekDay.equals("FRIDAY")) {
+                            days.add(CalendarDay.from(year, month, day + cont));
+                        }
+                        cont++;
+                    }
+                }
+
+                // Sabado
+                if (alarma.getSabado() && alarma.getActivated()) {
+                    YearMonth yearMonthObject = YearMonth.of(year, month);
+                    int maxDays = yearMonthObject.lengthOfMonth();
+                    int cont = 0;
+                    int day = 1;
+                    LocalDate time;
+
+                    while (cont < maxDays) {
+                        time = LocalDate.of(year, month, day + cont);
+                        String weekDay = time.getDayOfWeek().toString();
+                        if (weekDay.equals("SATURDAY")) {
+                            days.add(CalendarDay.from(year, month, day + cont));
+                        }
+                        cont++;
+                    }
+                }
             }
-
-
-            //}
         }
     }
 }
