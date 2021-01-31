@@ -8,20 +8,6 @@
     android:orientation="vertical"
     tools:context=".fragments.TabFragmentCalendario">
 
-    <!--<com.applandeo.materialcalendarview.CalendarView
-        android:id="@+id/calendarView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:datePicker="true"
-        app:eventsEnabled="true"
-        app:forwardButtonSrc="@drawable/ic_arrow_forward"
-        app:headerColor="@color/white"
-        app:headerLabelColor="@color/black"
-        app:layout_constraintTop_toTopOf="parent"
-        app:previousButtonSrc="@drawable/ic_arrow_back"
-        app:selectionColor="@color/blue_500"
-        app:todayLabelColor="@color/blue_500" />-->
-
     <com.prolificinteractive.materialcalendarview.MaterialCalendarView
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
