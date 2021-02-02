@@ -30,6 +30,12 @@
     <string name="domingo_rcv_tv">D</string>
     <string name="tv_ningun_sonido">Ningun sonido seleccionado</string>
     <string name="tv_place_holder">Place Holder</string>
+    <string name="et_dos_puntos">:</string>
+    <string name="et_crono">00</string>
+    <string name="tv_crono_hora">Horas</string>
+    <string name="tv_crono_min">Minutos</string>
+    <string name="tv_crono_seg">Segundos</string>
+    <string name="tv_crono_cuenta_atras">Cuenta atrás</string>
 
     <!--//////////////// Botones /////////////////////-->
     <string name="btn_radio_l">L</string>

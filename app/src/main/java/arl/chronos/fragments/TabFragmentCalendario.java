@@ -1,10 +1,17 @@
 package arl.chronos.fragments;
 
-import android.app.AlarmManager;
+import android.content.res.Resources;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.service.autofill.RegexValidator;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.BulletSpan;
+import android.text.style.EasyEditSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,28 +19,36 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.DayViewDecorator;
+import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import arl.chronos.MainActivity;
 import arl.chronos.R;
 import arl.chronos.classes.Alarma;
-import arl.chronos.classes.EventDecorator;
-import arl.chronos.classes.PoblarCalendario;
+import arl.chronos.calendar.EventDecorator;
+import arl.chronos.calendar.PoblarCalendario;
 import arl.chronos.database.MyViewModel;
+
+import static arl.chronos.R.*;
 
 
 public class TabFragmentCalendario extends Fragment {
@@ -59,12 +74,14 @@ public class TabFragmentCalendario extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflar el Layout para este Fragment
-        view = inflater.inflate(R.layout.fragment_tab_calendario, container, false);
-        calendarView = view.findViewById(R.id.calendarView);
+        view = inflater.inflate(layout.fragment_tab_calendario, container, false);
+        calendarView = view.findViewById(id.calendarView);
         // Se recoge la lista de la base de datos mediante ViewModel y se pasa la lista
         myViewModel = new ViewModelProvider(this).get(MyViewModel.class);
         // Se crea el hilo de fonde en cuanto se recoge la info de la BBDD
         executorService = Executors.newSingleThreadExecutor();
+        // Dibuja un circulo alrededor del día actual
+        marcarHoy();
 
         myViewModel.getTodasAlarmas().observe(getViewLifecycleOwner(), new Observer<List<Alarma>>() {
             @Override
@@ -156,7 +173,7 @@ public class TabFragmentCalendario extends Fragment {
         switch (diaElegido) {
             case MONDAY:
                 for (Alarma alarma : listAlarmas) {
-                    if (alarma.getLunes()) {
+                    if (alarma.getLunes() && alarma.getActivated()) {
                         hora = alarma.getHora() + ":" + alarma.getMinuto() + "\n";
                         mostrar.append(hora);
                     }
@@ -165,7 +182,7 @@ public class TabFragmentCalendario extends Fragment {
 
             case TUESDAY:
                 for (Alarma alarma : listAlarmas) {
-                    if (alarma.getMartes()) {
+                    if (alarma.getMartes() && alarma.getActivated()) {
                         hora = alarma.getHora() + ":" + alarma.getMinuto() + "\n";
                         mostrar.append(hora);
                     }
@@ -174,7 +191,7 @@ public class TabFragmentCalendario extends Fragment {
 
             case WEDNESDAY:
                 for (Alarma alarma : listAlarmas) {
-                    if (alarma.getMiercoles()) {
+                    if (alarma.getMiercoles() && alarma.getActivated()) {
                         hora = alarma.getHora() + ":" + alarma.getMinuto() + "\n";
                         mostrar.append(hora);
                     }
@@ -183,7 +200,7 @@ public class TabFragmentCalendario extends Fragment {
 
             case THURSDAY:
                 for (Alarma alarma : listAlarmas) {
-                    if (alarma.getJueves()) {
+                    if (alarma.getJueves() && alarma.getActivated()) {
                         hora = alarma.getHora() + ":" + alarma.getMinuto() + "\n";
                         mostrar.append(hora);
                     }
@@ -192,7 +209,7 @@ public class TabFragmentCalendario extends Fragment {
 
             case FRIDAY:
                 for (Alarma alarma : listAlarmas) {
-                    if (alarma.getViernes()) {
+                    if (alarma.getViernes() && alarma.getActivated()) {
                         hora = alarma.getHora() + ":" + alarma.getMinuto() + "\n";
                         mostrar.append(hora);
                     }
@@ -201,7 +218,7 @@ public class TabFragmentCalendario extends Fragment {
 
             case SATURDAY:
                 for (Alarma alarma : listAlarmas) {
-                    if (alarma.getSabado()) {
+                    if (alarma.getSabado() && alarma.getActivated()) {
                         hora = alarma.getHora() + ":" + alarma.getMinuto() + "\n";
                         mostrar.append(hora);
                     }
@@ -210,7 +227,7 @@ public class TabFragmentCalendario extends Fragment {
 
             case SUNDAY:
                 for (Alarma alarma : listAlarmas) {
-                    if (alarma.getDomingo()) {
+                    if (alarma.getDomingo() && alarma.getActivated()) {
                         hora = alarma.getHora() + ":" + alarma.getMinuto() + "\n";
                         mostrar.append(hora);
                     }
@@ -222,6 +239,26 @@ public class TabFragmentCalendario extends Fragment {
             mostrar.delete(ultimo, mostrar.length());
             Toast.makeText(view.getContext(), mostrar.toString(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void marcarHoy() {
+
+        calendarView.addDecorator(new DayViewDecorator() {
+            @Override
+            public boolean shouldDecorate(CalendarDay day) {
+                int calday1 = day.getDay();
+                int calmonth1 = day.getMonth();
+                int calday2 = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+                int calmonth2 = Calendar.getInstance().get(Calendar.MONTH) + 1;
+
+                return ((calday1 == calday2) && (calmonth1 == calmonth2));
+            }
+
+            @Override
+            public void decorate(DayViewFacade view) {
+                view.setSelectionDrawable(ResourcesCompat.getDrawable(getResources() ,drawable.shape_circle, null));
+            }
+        });
     }
 
     @Override

@@ -1,4 +1,4 @@
-package arl.chronos.classes;
+package arl.chronos.calendar;
 
 import android.content.res.Resources;
 import android.text.style.BulletSpan;

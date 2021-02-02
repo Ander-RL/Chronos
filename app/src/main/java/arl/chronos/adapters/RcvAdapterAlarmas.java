@@ -219,7 +219,7 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
 
     private void startAlarma(Calendar c, int code) {
 
-        Log.d("/////ADAPTER ALARM/////", nombreSonido + " ---> Uri: " + sonidoUri + " ---> Sonar: " + sonar);
+        //Log.d("/////ADAPTER ALARM/////", nombreSonido + " ---> Uri: " + sonidoUri + " ---> Sonar: " + sonar);
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlertReceiver.class);

@@ -1,4 +1,4 @@
-package arl.chronos.classes;
+package arl.chronos.calendar;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.concurrent.Callable;
+
+import arl.chronos.classes.Alarma;
 
 public class PoblarCalendario implements Callable<HashSet<CalendarDay>> {
     private final HashSet<CalendarDay> days = new HashSet<>();

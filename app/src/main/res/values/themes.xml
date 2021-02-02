@@ -58,4 +58,9 @@
         <item name="buttonTint">@drawable/selector_radiobutton</item>
     </style>
 
+    <style name="TextAppearance.MaterialCalendarWidget.Date.Today" parent="TextAppearance.MaterialCalendarWidget.Date">
+        <item name="android:textColor">@color/blue_500</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
 </resources>

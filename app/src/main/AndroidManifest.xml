@@ -48,6 +48,7 @@
         <receiver android:name=".receiver.NotificationReceiverCancelar" />
 
         <service android:name=".service.ServicioSonido"/>
+        <service android:name=".service.ServicioCrono"/>
 
     </application>
 
