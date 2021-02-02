@@ -18,11 +18,9 @@ public class ServicioCrono extends Service {
     private final Intent broadCastIntent = new Intent(CUENTA_ATRAS_BR);
 
     public static final String CUENTA_ATRAS_BR = "arl.chronos.fragments.TabFragmentCrono";
-    public static final String CUENTA_ATRAS = "cuenta_atras";
-
-    private static final String START = "start";
-    private static final String PAUSE = "pause";
-    private static final String STOP = "stop";
+    public static final String START = "start";
+    public static final String PAUSE = "pause";
+    public static final String STOP = "stop";
 
     @Nullable
     @Override
@@ -44,15 +42,15 @@ public class ServicioCrono extends Service {
         switch (cronoAccion) {
             case START:
                 startCrono();
-                Log.d("////////SERVICIO//////", "accion = " + cronoAccion);
+                Log.d("ServicioCrono", "accion = " + cronoAccion + "    timepoRestante = " + tiempoRestante);
                 break;
             case PAUSE:
                 pauseCrono();
-                Log.d("////////SERVICIO//////", "accion = " + cronoAccion);
+                Log.d("ServicioCrono", "accion = " + cronoAccion);
                 break;
             case STOP:
                 stopCrono();
-                Log.d("////////SERVICIO//////", "accion = " + cronoAccion);
+                Log.d("ServicioCrono", "accion = " + cronoAccion);
                 break;
         }
         return super.onStartCommand(intent, flags, startId);
@@ -61,6 +59,7 @@ public class ServicioCrono extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        stopCrono();
     }
 
     private void startCrono() {
@@ -70,8 +69,9 @@ public class ServicioCrono extends Service {
             @Override
             public void onTick(long millisUntilFinished) {
                 tiempoRestante = millisUntilFinished;
-                broadCastIntent.putExtra(CUENTA_ATRAS, tiempoRestante);
+                broadCastIntent.putExtra(CUENTA_ATRAS_BR, tiempoRestante);
                 sendBroadcast(broadCastIntent);
+                Log.d("ServicioCrono", "millisUntilFinished = " + tiempoRestante);
             }
 
             @Override

@@ -3,14 +3,17 @@ package arl.chronos.fragments;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 
@@ -25,9 +28,9 @@ public class TabFragmentCrono extends Fragment {
     private MaterialButton btnPlay;
     private MaterialButton btnPause;
     private MaterialButton btnStop;
-    private TextView tvSegundos;
-    private TextView tvMinutos;
-    private TextView tvHoras;
+    private TextView etSegundos;
+    private TextView etMinutos;
+    private TextView etHoras;
     private String h;
     private String m;
     private String s;
@@ -39,6 +42,7 @@ public class TabFragmentCrono extends Fragment {
     public static final String EXTRA_CRONO_ACCION = "arl.chronos.fragments.EXTRA_CRONO_ACCION";
     public static final String EXTRA_CRONO_TIEMPO = "arl.chronos.fragments.EXTRA_CRONO_TIEMPO";
 
+    // Recibe el Broadcast emitido por ServicioCrono en onTick() de starCrono()
     private BroadcastReceiver br = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -56,25 +60,82 @@ public class TabFragmentCrono extends Fragment {
         // Inflar el Layout para este Fragment
         view = inflater.inflate(R.layout.fragment_tab_crono, container, false);
 
-        tvSegundos = view.findViewById(R.id.tv_crono_seg);
-        tvMinutos = view.findViewById(R.id.tv_crono_min);
-        tvHoras = view.findViewById(R.id.tv_crono_hora);
+        etSegundos = view.findViewById(R.id.et_crono_seg);
+        etMinutos = view.findViewById(R.id.et_crono_min);
+        etHoras = view.findViewById(R.id.et_crono_hora);
         btnPlay = view.findViewById(R.id.btn_crono_start);
         btnPause = view.findViewById(R.id.btn_crono_pause);
         btnStop = view.findViewById(R.id.btn_crono_stop);
 
-        h = tvHoras.getText().toString();
-        m = tvMinutos.getText().toString();
-        s = tvSegundos.getText().toString();
-
-        tiempoRestante = convertirAMilis(h, m, s);
-
-        Intent servicioIntent = new Intent(getContext(), ServicioCrono.class);
-        servicioIntent.putExtra(EXTRA_CRONO_TIEMPO, tiempoRestante);
+        btnPause.setEnabled(false);
+        btnStop.setEnabled(false);
+        btnPlay.setBackgroundColor(getResources().getColor(R.color.blue_500, null));
 
         btnPlay.setOnClickListener(btnView -> {
+
+            h = etHoras.getText().toString();
+            m = etMinutos.getText().toString();
+            s = etSegundos.getText().toString();
+
+            if (h.isEmpty()) {
+                h = "00";
+            }
+            if (m.isEmpty()) {
+                m = "00";
+            }
+            if (s.isEmpty()) {
+                s = "00";
+            }
+
+            if (h.equals("00") && m.equals("00") && s.equals("00")) {
+                Toast.makeText(getContext(), "Inserta un valor", Toast.LENGTH_SHORT).show();
+            } else {
+                tiempoRestante = convertirAMilis(h, m, s);
+
+                Log.d("TabFragmentCrono", h + ":" + m + ":" + s);
+                Log.d("TabFragmentCrono", "tiempoRestante = " + tiempoRestante);
+
+                Intent servicioIntent = new Intent(getContext(), ServicioCrono.class);
+                servicioIntent.putExtra(EXTRA_CRONO_TIEMPO, tiempoRestante);
+                servicioIntent.putExtra(EXTRA_CRONO_ACCION, ServicioCrono.START);
+
+                btnView.setEnabled(false);
+                btnPause.setEnabled(true);
+                btnStop.setEnabled(true);
+                btnView.setBackgroundColor(getResources().getColor(R.color.slightly_darker_white, null));
+                btnPause.setBackgroundColor(getResources().getColor(R.color.blue_500, null));
+                btnStop.setBackgroundColor(getResources().getColor(R.color.blue_500, null));
+                view.getContext().startService(servicioIntent);
+            }
+        });
+
+        btnPause.setOnClickListener(btnView -> {
+            Intent servicioIntent = new Intent(getContext(), ServicioCrono.class);
+            view.getContext().stopService(servicioIntent);
+
             btnView.setEnabled(false);
-            view.getContext().startService(servicioIntent);
+            btnView.setBackgroundColor(getResources().getColor(R.color.slightly_darker_white, null));
+            btnPlay.setEnabled(true);
+            btnPlay.setBackgroundColor(getResources().getColor(R.color.blue_500, null));
+        });
+
+        btnStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View btnView) {
+                Intent servicioIntent = new Intent(getContext(), ServicioCrono.class);
+                view.getContext().stopService(servicioIntent);
+
+                btnView.setEnabled(false);
+                btnView.setBackgroundColor(getResources().getColor(R.color.slightly_darker_white, null));
+                btnPause.setEnabled(false);
+                btnPause.setBackgroundColor(getResources().getColor(R.color.slightly_darker_white, null));
+                btnPlay.setEnabled(true);
+                btnPlay.setBackgroundColor(getResources().getColor(R.color.blue_500, null));
+
+                etHoras.setText("");
+                etMinutos.setText("");
+                etSegundos.setText("");
+            }
         });
 
         return view;
@@ -83,29 +144,34 @@ public class TabFragmentCrono extends Fragment {
     private void actualizarContador(Intent intent) {
         if (intent.getExtras() != null) {
 
-            tiempoRestante = intent.getLongExtra(ServicioCrono.CUENTA_ATRAS, 0);
+            tiempoRestante = intent.getLongExtra(ServicioCrono.CUENTA_ATRAS_BR, 0);
+            Log.d("TabFragmentCrono", "tiempoRestante = " + tiempoRestante);
 
-            if (((tiempoRestante / 1000 / 60) % 60) != 0) {
-                hora = (int) tiempoRestante / 1000 / 60 / 60;
-                min = (int) tiempoRestante / 1000 / 60 % 60;
+            hora = (int) tiempoRestante / 1000 / 60 / 60;
+            min = (int) (tiempoRestante / 1000 / 60) % 60;
+            seg = (int) (tiempoRestante / 1000) % 60;
+
+            if (hora < 10) {
+                h = "0" + hora;
             } else {
-                hora = (int) tiempoRestante / 1000 / 60 / 60;
-                min = 0;
+                h = String.valueOf(hora);
+            }
+            if (min < 10) {
+                m = "0" + min;
+            } else {
+                m = String.valueOf(min);
+            }
+            if (seg < 10) {
+                s = "0" + seg;
+            } else {
+                s = String.valueOf(seg);
             }
 
-            if (((min * 1000) % 60) != 0) {
-                seg = min % 60;
-            } else {
-                seg = 0;
-            }
+            Log.d("TabFragmentCrono", h + ":" + m + ":" + s);
 
-            if(hora < 10){h = "0" + hora;}
-            if(min < 10){m = "0" + min;}
-            if(seg < 10){s = "0" + seg;}
-
-            tvHoras.setText(h);
-            tvMinutos.setText(m);
-            tvSegundos.setText(s);
+            etHoras.setText(h);
+            etMinutos.setText(m);
+            etSegundos.setText(s);
         }
     }
 
@@ -121,16 +187,24 @@ public class TabFragmentCrono extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        requireActivity().registerReceiver(br, new IntentFilter(ServicioCrono.CUENTA_ATRAS_BR));
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        requireActivity().unregisterReceiver(br);
     }
 
     @Override
     public void onStop() {
         super.onStop();
+
+        try {
+            requireActivity().unregisterReceiver(br);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

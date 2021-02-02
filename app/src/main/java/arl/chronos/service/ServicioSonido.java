@@ -38,7 +38,7 @@ public class ServicioSonido extends Service {
         nombreSonido = intent.getStringExtra(EscogerSonido.EXTRA_NOMBRE_SONIDO);
         sonidoUri = intent.getStringExtra(EscogerSonido.EXTRA_URI_SONIDO);
 
-        Log.d("////////SERVICIO//////",  nombreSonido + " ---> Uri: " + sonidoUri);
+        Log.d("ServicioSonido",  nombreSonido + " ---> Uri: " + sonidoUri);
 
         try {
             if (mediaPlayer != null) {
