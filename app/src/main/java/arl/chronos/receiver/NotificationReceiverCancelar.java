@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
+import arl.chronos.service.ServicioCrono;
 import arl.chronos.service.ServicioSonido;
 
 
@@ -30,10 +31,11 @@ public class NotificationReceiverCancelar extends BroadcastReceiver {
         c = Calendar.getInstance();
 
         mensaje = intent.getStringExtra(NotificationHelper.ID_INTENT);
-        hora = intent.getStringExtra(NotificationHelper.HORA);
         id = intent.getIntExtra(NotificationHelper.ID_ALARMA, 0);
 
         if (mensaje.equals(NotificationHelper.CANCELAR)) {
+
+            hora = intent.getStringExtra(NotificationHelper.HORA);
 
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
@@ -55,6 +57,22 @@ public class NotificationReceiverCancelar extends BroadcastReceiver {
             Toast.makeText(context, "Alarma cancelada", Toast.LENGTH_SHORT).show();
             Log.d("NOTIF_RECEIV", "Cancelar -> id = " + id + " / Mensaje = " + mensaje + " / Hora = " + hora);
 
+        }
+
+        if (mensaje.equals(NotificationHelper.CANCELAR_CUENTA_ATRAS)) {
+            notificationManager.cancel(id); // Cierra la notificacion
+        }
+
+        if (mensaje.equals(NotificationHelper.CANCELAR_TIEMPO_AGOTADO)) {
+
+            Intent intentServicio = new Intent(context, ServicioCrono.class);
+            intentServicio.setAction(".service.ServicioCrono");
+            context.stopService(intentServicio);
+
+            vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+            vibrator.cancel();
+
+            notificationManager.cancel(id); // Cierra la notificacion
         }
     }
 }

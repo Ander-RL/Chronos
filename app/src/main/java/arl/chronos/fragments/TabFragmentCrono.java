@@ -18,13 +18,11 @@ import android.widget.Toast;
 import com.google.android.material.button.MaterialButton;
 
 import arl.chronos.R;
+import arl.chronos.receiver.AlertReceiver;
 import arl.chronos.service.ServicioCrono;
 
 public class TabFragmentCrono extends Fragment {
     private View view;
-    private boolean start;
-    private boolean pause;
-    private boolean stop;
     private MaterialButton btnPlay;
     private MaterialButton btnPause;
     private MaterialButton btnStop;
@@ -167,7 +165,7 @@ public class TabFragmentCrono extends Fragment {
                 s = String.valueOf(seg);
             }
 
-            Log.d("TabFragmentCrono", h + ":" + m + ":" + s);
+            //Log.d("TabFragmentCrono", h + ":" + m + ":" + s);
 
             etHoras.setText(h);
             etMinutos.setText(m);
@@ -188,27 +186,37 @@ public class TabFragmentCrono extends Fragment {
     public void onResume() {
         super.onResume();
         requireActivity().registerReceiver(br, new IntentFilter(ServicioCrono.CUENTA_ATRAS_BR));
+
+        Log.d("TabFragmentCrono", "onResume() ---> tiempoRestante = " + tiempoRestante);
+
+        if (tiempoRestante == 0) {
+            etHoras.setText("");
+            etMinutos.setText("");
+            etSegundos.setText("");
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        requireActivity().unregisterReceiver(br);
+        // Se lanza un broadcast a AlestReceiver para poner en marcha el contador en notificacion
+        if (ServicioCrono.IS_RUNNING) {
+            Intent alertBroadcastIntent = new Intent(getContext(), AlertReceiver.class);
+            alertBroadcastIntent.putExtra(EXTRA_CRONO_TIEMPO, tiempoRestante);
+            alertBroadcastIntent.putExtra(EXTRA_CRONO_ACCION, "onPause");
+            getContext().sendBroadcast(alertBroadcastIntent);
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-
-        try {
-            requireActivity().unregisterReceiver(br);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Log.d("TabFragmentCrono", "onStop()");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        requireActivity().unregisterReceiver(br);
     }
 }

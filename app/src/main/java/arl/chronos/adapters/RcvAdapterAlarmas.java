@@ -131,14 +131,10 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
                     if (!fechaAlarma(hor, min, seg).before(Calendar.getInstance())) {
                         startAlarma(fechaAlarma(hor, min, seg), currentAlarma.getId());
                     }
-                        /*if (!fechaAlarma(Integer.parseInt(ho), Integer.parseInt(mi)).before(Calendar.getInstance())) {
-                            startAlarma(fechaAlarma(Integer.parseInt(ho), Integer.parseInt(mi)), currentAlarma.getId());
-                        }*/
                 }
             }
         } else {
             holder.activated.setChecked(false);
-            //cancelAlarma();
             cancelAlarma(currentAlarma.getId());
         }
 
@@ -182,7 +178,6 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
                     int position = getAdapterPosition();
                     if (listener != null && position != RecyclerView.NO_POSITION) {
                         listener.onItemClick(alarmas.get(position), true);
-                        //Toast.makeText(context, getAdapterPosition() + " Position", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -193,7 +188,6 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
                     int position = getAdapterPosition();
                     if (listener != null && position != RecyclerView.NO_POSITION) {
                         listener.onItemClick(alarmas.get(position), false);
-                        //Toast.makeText(context, getAdapterPosition() + " Position", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
