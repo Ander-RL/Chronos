@@ -67,26 +67,6 @@ public class AlertReceiver extends BroadcastReceiver {
             String accion = intent.getStringExtra(TabFragmentCrono.EXTRA_CRONO_ACCION);
             Log.d("AlertReceiver", "accion ---> " + accion);
 
-            if (accion.equals("onPause")) {
-                // Restaurar servicio para que siga contando
-                // Crear notificacion para avisar que servicio esta en foreground
-                /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    Intent restartCronoIntent = new Intent(context, ServicioCrono.class);
-                    restartCronoIntent.putExtra(TabFragmentCrono.EXTRA_CRONO_TIEMPO, tiempoRestante);
-                    restartCronoIntent.putExtra(TabFragmentCrono.EXTRA_CRONO_ACCION, ServicioCrono.START);
-                    context.startForegroundService(restartCronoIntent);
-                } else {
-                    Intent restartCronoIntent = new Intent(context, ServicioCrono.class);
-                    restartCronoIntent.putExtra(TabFragmentCrono.EXTRA_CRONO_TIEMPO, tiempoRestante);
-                    restartCronoIntent.putExtra(TabFragmentCrono.EXTRA_CRONO_ACCION, ServicioCrono.START);
-                    context.startService(new Intent(context, ServicioCrono.class));
-                }*/
-                // Lanzar notificacion diciendo que ha terminado
-                NotificationHelper notificationHelper = new NotificationHelper(context, accion, 1);
-                NotificationCompat.Builder nb = notificationHelper.getCanalNotification();
-                notificationHelper.getManager().notify(1, nb.build());
-            }
-
             if (accion.equals("onFinish")){
                 vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
                 vibrator.vibrate(new long[]{500, 1000, 500, 1000}, 0);

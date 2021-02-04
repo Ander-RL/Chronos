@@ -1,5 +1,6 @@
 package arl.chronos.fragments;
 
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -96,6 +97,7 @@ public class TabFragmentCrono extends Fragment {
                 Intent servicioIntent = new Intent(getContext(), ServicioCrono.class);
                 servicioIntent.putExtra(EXTRA_CRONO_TIEMPO, tiempoRestante);
                 servicioIntent.putExtra(EXTRA_CRONO_ACCION, ServicioCrono.START);
+                view.getContext().startService(servicioIntent);
 
                 btnView.setEnabled(false);
                 btnPause.setEnabled(true);
@@ -103,7 +105,6 @@ public class TabFragmentCrono extends Fragment {
                 btnView.setBackgroundColor(getResources().getColor(R.color.slightly_darker_white, null));
                 btnPause.setBackgroundColor(getResources().getColor(R.color.blue_500, null));
                 btnStop.setBackgroundColor(getResources().getColor(R.color.blue_500, null));
-                view.getContext().startService(servicioIntent);
             }
         });
 
@@ -188,11 +189,20 @@ public class TabFragmentCrono extends Fragment {
         requireActivity().registerReceiver(br, new IntentFilter(ServicioCrono.CUENTA_ATRAS_BR));
 
         Log.d("TabFragmentCrono", "onResume() ---> tiempoRestante = " + tiempoRestante);
-
+        // Si el tiempo llego a 0, vacia el TextView
         if (tiempoRestante == 0) {
             etHoras.setText("");
             etMinutos.setText("");
             etSegundos.setText("");
+        }
+        // Si el servicio sigue funcionando, actualiza los botones
+        if (ServicioCrono.IS_RUNNING){
+            btnPlay.setEnabled(false);
+            btnPause.setEnabled(true);
+            btnStop.setEnabled(true);
+            btnPlay.setBackgroundColor(getResources().getColor(R.color.slightly_darker_white, null));
+            btnPause.setBackgroundColor(getResources().getColor(R.color.blue_500, null));
+            btnStop.setBackgroundColor(getResources().getColor(R.color.blue_500, null));
         }
     }
 

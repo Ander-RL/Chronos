@@ -62,7 +62,7 @@ public class NotificationHelper extends ContextWrapper {
 
     public NotificationCompat.Builder getCanalNotification() {
         Log.d("NotificationHelper", "Mensaje = " + mensaje);
-        if (!mensaje.equals("onPause") && !mensaje.equals("onFinish")) {
+        if (!mensaje.equals("foregroundService") && !mensaje.equals("onFinish")) {
             // Se crea un pending intent para abrir la app al clickar en la notificacion
             Intent intent = new Intent(this, MainActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, id, intent, 0);
@@ -93,7 +93,7 @@ public class NotificationHelper extends ContextWrapper {
                     .addAction(R.mipmap.ic_launcher, POSPONER, postponerButtonPendingIntent);
         }
 
-        if (mensaje.equals("onPause")) {
+        if (mensaje.equals("foregroundService")) {
             // Se crea un pending intent para abrir la app al clickar en la notificacion
             Intent intent = new Intent(this, MainActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, id, intent, 0);

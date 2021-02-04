@@ -1,5 +1,6 @@
 package arl.chronos.service;
 
+import android.app.Notification;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -9,9 +10,11 @@ import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 
 import arl.chronos.fragments.TabFragmentCrono;
 import arl.chronos.receiver.AlertReceiver;
+import arl.chronos.receiver.NotificationHelper;
 
 public class ServicioCrono extends Service {
 
@@ -38,6 +41,11 @@ public class ServicioCrono extends Service {
     public void onCreate() {
         super.onCreate();
         context = this;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startMyForeground();
+        } else {
+            startForeground(3, new Notification());
+        }
     }
 
     @Override
@@ -107,5 +115,12 @@ public class ServicioCrono extends Service {
 
     private void stopCrono() {
         countDownTimer.cancel();
+    }
+
+    private void startMyForeground() {
+        NotificationHelper notificationHelper = new NotificationHelper(context, "foregroundService", 1);
+        NotificationCompat.Builder nb = notificationHelper.getCanalNotification();
+        notificationHelper.getManager().notify(1, nb.build());
+        startForeground(1,nb.build());
     }
 }
