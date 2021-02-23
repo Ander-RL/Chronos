@@ -29,6 +29,7 @@ import arl.chronos.CrearEditarAlarma;
 import arl.chronos.R;
 import arl.chronos.adapters.RcvAdapterAlarmas;
 import arl.chronos.classes.Alarma;
+import arl.chronos.classes.AlarmaUnica;
 import arl.chronos.database.MyViewModel;
 
 import static android.app.Activity.RESULT_OK;
@@ -40,11 +41,13 @@ public class TabFragmentAlarmas extends Fragment {
     private RecyclerView recyclerView;
     private RcvAdapterAlarmas rcvAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<Alarma> listAlarmas;
     private MyViewModel myViewModel;
     private View view;
     private int hora;
     private int min;
+    private int ano;
+    private int mes;
+    private int dia;
     private Boolean activar;
     private Boolean l;
     private Boolean m;
@@ -83,8 +86,6 @@ public class TabFragmentAlarmas extends Fragment {
             }
         });
 
-        //listAlarmas = new ArrayList<>();
-
         recyclerView = view.findViewById(R.id.rcv_alarmas);
         recyclerView.setHasFixedSize(true);
 
@@ -98,8 +99,15 @@ public class TabFragmentAlarmas extends Fragment {
         myViewModel = new ViewModelProvider(this).get(MyViewModel.class);
         myViewModel.getTodasAlarmas().observe(getViewLifecycleOwner(), new Observer<List<Alarma>>() {
             @Override
-            public void onChanged(List<Alarma> alarmas) {
+            public void onChanged(List<Alarma> alarmas) {;
                 rcvAdapter.setAlarmas(alarmas);
+            }
+        });
+
+        myViewModel.getTodasAlarmasUnicas().observe(getViewLifecycleOwner(), new Observer<List<AlarmaUnica>>() {
+            @Override
+            public void onChanged(List<AlarmaUnica> alarmasUnicas) {
+                rcvAdapter.setAlarmasUnicas(alarmasUnicas);
             }
         });
 
@@ -113,7 +121,11 @@ public class TabFragmentAlarmas extends Fragment {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                myViewModel.delete(rcvAdapter.getAlarmaAt(viewHolder.getAdapterPosition()));
+                if (rcvAdapter.getAlarmaAt(viewHolder.getAdapterPosition()) instanceof Alarma) {
+                    myViewModel.delete((Alarma) rcvAdapter.getAlarmaAt(viewHolder.getAdapterPosition()));
+                } else {
+                    myViewModel.deleteUnica((AlarmaUnica) rcvAdapter.getAlarmaAt(viewHolder.getAdapterPosition()));
+                }
                 Snackbar.make(view, "Alarma borrada", Snackbar.LENGTH_LONG).show();
             }
         }).attachToRecyclerView(recyclerView);
@@ -121,7 +133,8 @@ public class TabFragmentAlarmas extends Fragment {
         // Edita la alarma seleccionada
         rcvAdapter.setOnItemClickListener(new RcvAdapterAlarmas.OnItemClickListener() {
             @Override
-            public void onItemClick(Alarma alarma, Boolean editar) {
+            public void onItemClick(Object alarmaO, Boolean editar) {
+                Alarma alarma = (Alarma) alarmaO;
                 if (!editar) { // Si se clicka en el switch
                     if (alarma.getActivated()) {
                         alarma.setActivated(false);
@@ -133,10 +146,11 @@ public class TabFragmentAlarmas extends Fragment {
                     // Vuelve a la activy de crear alarmas con los datos de la alarma clickada
 
                     Log.d("TABFRAGMENT_EDITALARMA", alarma.getHora() + ":" + alarma.getMinuto() + " id: " + alarma.getId() +
-                            " Nombre Sonido: " + alarma.getNombreSonido() + " Uri: " + alarma.getSonidoUri() + " Sonar: " + alarma.getSonar());
+                            " Nombre Sonido: " + alarma.getNombreSonido() + " Uri: " + alarma.getSonidoUri() + " Sonar: " + alarma.getSonar() + "  Tipo: semanal");
 
                     Intent intent = new Intent(getContext(), CrearEditarAlarma.class);
                     intent.putExtra(CrearEditarAlarma.EXTRA_ID, alarma.getId());
+                    intent.putExtra(CrearEditarAlarma.EXTRA_TIPO_ALARMA, "semanal");
                     intent.putExtra(CrearEditarAlarma.EXTRA_HORA, alarma.getHora());
                     intent.putExtra(CrearEditarAlarma.EXTRA_MIN, alarma.getMinuto());
                     intent.putExtra(CrearEditarAlarma.EXTRA_LUN, alarma.getLunes());
@@ -155,6 +169,41 @@ public class TabFragmentAlarmas extends Fragment {
             }
         });
 
+        rcvAdapter.setOnItemClickListenerUnica(new RcvAdapterAlarmas.OnItemClickListenerUnica() {
+            @Override
+            public void onItemClickUnica(Object alarmaO, Boolean editar) {
+                AlarmaUnica alarma = (AlarmaUnica) alarmaO;
+                if (!editar) { // Si se clicka en el switch
+                    if (alarma.getActivated()) {
+                        alarma.setActivated(false);
+                    } else {
+                        alarma.setActivated(true);
+                    }
+                    myViewModel.updateUnica(alarma);
+                } else { // Si se clicka fuera del switch
+
+                    // Vuelve a la activy de crear alarmas con los datos de la alarma clickada
+                    Log.d("TABFRAGMENT_EDITALARMA", alarma.getHora() + ":" + alarma.getMinuto() + " id: " + alarma.getId() +
+                            " Nombre Sonido: " + alarma.getNombreSonido() + " Uri: " + alarma.getSonidoUri() + " Sonar: " + alarma.getSonar() +
+                            "  Año: " + alarma.getAno() + "  Mes: " + alarma.getMes() + "  Dia: " + alarma.getDia() + "  Tipo: unica");
+
+                    Intent intent = new Intent(getContext(), CrearEditarAlarma.class);
+                    intent.putExtra(CrearEditarAlarma.EXTRA_ID, alarma.getId());
+                    intent.putExtra(CrearEditarAlarma.EXTRA_TIPO_ALARMA, "unica");
+                    intent.putExtra(CrearEditarAlarma.EXTRA_HORA, alarma.getHora());
+                    intent.putExtra(CrearEditarAlarma.EXTRA_MIN, alarma.getMinuto());
+                    intent.putExtra(CrearEditarAlarma.EXTRA_ANO, alarma.getAno());
+                    intent.putExtra(CrearEditarAlarma.EXTRA_MES, alarma.getMes());
+                    intent.putExtra(CrearEditarAlarma.EXTRA_DIA, alarma.getDia());
+                    intent.putExtra(CrearEditarAlarma.EXTRA_ACT, alarma.getActivated());
+                    intent.putExtra(CrearEditarAlarma.EXTRA_SONIDO, alarma.getNombreSonido());
+                    intent.putExtra(CrearEditarAlarma.EXTRA_URI, alarma.getSonidoUri());
+                    intent.putExtra(CrearEditarAlarma.EXTRA_SONAR, alarma.getSonar());
+                    startActivityForResult(intent, EDIT_ALARMAS_REQUEST);
+                }
+            }
+        });
+
         return view;
     }
 
@@ -162,6 +211,7 @@ public class TabFragmentAlarmas extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // En caso de que se retorne de crear la alarma
+        Log.d("TABFRAGMENT_RESULT", "onActivityResult");
         if (requestCode == ADD_ALARMAS_REQUEST && resultCode == RESULT_OK) {
             hora = data.getIntExtra(CrearEditarAlarma.EXTRA_HORA, 0);
             min = data.getIntExtra(CrearEditarAlarma.EXTRA_MIN, 0);
@@ -172,26 +222,34 @@ public class TabFragmentAlarmas extends Fragment {
             v = data.getBooleanExtra(CrearEditarAlarma.EXTRA_VIE, false);
             s = data.getBooleanExtra(CrearEditarAlarma.EXTRA_SAB, false);
             d = data.getBooleanExtra(CrearEditarAlarma.EXTRA_DOM, false);
+            ano = data.getIntExtra(CrearEditarAlarma.EXTRA_ANO, -1);
+            mes = data.getIntExtra(CrearEditarAlarma.EXTRA_MES, -1);
+            dia = data.getIntExtra(CrearEditarAlarma.EXTRA_DIA, -1);
             activar = data.getBooleanExtra(CrearEditarAlarma.EXTRA_ACT, true);
             nombreSonido = data.getStringExtra(CrearEditarAlarma.EXTRA_SONIDO);
             sonidoUri = Uri.parse(data.getStringExtra(CrearEditarAlarma.EXTRA_URI));
             sonar = data.getBooleanExtra(CrearEditarAlarma.EXTRA_SONAR, false);
-
-            //Log.d("//////////TABFRAGMENT_RESULT//////", hora + ":" + min);
 
             //Formateo el hora obtenido: antepone el 0 si son menores de 10
             String horaFormateada = (hora < 10) ? (CERO + hora) : String.valueOf(hora);
             //Formateo el minuto obtenido: antepone el 0 si son menores de 10
             String minutoFormateado = (min < 10) ? (CERO + min) : String.valueOf(min);
 
-            //Log.d("//////////TABFRAGMENT_RESULT//////", horaFormateada + ":" + minutoFormateado);
+            if ((ano == -1) && (mes == -1) && (dia == -1)) {
+                Log.d("TABFRAGMENT_RESULT", horaFormateada + ":" + minutoFormateado + "    L: " + l + "M: " + m + "X: " + x + "J: " + j + "V: " + v + "S: " + s + "D: " + d);
+                Alarma alarma = new Alarma(horaFormateada, minutoFormateado, l, m, x, j, v, s, d, activar, nombreSonido, sonidoUri.toString(), sonar);
+                myViewModel.insert(alarma);
+            }
 
-            Alarma alarma = new Alarma(horaFormateada, minutoFormateado, l, m, x, j, v, s, d, activar, nombreSonido, sonidoUri.toString(), sonar);
-            myViewModel.insert(alarma);
+            if ((ano != -1) && (mes != -1) && (dia != -1)) {
+                Log.d("TABFRAGMENT_RESULT", horaFormateada + ":" + minutoFormateado + "    ano: " + ano + "  mes: " + mes + "  dia: " + dia);
+                AlarmaUnica alarmaUnica = new AlarmaUnica(horaFormateada, minutoFormateado, String.valueOf(ano), String.valueOf(mes), String.valueOf(dia), activar, nombreSonido, sonidoUri.toString(), sonar);
+                myViewModel.insertUnica(alarmaUnica);
+            }
 
             Snackbar.make(view, "Alarma creada", Snackbar.LENGTH_LONG).show();
 
-        // En caso de que se retorne de modificar la alarma
+            // En caso de que se retorne de modificar la alarma
         } else if (requestCode == EDIT_ALARMAS_REQUEST && resultCode == RESULT_OK) {
 
             int id = data.getIntExtra(CrearEditarAlarma.EXTRA_ID, -1);
@@ -209,6 +267,9 @@ public class TabFragmentAlarmas extends Fragment {
             v = data.getBooleanExtra(CrearEditarAlarma.EXTRA_VIE, false);
             s = data.getBooleanExtra(CrearEditarAlarma.EXTRA_SAB, false);
             d = data.getBooleanExtra(CrearEditarAlarma.EXTRA_DOM, false);
+            ano = data.getIntExtra(CrearEditarAlarma.EXTRA_ANO, -1);
+            mes = data.getIntExtra(CrearEditarAlarma.EXTRA_MES, -1);
+            dia = data.getIntExtra(CrearEditarAlarma.EXTRA_DIA, -1);
             activar = data.getBooleanExtra(CrearEditarAlarma.EXTRA_ACT, true);
             nombreSonido = data.getStringExtra(CrearEditarAlarma.EXTRA_SONIDO);
             sonidoUri = Uri.parse(data.getStringExtra(CrearEditarAlarma.EXTRA_URI));
@@ -219,9 +280,19 @@ public class TabFragmentAlarmas extends Fragment {
             //Formateo el minuto obtenido: antepone el 0 si son menores de 10
             String minutoFormateado = (min < 10) ? (CERO + min) : String.valueOf(min);
 
-            Alarma alarma = new Alarma(horaFormateada, minutoFormateado, l, m, x, j, v, s, d, activar, nombreSonido, sonidoUri.toString(), sonar);
-            alarma.setId(id); // Necesario para que ROOM pueda identificar la entrada para actualizar la alarma
-            myViewModel.update(alarma);
+            if ((ano == -1) && (mes == -1) && (dia == -1)) {
+                Log.d("TABFRAGMENT_RESULT_EDIT", horaFormateada + ":" + minutoFormateado + "    L: " + l + "M: " + m + "X: " + x + "J: " + j + "V: " + v + "S: " + s + "D: " + d);
+                Alarma alarma = new Alarma(horaFormateada, minutoFormateado, l, m, x, j, v, s, d, activar, nombreSonido, sonidoUri.toString(), sonar);
+                alarma.setId(id); // Necesario para que ROOM pueda identificar la entrada para actualizar la alarma
+                myViewModel.update(alarma);
+            }
+
+            if ((ano != -1) && (mes != -1) && (dia != -1)) {
+                Log.d("TABFRAGMENT_RESULT_EDIT", horaFormateada + ":" + minutoFormateado + "    ano: " + ano + "  mes: " + mes + "  dia: " + dia);
+                AlarmaUnica alarmaUnica = new AlarmaUnica(horaFormateada, minutoFormateado, String.valueOf(ano), String.valueOf(mes), String.valueOf(dia), activar, nombreSonido, sonidoUri.toString(), sonar);
+                alarmaUnica.setId(id);
+                myViewModel.updateUnica(alarmaUnica);
+            }
 
             Snackbar.make(view, "Alarma actualizada", Snackbar.LENGTH_LONG).show();
 

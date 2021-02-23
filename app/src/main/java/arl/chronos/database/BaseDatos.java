@@ -10,14 +10,14 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import arl.chronos.classes.Alarma;
+import arl.chronos.classes.AlarmaUnica;
 
-// @Database(entities = {Alarma.class, Nota.class}. version = 1) ExportSchema sirve para exportar la BBDD a un fichero para hacer version control.
-@Database(entities = {Alarma.class}, version = 2, exportSchema = false)
+@Database(entities = {Alarma.class, AlarmaUnica.class}, version = 1, exportSchema = false)
 public abstract class BaseDatos extends RoomDatabase{
 
     // Singleton. Solo se puede instanciar una vez.
     private static BaseDatos instance;
-    // Metodo abstracto;
+    // Metodo Getter abstracto;
     public abstract AlarmaDAO alarmaDAO(); // El codigo de este metodo es autogenerado por Room en el metodo que construye el singleton de la base de datos (getInstance).
 
     // Solo un hilo por vez puede acceder a este metodo.
@@ -52,6 +52,8 @@ public abstract class BaseDatos extends RoomDatabase{
         protected Void doInBackground(Void... voids) {
             alarmaDAO.insert(new Alarma("05", "34", true, false, false, true, false, false, false, true, "", "", false));
             alarmaDAO.insert(new Alarma("15", "09", false, true, true, true, false, false, true, false, "", "", false));
+            alarmaDAO.insert(new AlarmaUnica("15", "09", "2021", "02", "22", false, "", "", false));
+            alarmaDAO.insert(new AlarmaUnica("15", "09", "2021", "03", "22", true, "", "", false));
             return null;
         }
     }

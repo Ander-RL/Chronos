@@ -23,19 +23,23 @@ import java.util.List;
 import arl.chronos.CrearEditarAlarma;
 import arl.chronos.R;
 import arl.chronos.classes.Alarma;
+import arl.chronos.classes.AlarmaUnica;
 import arl.chronos.receiver.AlertReceiver;
 
-public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.MyViewHolder> {
+public class RcvAdapterAlarmas extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Alarma> alarmas = new ArrayList<>();
+    private List<AlarmaUnica> alarmasUnicas = new ArrayList<>();
+    private ArrayList<Object> dataSet = new ArrayList<>();
     private OnItemClickListener listener;
+    private OnItemClickListenerUnica listenerUnica;
     Context context;
     private String ho;
     private String mi;
+    private String mostrarFecha;
     private int hor;
     private int min;
     private int seg;
-    //private static boolean repetirAlarma = true;
     private Boolean l = false;
     private Boolean m = false;
     private Boolean x = false;
@@ -47,6 +51,7 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
     private String sonidoUri;
     private Boolean sonar;
     private Boolean activar;
+    private int tipoAlarma;
 
     public static final String MENSAJE = "mensaje_alarma";
     public static final String ID_ALARMA = "id_alarma";
@@ -61,88 +66,157 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
         notifyDataSetChanged();
     }
 
+    public void setAlarmasUnicas(List<AlarmaUnica> alarmasUnicas) {
+        this.alarmasUnicas = alarmasUnicas;
+        notifyDataSetChanged();
+    }
+
     // Para poder pasar al metodo de Swip (en TabFragmentAlarmas) y poder borrar esa alarma en concreto. Pasamos su posicion.
-    public Alarma getAlarmaAt(int position) {
-        return alarmas.get(position);
+    public Object getAlarmaAt(int position) {
+        return dataSet.get(position);
     }
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) { // Parent es RecyclerView. Context es Fragment.
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) { // Parent es RecyclerView. Context es Fragment.
+        //Log.d("ADAPTER", "onCreateViewHolder ---> viewType = " + viewType);
+        if (viewType == 1) {
+            tipoAlarma = 1;
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rcv_alarmas_unicas_layout, parent, false);
+            return new MyViewHolderUnica(view);
+        }
+        tipoAlarma = 0;
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rcv_alarmas_layout, parent, false);
-        MyViewHolder holder = new MyViewHolder(view);
-
-        return holder;
+        return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
-        Alarma currentAlarma = alarmas.get(position);
+        //Log.d("ADAPTER", "onBindViewHolder ---> position = " + position);
+        //Log.d("ADAPTER", "onBindViewHolder ---> alarmas.size()" + alarmas.size());
+        //Log.d("ADAPTER", "onBindViewHolder ---> alarmasUnicas.size()" + alarmasUnicas.size());
+        //Log.d("ADAPTER", "onBindViewHolder ---> dataSet.size()" + dataSet.size());
 
-        holder.hora.setText(currentAlarma.getHora() + ":" + currentAlarma.getMinuto());
-        ho = currentAlarma.getHora();
-        mi = currentAlarma.getMinuto();
-        nombreSonido = currentAlarma.getNombreSonido();
-        sonidoUri = currentAlarma.getSonidoUri();
-        sonar = currentAlarma.getSonar();
-        activar = currentAlarma.getActivated();
+        if (holder.getItemViewType() == 0 && (dataSet.get(position) instanceof Alarma)) {
+            //Log.d("ADAPTER", "Semanales ---> alarmas.size()" + alarmas.size());
 
-        hor = Integer.parseInt(ho);
-        min = Integer.parseInt(mi);
-        seg = 0;
+            MyViewHolder myHolder = (MyViewHolder) holder;
+            Alarma currentAlarma = (Alarma) dataSet.get(position);
 
-        if (currentAlarma.getLunes() == true) {
-            holder.lunes.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
-            l = true;
-        }
-        if (currentAlarma.getMartes() == true) {
-            holder.martes.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
-            m = true;
-        }
-        if (currentAlarma.getMiercoles() == true) {
-            holder.miercoles.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
-            x = true;
-        }
-        if (currentAlarma.getJueves() == true) {
-            holder.jueves.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
-            j = true;
-        }
-        if (currentAlarma.getViernes() == true) {
-            holder.viernes.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
-            v = true;
-        }
-        if (currentAlarma.getSabado() == true) {
-            holder.sabado.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
-            s = true;
-        }
-        if (currentAlarma.getDomingo() == true) {
-            holder.domingo.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
-            d = true;
-        }
-        if (currentAlarma.getActivated() == true) {
-            holder.activated.setChecked(true);
+            myHolder.hora.setText(currentAlarma.getHora() + ":" + currentAlarma.getMinuto());
+            ho = currentAlarma.getHora();
+            mi = currentAlarma.getMinuto();
+            nombreSonido = currentAlarma.getNombreSonido();
+            sonidoUri = currentAlarma.getSonidoUri();
+            sonar = currentAlarma.getSonar();
+            activar = currentAlarma.getActivated();
+            //Log.d("ADAPTER", "Semanales ---> HORA  " + ho + ":" + mi);
 
-            // Comprueba el día de la semana con los días elegidos para la alarma
-            if (diaAlarma(currentAlarma)) {
-                // Para que no funcione en caso de que no haya valores
-                if (!ho.isEmpty() && !mi.isEmpty()) {
-                    // Para que las alarmas activas con hora anterior a la actual no se ejecuten
-                    if (!fechaAlarma(hor, min, seg).before(Calendar.getInstance())) {
-                        startAlarma(fechaAlarma(hor, min, seg), currentAlarma.getId());
+            hor = Integer.parseInt(ho);
+            min = Integer.parseInt(mi);
+            seg = 0;
+
+            if (currentAlarma.getLunes() == true) {
+                myHolder.lunes.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
+                l = true;
+            }
+            if (currentAlarma.getMartes() == true) {
+                myHolder.martes.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
+                m = true;
+            }
+            if (currentAlarma.getMiercoles() == true) {
+                myHolder.miercoles.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
+                x = true;
+            }
+            if (currentAlarma.getJueves() == true) {
+                myHolder.jueves.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
+                j = true;
+            }
+            if (currentAlarma.getViernes() == true) {
+                myHolder.viernes.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
+                v = true;
+            }
+            if (currentAlarma.getSabado() == true) {
+                myHolder.sabado.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
+                s = true;
+            }
+            if (currentAlarma.getDomingo() == true) {
+                myHolder.domingo.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
+                d = true;
+            }
+            if (currentAlarma.getActivated() == true) {
+                myHolder.activated.setChecked(true);
+
+                // Comprueba el día de la semana con los días elegidos para la alarma
+                if (diaAlarma(currentAlarma)) {
+                    // Para que no funcione en caso de que no haya valores
+                    if (!ho.isEmpty() && !mi.isEmpty()) {
+                        // Para que las alarmas activas con hora anterior a la actual no se ejecuten
+                        if (!fechaAlarma(hor, min, seg).before(Calendar.getInstance())) {
+                            startAlarma(fechaAlarma(hor, min, seg), currentAlarma.getId());
+                        }
                     }
                 }
+            } else {
+                myHolder.activated.setChecked(false);
+                cancelAlarma(currentAlarma.getId());
             }
-        } else {
-            holder.activated.setChecked(false);
-            cancelAlarma(currentAlarma.getId());
+        }
+
+        if (holder.getItemViewType() == 1 && (dataSet.get(position) instanceof AlarmaUnica)) {
+            //Log.d("ADAPTER", "Unica ---> alarmasUnicas.size()" + alarmasUnicas.size());
+            MyViewHolderUnica myHolder = (MyViewHolderUnica) holder;
+            AlarmaUnica currentAlarma = (AlarmaUnica) dataSet.get(position);
+
+            myHolder.hora.setText(currentAlarma.getHora() + ":" + currentAlarma.getMinuto());
+            ho = currentAlarma.getHora();
+            mi = currentAlarma.getMinuto();
+            mostrarFecha = currentAlarma.getAno() + "/" + currentAlarma.getMes() + "/" + currentAlarma.getDia();
+            nombreSonido = currentAlarma.getNombreSonido();
+            sonidoUri = currentAlarma.getSonidoUri();
+            sonar = currentAlarma.getSonar();
+            activar = currentAlarma.getActivated();
+
+            hor = Integer.parseInt(ho);
+            min = Integer.parseInt(mi);
+            seg = 0;
+
+            myHolder.fecha.setText(mostrarFecha);
+
+            l = false;
+            m = false;
+            x = false;
+            j = false;
+            v = false;
+            s = false;
+            d = false;
+
+            if (currentAlarma.getActivated() == true) {
+                myHolder.activated.setChecked(true);
+                // Comprueba el día de la semana con los días elegidos para la alarma
+                if (diaAlarmaUnica(currentAlarma)) {
+                    // Para que no funcione en caso de que no haya valores
+                    if (!ho.isEmpty() && !mi.isEmpty()) {
+                        // Para que las alarmas activas con hora anterior a la actual no se ejecuten
+                        if (!fechaAlarma(hor, min, seg).before(Calendar.getInstance())) {
+                            startAlarma(fechaAlarma(hor, min, seg), currentAlarma.getId());
+                        }
+                    }
+                }
+            } else {
+                myHolder.activated.setChecked(false);
+                cancelAlarma(currentAlarma.getId());
+            }
         }
 
     }
 
     @Override
     public int getItemCount() {
-        return alarmas.size();
+        //Log.d("ADAPTER", "getItemCount ---> " + alarmasUnicas.size() + alarmas.size());
+        //Log.d("ADAPTER", "getItemCount ---> dataSet.size() = " + dataSet.size());
+        return alarmasUnicas.size() + alarmas.size();
     }
 
     // CLASE INTERNA
@@ -177,7 +251,7 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
                 public void onClick(View view) {
                     int position = getAdapterPosition();
                     if (listener != null && position != RecyclerView.NO_POSITION) {
-                        listener.onItemClick(alarmas.get(position), true);
+                        listener.onItemClick(dataSet.get(position), true);
                     }
                 }
             });
@@ -187,7 +261,42 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
                 public void onClick(View view) {
                     int position = getAdapterPosition();
                     if (listener != null && position != RecyclerView.NO_POSITION) {
-                        listener.onItemClick(alarmas.get(position), false);
+                        listener.onItemClick(dataSet.get(position), false);
+                    }
+                }
+            });
+        }
+    }
+
+    public class MyViewHolderUnica extends RecyclerView.ViewHolder {
+        TextView hora;
+        TextView fecha;
+        TextView editarAlarma;
+        SwitchMaterial activated;
+
+        public MyViewHolderUnica(@NonNull View itemView) {
+            super(itemView);
+            hora = itemView.findViewById(R.id.tv_hora_unica);
+            fecha = itemView.findViewById(R.id.tv_fecha_unica);
+            editarAlarma = itemView.findViewById(R.id.tv_editar_alarma_unica);
+            activated = itemView.findViewById(R.id.activated_unica);
+
+            editarAlarma.setOnClickListener(new View.OnClickListener() { // FUNCIONA SI TOCAS SOBRE LA ALARMA
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    if (listenerUnica != null && position != RecyclerView.NO_POSITION) {
+                        listenerUnica.onItemClickUnica(dataSet.get(position), true);
+                    }
+                }
+            });
+
+            activated.setOnClickListener(new View.OnClickListener() {// FUNCIONA SI TOCAS SOBRE EL SWITCH
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    if (listenerUnica != null && position != RecyclerView.NO_POSITION) {
+                        listenerUnica.onItemClickUnica(dataSet.get(position), false);
                     }
                 }
             });
@@ -195,11 +304,49 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
     }
 
     public interface OnItemClickListener {
-        void onItemClick(Alarma alarma, Boolean editar);
+        void onItemClick(Object alarmaO, Boolean editar);
+    }
+
+    public interface OnItemClickListenerUnica {
+        void onItemClickUnica(Object alarmaO, Boolean editar);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
+    }
+
+    public void setOnItemClickListenerUnica(OnItemClickListenerUnica listenerUnica) {
+        this.listenerUnica = listenerUnica;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+
+        dataSet = new ArrayList<>();
+
+        for (Alarma alarma : alarmas) {
+            dataSet.add(alarma);
+        }
+        for (AlarmaUnica alarma : alarmasUnicas) {
+            dataSet.add(alarma);
+        }
+
+        //Log.d("ADAPTER", "getItemViewType ---> position" + position);
+        //Log.d("ADAPTER", "getItemViewType ---> dataSet.size() = " + dataSet.size());
+        //Log.d("ADAPTER", "getItemCount ---> dataSet = " + dataSet.toString());
+
+        // Se llama a este metodo desde obBindViewHolder y desde onCreateViewHolder
+        // holder.getItemViewType
+        // position = 0 OR position = 1
+        int viewType = 0; // Default --> MyViewHolder
+
+        if (dataSet.get(position) instanceof Alarma) {
+            viewType = 0;
+        }
+        if (dataSet.get(position) instanceof AlarmaUnica) {
+            viewType = 1;
+        }
+        return viewType;
     }
 
     private Calendar fechaAlarma(int hora, int min, int seg) {
@@ -258,5 +405,26 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RcvAdapterAlarmas.My
             default:
                 return false;
         }
+    }
+
+    private Boolean diaAlarmaUnica(AlarmaUnica alarmaUnica) {
+
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH) + 1;
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        Log.d("ADAPTER", "diaAlarmaUnica ---> year = " + year +
+                "  month = " + month + "  day = " + day);
+
+        int ano = Integer.parseInt(alarmaUnica.getAno());
+        int mes = Integer.parseInt(alarmaUnica.getMes());
+        int dia = Integer.parseInt(alarmaUnica.getDia());
+
+        Log.d("ADAPTER", "diaAlarmaUnica ---> ano = " + ano +
+                "  mes = " + mes + "  dia = " + dia);
+
+        return (ano == year) && (mes == month) && (dia == day);
+
     }
 }

@@ -2,6 +2,7 @@ package arl.chronos;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
@@ -31,9 +33,14 @@ public class CrearEditarAlarma extends AppCompatActivity {
     private Button cancelar;
     private Button guardar;
     private ImageButton reloj;
+    private ImageButton btnCalendario;
     private boolean activar;
     private int hora;
     private int min;
+    private int ano;
+    private int mes;
+    private int dia;
+    private String fecha;
     private Boolean l = false;
     private Boolean m = false;
     private Boolean x = false;
@@ -42,8 +49,10 @@ public class CrearEditarAlarma extends AppCompatActivity {
     private Boolean s = false;
     private Boolean d = false;
     private TimePickerDialog timePicker;
+    private DatePickerDialog datePicker;
     private Calendar calendar;
     private EditText hhmm;
+    private EditText etFecha;
     private final String CERO = "0";
     private final String DOS_PUNTOS = ":";
     private SwitchMaterial sonidoSwitch;
@@ -58,6 +67,10 @@ public class CrearEditarAlarma extends AppCompatActivity {
     private final int STORAGE_PERMISSION_CODE = 1;
 
     public static final String EXTRA_ID = "arl.chronos.EXTRA_ID";
+    public static final String EXTRA_TIPO_ALARMA = "arl.chronos.EXTRA_TIPO_ALARMA";
+    public static final String EXTRA_ANO = "arl.chronos.EXTRA_ANO";
+    public static final String EXTRA_MES = "arl.chronos.EXTRA_MES";
+    public static final String EXTRA_DIA = "arl.chronos.EXTRA_DIA";
     public static final String EXTRA_HORA = "arl.chronos.EXTRA_HORA";
     public static final String EXTRA_MIN = "arl.chronos.EXTRA_MIN";
     public static final String EXTRA_LUN = "arl.chronos.EXTRA_LUN";
@@ -81,6 +94,8 @@ public class CrearEditarAlarma extends AppCompatActivity {
         guardar = findViewById(R.id.btn_guardar_alarma);
         reloj = findViewById(R.id.btn_reloj);
         hhmm = findViewById(R.id.edit_hhmm);
+        etFecha = findViewById(R.id.edit_fecha);
+        btnCalendario = findViewById(R.id.btn_calendario);
 
         selectorSonido = findViewById(R.id.tv_selector);
         sonidoSwitch = findViewById(R.id.sonido);
@@ -89,55 +104,78 @@ public class CrearEditarAlarma extends AppCompatActivity {
         // Si se edita la alarma, se entra en esta condición
         Intent intentEditarAlarma = getIntent();
 
-        if (intentEditarAlarma.hasExtra(EXTRA_ID)){
-            Log.d("EDITALARMA", "L: " + intentEditarAlarma.getBooleanExtra(EXTRA_LUN, false) +
-                    "  M: " + intentEditarAlarma.getBooleanExtra(EXTRA_MAR, false) +
-                    "  X: " + intentEditarAlarma.getBooleanExtra(EXTRA_MIE, false) +
-                    "  J: " + intentEditarAlarma.getBooleanExtra(EXTRA_JUE, false) +
-                    "  V: " + intentEditarAlarma.getBooleanExtra(EXTRA_VIE, false) +
-                    "  S: " + intentEditarAlarma.getBooleanExtra(EXTRA_SAB, false) +
-                    "  D: " + intentEditarAlarma.getBooleanExtra(EXTRA_DOM, false) +
-                    "  Acivar: " + intentEditarAlarma.getBooleanExtra(EXTRA_ACT, false) +
-                    "  Sonido: " + intentEditarAlarma.getStringExtra(EXTRA_SONIDO) +
-                    "  Uri: " + intentEditarAlarma.getBooleanExtra(EXTRA_URI, false)+
-                    "  Sonar: " + intentEditarAlarma.getBooleanExtra(EXTRA_SONAR, false) +
-                    "  Hora: " + intentEditarAlarma.getStringExtra(EXTRA_HORA) +
-                    ":" + intentEditarAlarma.getStringExtra(EXTRA_MIN));
+        if (intentEditarAlarma.hasExtra(EXTRA_ID)) {
+            Log.d("EDITALARMA",
+                    "L: " + intentEditarAlarma.getBooleanExtra(EXTRA_LUN, false) +
+                            "  M: " + intentEditarAlarma.getBooleanExtra(EXTRA_MAR, false) +
+                            "  X: " + intentEditarAlarma.getBooleanExtra(EXTRA_MIE, false) +
+                            "  J: " + intentEditarAlarma.getBooleanExtra(EXTRA_JUE, false) +
+                            "  V: " + intentEditarAlarma.getBooleanExtra(EXTRA_VIE, false) +
+                            "  S: " + intentEditarAlarma.getBooleanExtra(EXTRA_SAB, false) +
+                            "  D: " + intentEditarAlarma.getBooleanExtra(EXTRA_DOM, false) +
+                            "  Acivar: " + intentEditarAlarma.getBooleanExtra(EXTRA_ACT, false) +
+                            "  Sonido: " + intentEditarAlarma.getStringExtra(EXTRA_SONIDO) +
+                            "  Uri: " + intentEditarAlarma.getStringExtra(EXTRA_URI) +
+                            "  Sonar: " + intentEditarAlarma.getBooleanExtra(EXTRA_SONAR, false) +
+                            "  Hora: " + intentEditarAlarma.getStringExtra(EXTRA_HORA) +
+                            ":" + intentEditarAlarma.getStringExtra(EXTRA_MIN) +
+                            "  Año: " + intentEditarAlarma.getStringExtra(EXTRA_ANO) +
+                            "  Mes: " + intentEditarAlarma.getStringExtra(EXTRA_MES) +
+                            "  Dia: " + intentEditarAlarma.getStringExtra(EXTRA_DIA));
 
             String ho = intentEditarAlarma.getStringExtra(EXTRA_HORA);
-            String mi  = intentEditarAlarma.getStringExtra(EXTRA_MIN);
+            String mi = intentEditarAlarma.getStringExtra(EXTRA_MIN);
             String tiempo = ho + DOS_PUNTOS + mi;
+
             // Se añaden a estas variables para que luego se pasen de vuelta correctamente y por separado.
             hora = Integer.parseInt(ho);
-            min  = Integer.parseInt(mi);
+            min = Integer.parseInt(mi);
             // Se pone la hora en el textview
             hhmm.setText(tiempo);
             tvNombreSonido.setText(intentEditarAlarma.getStringExtra(EXTRA_SONIDO));
             sonar = intentEditarAlarma.getBooleanExtra(EXTRA_SONAR, false);
             sonidoSwitch.setChecked(sonar);
             sonidoUri = Uri.parse(intentEditarAlarma.getStringExtra(EXTRA_URI));
+            String tipo_alarma = intentEditarAlarma.getStringExtra(EXTRA_TIPO_ALARMA);
 
-            RadioButton rL = findViewById(R.id.radio_l);
-            RadioButton rM = findViewById(R.id.radio_m);
-            RadioButton rX = findViewById(R.id.radio_x);
-            RadioButton rJ = findViewById(R.id.radio_j);
-            RadioButton rV = findViewById(R.id.radio_v);
-            RadioButton rS = findViewById(R.id.radio_s);
-            RadioButton rD = findViewById(R.id.radio_d);
-            l = intentEditarAlarma.getBooleanExtra(EXTRA_LUN, false);
-            m = intentEditarAlarma.getBooleanExtra(EXTRA_MAR, false);
-            x = intentEditarAlarma.getBooleanExtra(EXTRA_MIE, false);
-            j = intentEditarAlarma.getBooleanExtra(EXTRA_JUE, false);
-            v = intentEditarAlarma.getBooleanExtra(EXTRA_VIE, false);
-            s = intentEditarAlarma.getBooleanExtra(EXTRA_SAB, false);
-            d = intentEditarAlarma.getBooleanExtra(EXTRA_DOM, false);
-            rL.setChecked(l);
-            rM.setChecked(m);
-            rX.setChecked(x);
-            rJ.setChecked(j);
-            rV.setChecked(v);
-            rS.setChecked(s);
-            rD.setChecked(d);
+            if (tipo_alarma.equals("unica")) {
+
+                String year = intentEditarAlarma.getStringExtra(EXTRA_ANO);
+                String month = intentEditarAlarma.getStringExtra(EXTRA_MES);
+                String day = intentEditarAlarma.getStringExtra(EXTRA_DIA);
+
+                ano = Integer.parseInt(year);
+                mes = Integer.parseInt(month);
+                dia = Integer.parseInt(day);
+
+                fecha = year + "/" + month + "/" + day;
+                etFecha.setText(fecha);
+                deshabilitarSemana();
+
+            } else {
+
+                RadioButton rL = findViewById(R.id.radio_l);
+                RadioButton rM = findViewById(R.id.radio_m);
+                RadioButton rX = findViewById(R.id.radio_x);
+                RadioButton rJ = findViewById(R.id.radio_j);
+                RadioButton rV = findViewById(R.id.radio_v);
+                RadioButton rS = findViewById(R.id.radio_s);
+                RadioButton rD = findViewById(R.id.radio_d);
+                l = intentEditarAlarma.getBooleanExtra(EXTRA_LUN, false);
+                m = intentEditarAlarma.getBooleanExtra(EXTRA_MAR, false);
+                x = intentEditarAlarma.getBooleanExtra(EXTRA_MIE, false);
+                j = intentEditarAlarma.getBooleanExtra(EXTRA_JUE, false);
+                v = intentEditarAlarma.getBooleanExtra(EXTRA_VIE, false);
+                s = intentEditarAlarma.getBooleanExtra(EXTRA_SAB, false);
+                d = intentEditarAlarma.getBooleanExtra(EXTRA_DOM, false);
+                rL.setChecked(l);
+                rM.setChecked(m);
+                rX.setChecked(x);
+                rJ.setChecked(j);
+                rV.setChecked(v);
+                rS.setChecked(s);
+                rD.setChecked(d);
+            }
 
             SwitchMaterial activarAlarma = findViewById(R.id.activar);
             activar = intentEditarAlarma.getBooleanExtra(EXTRA_ACT, false);
@@ -155,7 +193,14 @@ public class CrearEditarAlarma extends AppCompatActivity {
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("EDITALARMA", "hora: " + hora + "  min: " + min + "  activar: " + activar + "  sonar: " + sonar);
+
+                if (etFecha.getText().toString().isEmpty()) {
+                    ano = -1;
+                    mes = -1;
+                    dia = -1;
+                }
+
+                Log.d("EDITALARMA", "hora: " + hora + "  min: " + min + "  activar: " + activar + "  sonar: " + sonar + "  año: " + ano + "  mes: " + mes + "  dia: " + dia);
 
                 Intent intent = new Intent(view.getContext(), MainActivity.class);
                 intent.putExtra(EXTRA_HORA, hora);
@@ -167,6 +212,9 @@ public class CrearEditarAlarma extends AppCompatActivity {
                 intent.putExtra(EXTRA_VIE, v);
                 intent.putExtra(EXTRA_SAB, s);
                 intent.putExtra(EXTRA_DOM, d);
+                intent.putExtra(EXTRA_ANO, ano);
+                intent.putExtra(EXTRA_MES, mes);
+                intent.putExtra(EXTRA_DIA, dia);
                 intent.putExtra(EXTRA_ACT, activar);
 
                 nombreSonido = tvNombreSonido.getText().toString();
@@ -215,6 +263,31 @@ public class CrearEditarAlarma extends AppCompatActivity {
                     }
                 }, horas, mins, true);
                 timePicker.show();
+            }
+        });
+
+        btnCalendario.setOnClickListener(view -> {
+            calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+            datePicker = new DatePickerDialog(this, R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                    ano = datePicker.getYear();
+                    mes = datePicker.getMonth() + 1;
+                    dia = datePicker.getDayOfMonth();
+                    Toast.makeText(CrearEditarAlarma.this, ano + "/" + mes + "/" + dia, Toast.LENGTH_SHORT).show();
+                    fecha = ano + "/" + mes + "/" + dia;
+                    etFecha.setText(fecha);
+                }
+            }, year, month, day);
+            datePicker.show();
+
+            if (!etFecha.getText().toString().equals(getResources().getString(R.string.yyy_mm_dd))) {
+                // Desabilita botones repeticion semanal
+                deshabilitarSemana();
             }
         });
 
@@ -380,5 +453,31 @@ public class CrearEditarAlarma extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void deshabilitarSemana() {
+        findViewById(R.id.radio_l).setEnabled(false);
+        findViewById(R.id.radio_m).setEnabled(false);
+        findViewById(R.id.radio_x).setEnabled(false);
+        findViewById(R.id.radio_j).setEnabled(false);
+        findViewById(R.id.radio_v).setEnabled(false);
+        findViewById(R.id.radio_s).setEnabled(false);
+        findViewById(R.id.radio_d).setEnabled(false);
+
+        findViewById(R.id.radio_l).setActivated(false);
+        findViewById(R.id.radio_m).setActivated(false);
+        findViewById(R.id.radio_x).setActivated(false);
+        findViewById(R.id.radio_j).setActivated(false);
+        findViewById(R.id.radio_v).setActivated(false);
+        findViewById(R.id.radio_s).setActivated(false);
+        findViewById(R.id.radio_d).setActivated(false);
+
+        findViewById(R.id.radio_l).setVisibility(View.INVISIBLE);
+        findViewById(R.id.radio_m).setVisibility(View.INVISIBLE);
+        findViewById(R.id.radio_x).setVisibility(View.INVISIBLE);
+        findViewById(R.id.radio_j).setVisibility(View.INVISIBLE);
+        findViewById(R.id.radio_v).setVisibility(View.INVISIBLE);
+        findViewById(R.id.radio_s).setVisibility(View.INVISIBLE);
+        findViewById(R.id.radio_d).setVisibility(View.INVISIBLE);
     }
 }

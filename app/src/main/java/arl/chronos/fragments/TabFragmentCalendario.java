@@ -46,6 +46,7 @@ import arl.chronos.R;
 import arl.chronos.classes.Alarma;
 import arl.chronos.calendar.EventDecorator;
 import arl.chronos.calendar.PoblarCalendario;
+import arl.chronos.classes.AlarmaUnica;
 import arl.chronos.database.MyViewModel;
 
 import static arl.chronos.R.*;
@@ -56,6 +57,7 @@ public class TabFragmentCalendario extends Fragment {
     private MaterialCalendarView calendarView;
     private MyViewModel myViewModel;
     private ArrayList<Alarma> listAlarmas = new ArrayList<>();
+    private ArrayList<AlarmaUnica> listAlarmasUnicas = new ArrayList<>();
     private HashSet<CalendarDay> days = new HashSet<>();
     private ExecutorService executorService;
     private static final String MONDAY = "MONDAY";
@@ -89,6 +91,41 @@ public class TabFragmentCalendario extends Fragment {
                 listAlarmas = (ArrayList<Alarma>) alarmas;
 
                 PoblarCalendario poblarCalendario = new PoblarCalendario(listAlarmas, CalendarDay.today());
+
+                try {
+                    days = executorService.submit(poblarCalendario).get();
+                } catch (ExecutionException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+                // Objeto para decorar el CalendarView
+                EventDecorator eventDecorator = new EventDecorator(view, days);
+                // Se añade una tarea al hilo de fondo (executorService)
+                executorService.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Se crea un Handler que relaciona el hilo de fondo con el Main Thread
+                        // El Handler se relaciona con el Looper de la App (Looper.getMainLooper())
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                for (CalendarDay day : days) {
+                                    if (eventDecorator.shouldDecorate(day)) {
+                                        calendarView.addDecorator(eventDecorator);
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+        myViewModel.getTodasAlarmasUnicas().observe(getViewLifecycleOwner(), new Observer<List<AlarmaUnica>>() {
+            @Override
+            public void onChanged(List<AlarmaUnica> alarmas) {
+                listAlarmasUnicas = (ArrayList<AlarmaUnica>) alarmas;
+
+                PoblarCalendario poblarCalendario = new PoblarCalendario(listAlarmasUnicas, CalendarDay.today(), true);
 
                 try {
                     days = executorService.submit(poblarCalendario).get();
@@ -169,6 +206,17 @@ public class TabFragmentCalendario extends Fragment {
         String diaElegido = localDate.getDayOfWeek().toString();
         StringBuilder mostrar = new StringBuilder();
         String hora = "";
+
+        for (AlarmaUnica alarmaUnica : listAlarmasUnicas) {
+            if (Integer.parseInt(alarmaUnica.getAno()) == ano) {
+                if (Integer.parseInt(alarmaUnica.getMes()) == mes) {
+                    if (Integer.parseInt(alarmaUnica.getDia()) == dia) {
+                        hora = alarmaUnica.getHora() + ":" + alarmaUnica.getMinuto() + "\n";
+                        mostrar.append(hora);
+                    }
+                }
+            }
+        }
 
         switch (diaElegido) {
             case MONDAY:
@@ -256,7 +304,7 @@ public class TabFragmentCalendario extends Fragment {
 
             @Override
             public void decorate(DayViewFacade view) {
-                view.setSelectionDrawable(ResourcesCompat.getDrawable(getResources() ,drawable.shape_circle, null));
+                view.setSelectionDrawable(ResourcesCompat.getDrawable(getResources(), drawable.shape_circle, null));
             }
         });
     }

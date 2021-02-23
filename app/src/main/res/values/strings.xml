@@ -20,6 +20,7 @@
 
     <!--//////////////// TextView & EditText /////////////////////-->
     <string name="description_boton_reloj">Boton reloj</string>
+    <string name="fecha_rcv_tv"></string>
     <string name="hora_rcv_tv">00:00</string>
     <string name="lunes_rcv_tv">L</string>
     <string name="martes_rcv_tv">M</string>
@@ -50,6 +51,7 @@
     <string name="btn_aceptar">Aceptar</string>
     <string name="borrar_todas_las_alarmas">Borrar todas las alarmas</string>
     <string name="hh_mm">hh:mm</string>
+    <string name="yyy_mm_dd">año/mes/dia</string>
 
     <!--//////////////// Calendario ///////////////-->
     <string name="material_calendar_monday">L</string>

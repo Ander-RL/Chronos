@@ -52,6 +52,22 @@
         app:layout_constraintTop_toTopOf="@+id/guideline_vertical"
         app:srcCompat="@drawable/ic_alarma" />
 
+    <ImageButton
+        android:id="@+id/btn_calendario"
+        android:layout_width="54dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="136dp"
+        android:adjustViewBounds="true"
+        android:backgroundTint="#00FFFFFF"
+        android:contentDescription="@string/description_boton_reloj"
+        android:hapticFeedbackEnabled="true"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/edit_fecha"
+        app:layout_constraintTop_toTopOf="@+id/guideline_vertical"
+        app:srcCompat="@drawable/ic_calendar" />
+
     <EditText
         android:id="@+id/edit_hhmm"
         android:layout_width="250dp"
@@ -67,6 +83,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline_vertical"
         app:layout_constraintVertical_bias="0.002" />
+
+    <EditText
+        android:id="@+id/edit_fecha"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
+        android:autofillHints="@string/yyy_mm_dd"
+        android:enabled="false"
+        android:hint="@string/yyy_mm_dd"
+        android:inputType="datetime"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline_vertical"
+        app:layout_constraintVertical_bias="0.143" />
 
     <View
         android:id="@+id/divider2"
