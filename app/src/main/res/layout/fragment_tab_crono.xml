@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
+        app:layout_constraintGuide_percent="0.31" />
 
     <EditText
         android:id="@+id/et_crono_min"
@@ -134,5 +134,30 @@
         android:drawableBottom="@drawable/ic_play"
         app:layout_constraintBaseline_toBaselineOf="@+id/btn_crono_pause"
         app:layout_constraintEnd_toStartOf="@+id/btn_crono_pause" />
+
+    <TextView
+        android:id="@+id/tv_crono"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="25dp"
+        android:scrollbars="vertical"
+        android:textSize="20sp"
+        android:layout_marginEnd="75dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_crono_pause"
+        app:layout_constraintTop_toBottomOf="@id/tv_crono_min"
+        tools:layout_editor_absoluteX="100dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_crono_reset"
+        android:layout_width="40dp"
+        android:layout_height="45dp"
+        android:drawableBottom="@drawable/ic_refresh"
+        app:layout_constraintBottom_toTopOf="@id/btn_crono_stop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.285"
+        app:layout_constraintStart_toEndOf="@id/tv_crono"
+        app:layout_constraintTop_toBottomOf="@id/tv_crono_seg"
+        app:layout_constraintVertical_bias="0.421" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -45,5 +45,4 @@ public interface AlarmaDAO {
     @Query("SELECT * FROM alarma_unica_tabla ORDER BY hora DESC")
     LiveData<List<AlarmaUnica>> getTodasAlarmasUnicas();
 
-
 }

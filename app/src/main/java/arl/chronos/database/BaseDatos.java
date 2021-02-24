@@ -11,14 +11,16 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import arl.chronos.classes.Alarma;
 import arl.chronos.classes.AlarmaUnica;
+import arl.chronos.classes.Crono;
 
-@Database(entities = {Alarma.class, AlarmaUnica.class}, version = 1, exportSchema = false)
+@Database(entities = {Alarma.class, AlarmaUnica.class, Crono.class}, version = 1, exportSchema = false)
 public abstract class BaseDatos extends RoomDatabase{
 
     // Singleton. Solo se puede instanciar una vez.
     private static BaseDatos instance;
     // Metodo Getter abstracto;
     public abstract AlarmaDAO alarmaDAO(); // El codigo de este metodo es autogenerado por Room en el metodo que construye el singleton de la base de datos (getInstance).
+    public abstract CronoDAO cronoDAO();
 
     // Solo un hilo por vez puede acceder a este metodo.
     public static synchronized BaseDatos getInstance(Context context){

@@ -8,17 +8,25 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 
+import java.util.List;
+
 import arl.chronos.R;
+import arl.chronos.classes.Crono;
+import arl.chronos.database.MyViewModel;
 import arl.chronos.receiver.AlertReceiver;
 import arl.chronos.service.ServicioCrono;
 
@@ -27,6 +35,9 @@ public class TabFragmentCrono extends Fragment {
     private MaterialButton btnPlay;
     private MaterialButton btnPause;
     private MaterialButton btnStop;
+    private MaterialButton btnReset;
+    private MyViewModel myViewModel;
+    private TextView tvCrono;
     private TextView etSegundos;
     private TextView etMinutos;
     private TextView etHoras;
@@ -65,10 +76,15 @@ public class TabFragmentCrono extends Fragment {
         btnPlay = view.findViewById(R.id.btn_crono_start);
         btnPause = view.findViewById(R.id.btn_crono_pause);
         btnStop = view.findViewById(R.id.btn_crono_stop);
+        btnReset = view.findViewById(R.id.btn_crono_reset);
+        tvCrono = view.findViewById(R.id.tv_crono);
+        tvCrono.setMovementMethod(new ScrollingMovementMethod());
 
         btnPause.setEnabled(false);
         btnStop.setEnabled(false);
         btnPlay.setBackgroundColor(getResources().getColor(R.color.blue_500, null));
+
+        myViewModel = new ViewModelProvider(this).get(MyViewModel.class);
 
         btnPlay.setOnClickListener(btnView -> {
 
@@ -90,6 +106,27 @@ public class TabFragmentCrono extends Fragment {
                 Toast.makeText(getContext(), "Inserta un valor", Toast.LENGTH_SHORT).show();
             } else {
                 tiempoRestante = convertirAMilis(h, m, s);
+                tvCrono.setText("");
+
+                if(Integer.parseInt(h) < 10 && !h.equals("00")){
+                    h = "0" + h;
+                }
+                if(Integer.parseInt(m) < 10 && !m.equals("00")){
+                    m = "0" + m;
+                }
+                if(Integer.parseInt(s) < 10 && !s.equals("00")){
+                    s = "0" + s;
+                }
+
+                myViewModel.insertCrono(new Crono(h, m, s));
+                myViewModel.getTodoCrono().observe(getViewLifecycleOwner(), new Observer<List<Crono>>() {
+                    @Override
+                    public void onChanged(List<Crono> cronosList) {
+                        for(Crono crono : cronosList){
+                            tvCrono.append(crono.getHoras() + ":" + crono.getMinutos() + ":" + crono.getSegundos() + "\n");
+                        }
+                    }
+                });
 
                 Log.d("TabFragmentCrono", h + ":" + m + ":" + s);
                 Log.d("TabFragmentCrono", "tiempoRestante = " + tiempoRestante);
@@ -135,6 +172,11 @@ public class TabFragmentCrono extends Fragment {
                 etMinutos.setText("");
                 etSegundos.setText("");
             }
+        });
+
+        btnReset.setOnClickListener(btnView -> {
+            tvCrono.setText("");
+            myViewModel.deleteTodoCronos();
         });
 
         return view;
