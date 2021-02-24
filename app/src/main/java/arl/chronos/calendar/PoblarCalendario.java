@@ -197,7 +197,9 @@ public class PoblarCalendario implements Callable<HashSet<CalendarDay>> {
                 Log.d("POBLAR_CALENDARIO", "ano = " + ano + "  mes = " + mes + "  dia = " + dia);
                 Log.d("POBLAR_CALENDARIO", "date.getYear() = " + date.getYear() + "  date.getMonth() = " + date.getMonth() + "  date.getDay() = " + date.getDay());
 
-                days.add(CalendarDay.from(ano, mes, dia));
+                if (alarmaUnica.getActivated()) {
+                    days.add(CalendarDay.from(ano, mes, dia));
+                }
             }
         }
     }

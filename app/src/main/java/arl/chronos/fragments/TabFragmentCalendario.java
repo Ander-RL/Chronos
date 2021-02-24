@@ -208,11 +208,13 @@ public class TabFragmentCalendario extends Fragment {
         String hora = "";
 
         for (AlarmaUnica alarmaUnica : listAlarmasUnicas) {
-            if (Integer.parseInt(alarmaUnica.getAno()) == ano) {
-                if (Integer.parseInt(alarmaUnica.getMes()) == mes) {
-                    if (Integer.parseInt(alarmaUnica.getDia()) == dia) {
-                        hora = alarmaUnica.getHora() + ":" + alarmaUnica.getMinuto() + "\n";
-                        mostrar.append(hora);
+            if (alarmaUnica.getActivated()) {
+                if (Integer.parseInt(alarmaUnica.getAno()) == ano) {
+                    if (Integer.parseInt(alarmaUnica.getMes()) == mes) {
+                        if (Integer.parseInt(alarmaUnica.getDia()) == dia) {
+                            hora = alarmaUnica.getHora() + ":" + alarmaUnica.getMinuto() + "\n";
+                            mostrar.append(hora);
+                        }
                     }
                 }
             }

@@ -51,7 +51,7 @@ public class MyViewModel extends AndroidViewModel {
     public void deleteAll(){
         repositorio.deleteTodasAlarmas();
     }
-    public void deleteAllUnica(AlarmaUnica alarmaUnica){
+    public void deleteAllUnica(){
         repositorio.deleteTodasAlarmasUnicas();
     }
 
