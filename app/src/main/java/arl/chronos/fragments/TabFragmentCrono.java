@@ -86,6 +86,15 @@ public class TabFragmentCrono extends Fragment {
 
         myViewModel = new ViewModelProvider(this).get(MyViewModel.class);
 
+        myViewModel.getTodoCrono().observe(getViewLifecycleOwner(), new Observer<List<Crono>>() {
+            @Override
+            public void onChanged(List<Crono> cronosList) {
+                for (Crono crono : cronosList) {
+                    tvCrono.append(crono.getHoras() + ":" + crono.getMinutos() + ":" + crono.getSegundos() + "\n");
+                }
+            }
+        });
+
         btnPlay.setOnClickListener(btnView -> {
 
             h = etHoras.getText().toString();
@@ -108,25 +117,17 @@ public class TabFragmentCrono extends Fragment {
                 tiempoRestante = convertirAMilis(h, m, s);
                 tvCrono.setText("");
 
-                if(Integer.parseInt(h) < 10 && !h.equals("00")){
+                if (Integer.parseInt(h) < 10 && !h.equals("00")) {
                     h = "0" + h;
                 }
-                if(Integer.parseInt(m) < 10 && !m.equals("00")){
+                if (Integer.parseInt(m) < 10 && !m.equals("00")) {
                     m = "0" + m;
                 }
-                if(Integer.parseInt(s) < 10 && !s.equals("00")){
+                if (Integer.parseInt(s) < 10 && !s.equals("00")) {
                     s = "0" + s;
                 }
 
                 myViewModel.insertCrono(new Crono(h, m, s));
-                myViewModel.getTodoCrono().observe(getViewLifecycleOwner(), new Observer<List<Crono>>() {
-                    @Override
-                    public void onChanged(List<Crono> cronosList) {
-                        for(Crono crono : cronosList){
-                            tvCrono.append(crono.getHoras() + ":" + crono.getMinutos() + ":" + crono.getSegundos() + "\n");
-                        }
-                    }
-                });
 
                 Log.d("TabFragmentCrono", h + ":" + m + ":" + s);
                 Log.d("TabFragmentCrono", "tiempoRestante = " + tiempoRestante);
@@ -238,7 +239,7 @@ public class TabFragmentCrono extends Fragment {
             etSegundos.setText("");
         }
         // Si el servicio sigue funcionando, actualiza los botones
-        if (ServicioCrono.IS_RUNNING){
+        if (ServicioCrono.IS_RUNNING) {
             btnPlay.setEnabled(false);
             btnPause.setEnabled(true);
             btnStop.setEnabled(true);

@@ -46,7 +46,6 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     // CalendarView
-    //implementation 'com.applandeo:material-calendar-view:1.7.0'
     implementation "com.github.prolificinteractive:material-calendarview:$calendar_version"
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
