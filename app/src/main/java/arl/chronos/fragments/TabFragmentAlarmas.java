@@ -234,6 +234,10 @@ public class TabFragmentAlarmas extends Fragment {
             String horaFormateada = (hora < 10) ? (CERO + hora) : String.valueOf(hora);
             //Formateo el minuto obtenido: antepone el 0 si son menores de 10
             String minutoFormateado = (min < 10) ? (CERO + min) : String.valueOf(min);
+            //Formateo el mes obtenido: antepone el 0 si son menores de 10
+            String mesFormateado = (mes < 10) ? (CERO + mes) : String.valueOf(mes);
+            //Formateo el día obtenido: antepone el 0 si son menores de 10
+            String diaFormateado = (dia < 10) ? (CERO + dia) : String.valueOf(dia);
 
             if ((ano == -1) && (mes == -1) && (dia == -1)) {
                 Log.d("TABFRAGMENT_RESULT", horaFormateada + ":" + minutoFormateado + "    L: " + l + "M: " + m + "X: " + x + "J: " + j + "V: " + v + "S: " + s + "D: " + d);
@@ -242,8 +246,8 @@ public class TabFragmentAlarmas extends Fragment {
             }
 
             if ((ano != -1) && (mes != -1) && (dia != -1)) {
-                Log.d("TABFRAGMENT_RESULT", horaFormateada + ":" + minutoFormateado + "    ano: " + ano + "  mes: " + mes + "  dia: " + dia);
-                AlarmaUnica alarmaUnica = new AlarmaUnica(horaFormateada, minutoFormateado, String.valueOf(ano), String.valueOf(mes), String.valueOf(dia), activar, nombreSonido, sonidoUri.toString(), sonar);
+                Log.d("TABFRAGMENT_RESULT", horaFormateada + ":" + minutoFormateado + "    ano: " + ano + "  mes: " + mesFormateado + "  dia: " + diaFormateado);
+                AlarmaUnica alarmaUnica = new AlarmaUnica(horaFormateada, minutoFormateado, String.valueOf(ano), mesFormateado, diaFormateado, activar, nombreSonido, sonidoUri.toString(), sonar);
                 myViewModel.insertUnica(alarmaUnica);
             }
 
@@ -279,6 +283,10 @@ public class TabFragmentAlarmas extends Fragment {
             String horaFormateada = (hora < 10) ? (CERO + hora) : String.valueOf(hora);
             //Formateo el minuto obtenido: antepone el 0 si son menores de 10
             String minutoFormateado = (min < 10) ? (CERO + min) : String.valueOf(min);
+            //Formateo el mes obtenido: antepone el 0 si son menores de 10
+            String mesFormateado = (mes < 10) ? (CERO + mes) : String.valueOf(mes);
+            //Formateo el día obtenido: antepone el 0 si son menores de 10
+            String diaFormateado = (dia < 10) ? (CERO + dia) : String.valueOf(dia);
 
             if ((ano == -1) && (mes == -1) && (dia == -1)) {
                 Log.d("TABFRAGMENT_RESULT_EDIT", horaFormateada + ":" + minutoFormateado + "    L: " + l + "M: " + m + "X: " + x + "J: " + j + "V: " + v + "S: " + s + "D: " + d);
@@ -288,8 +296,8 @@ public class TabFragmentAlarmas extends Fragment {
             }
 
             if ((ano != -1) && (mes != -1) && (dia != -1)) {
-                Log.d("TABFRAGMENT_RESULT_EDIT", horaFormateada + ":" + minutoFormateado + "    ano: " + ano + "  mes: " + mes + "  dia: " + dia);
-                AlarmaUnica alarmaUnica = new AlarmaUnica(horaFormateada, minutoFormateado, String.valueOf(ano), String.valueOf(mes), String.valueOf(dia), activar, nombreSonido, sonidoUri.toString(), sonar);
+                Log.d("TABFRAGMENT_RESULT_EDIT", horaFormateada + ":" + minutoFormateado + "    ano: " + ano + "  mes: " + mesFormateado + "  dia: " + diaFormateado);
+                AlarmaUnica alarmaUnica = new AlarmaUnica(horaFormateada, minutoFormateado, String.valueOf(ano), mesFormateado, diaFormateado, activar, nombreSonido, sonidoUri.toString(), sonar);
                 alarmaUnica.setId(id);
                 myViewModel.updateUnica(alarmaUnica);
             }
@@ -299,13 +307,5 @@ public class TabFragmentAlarmas extends Fragment {
         } else {
             Snackbar.make(view, "Alarma no creada", Snackbar.LENGTH_LONG).show();
         }
-    }
-
-    public MyViewModel getMyViewModel() {
-        return myViewModel;
-    }
-
-    public String getMensaje() {
-        return horaFormateada + DOS_PUNTOS + minutoFormateado;
     }
 }

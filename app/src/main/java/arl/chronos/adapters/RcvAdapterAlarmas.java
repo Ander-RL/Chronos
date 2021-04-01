@@ -79,7 +79,7 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RecyclerView.ViewHol
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) { // Parent es RecyclerView. Context es Fragment.
-        //Log.d("ADAPTER", "onCreateViewHolder ---> viewType = " + viewType);
+
         if (viewType == 1) {
             tipoAlarma = 1;
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rcv_alarmas_unicas_layout, parent, false);
@@ -93,13 +93,7 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
-        //Log.d("ADAPTER", "onBindViewHolder ---> position = " + position);
-        //Log.d("ADAPTER", "onBindViewHolder ---> alarmas.size()" + alarmas.size());
-        //Log.d("ADAPTER", "onBindViewHolder ---> alarmasUnicas.size()" + alarmasUnicas.size());
-        //Log.d("ADAPTER", "onBindViewHolder ---> dataSet.size()" + dataSet.size());
-
         if (holder.getItemViewType() == 0 && (dataSet.get(position) instanceof Alarma)) {
-            //Log.d("ADAPTER", "Semanales ---> alarmas.size()" + alarmas.size());
 
             MyViewHolder myHolder = (MyViewHolder) holder;
             Alarma currentAlarma = (Alarma) dataSet.get(position);
@@ -111,41 +105,40 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RecyclerView.ViewHol
             sonidoUri = currentAlarma.getSonidoUri();
             sonar = currentAlarma.getSonar();
             activar = currentAlarma.getActivated();
-            //Log.d("ADAPTER", "Semanales ---> HORA  " + ho + ":" + mi);
 
             hor = Integer.parseInt(ho);
             min = Integer.parseInt(mi);
             seg = 0;
 
-            if (currentAlarma.getLunes() == true) {
+            if (currentAlarma.getLunes()) {
                 myHolder.lunes.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
                 l = true;
             }
-            if (currentAlarma.getMartes() == true) {
+            if (currentAlarma.getMartes()) {
                 myHolder.martes.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
                 m = true;
             }
-            if (currentAlarma.getMiercoles() == true) {
+            if (currentAlarma.getMiercoles()) {
                 myHolder.miercoles.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
                 x = true;
             }
-            if (currentAlarma.getJueves() == true) {
+            if (currentAlarma.getJueves()) {
                 myHolder.jueves.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
                 j = true;
             }
-            if (currentAlarma.getViernes() == true) {
+            if (currentAlarma.getViernes()) {
                 myHolder.viernes.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
                 v = true;
             }
-            if (currentAlarma.getSabado() == true) {
+            if (currentAlarma.getSabado()) {
                 myHolder.sabado.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
                 s = true;
             }
-            if (currentAlarma.getDomingo() == true) {
+            if (currentAlarma.getDomingo()) {
                 myHolder.domingo.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
                 d = true;
             }
-            if (currentAlarma.getActivated() == true) {
+            if (currentAlarma.getActivated()) {
                 myHolder.activated.setChecked(true);
 
                 // Comprueba el día de la semana con los días elegidos para la alarma
@@ -165,9 +158,11 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
         if (holder.getItemViewType() == 1 && (dataSet.get(position) instanceof AlarmaUnica)) {
-            //Log.d("ADAPTER", "Unica ---> alarmasUnicas.size()" + alarmasUnicas.size());
+
             MyViewHolderUnica myHolder = (MyViewHolderUnica) holder;
             AlarmaUnica currentAlarma = (AlarmaUnica) dataSet.get(position);
+
+            Log.d("RCV", "mes = " + currentAlarma.getMes() + "  dia = " + currentAlarma.getDia());
 
             myHolder.hora.setText(currentAlarma.getHora() + ":" + currentAlarma.getMinuto());
             ho = currentAlarma.getHora();
@@ -214,8 +209,6 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemCount() {
-        //Log.d("ADAPTER", "getItemCount ---> " + alarmasUnicas.size() + alarmas.size());
-        //Log.d("ADAPTER", "getItemCount ---> dataSet.size() = " + dataSet.size());
         return alarmasUnicas.size() + alarmas.size();
     }
 
@@ -331,13 +324,6 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RecyclerView.ViewHol
             dataSet.add(alarma);
         }
 
-        //Log.d("ADAPTER", "getItemViewType ---> position" + position);
-        //Log.d("ADAPTER", "getItemViewType ---> dataSet.size() = " + dataSet.size());
-        //Log.d("ADAPTER", "getItemCount ---> dataSet = " + dataSet.toString());
-
-        // Se llama a este metodo desde obBindViewHolder y desde onCreateViewHolder
-        // holder.getItemViewType
-        // position = 0 OR position = 1
         int viewType = 0; // Default --> MyViewHolder
 
         if (dataSet.get(position) instanceof Alarma) {
@@ -359,8 +345,6 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     private void startAlarma(Calendar c, int code) {
-
-        //Log.d("/////ADAPTER ALARM/////", nombreSonido + " ---> Uri: " + sonidoUri + " ---> Sonar: " + sonar);
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlertReceiver.class);

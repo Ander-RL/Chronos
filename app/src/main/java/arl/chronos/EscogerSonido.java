@@ -103,10 +103,8 @@ public class EscogerSonido extends AppCompatActivity {
 
         Uri sonidos;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            //sonidos = MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL);
             sonidos = MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_INTERNAL);
         } else {
-            //sonidos = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
             sonidos = MediaStore.Audio.Media.INTERNAL_CONTENT_URI;
         }
 
@@ -120,8 +118,6 @@ public class EscogerSonido extends AppCompatActivity {
         try (Cursor cursor = getApplicationContext().getContentResolver().query(
                 sonidos, columnas, null, null, ordenarSonido
         )) {
-            //int idColumna = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID);
-            //int nombreColumna = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME);
             int idColumna = cursor.getColumnIndex(MediaStore.Audio.Media._ID);
             int nombreColumna = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
 
@@ -130,7 +126,6 @@ public class EscogerSonido extends AppCompatActivity {
                 long id = cursor.getLong(idColumna);
                 String nombre = cursor.getString(nombreColumna);
 
-                //Uri contentUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id);
                 Uri contentUri = ContentUris.withAppendedId(MediaStore.Audio.Media.INTERNAL_CONTENT_URI, id);
 
                 // Guarda los valores de las columnas de contenUri  en la lista.

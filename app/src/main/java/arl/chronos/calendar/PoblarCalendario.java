@@ -39,7 +39,6 @@ public class PoblarCalendario implements Callable<HashSet<CalendarDay>> {
             addCalendarDays(listAlarmasObj, date.getMonth(), date.getYear());
         } else {
             ArrayList<Object> listAlarmasObj = new ArrayList<>(listAlarmasUnicas);
-            //Log.d("POBLAR_CALENDARIO", "call()  --->  date.getYear() = " + date.getYear() + "  date.getMonth() = " + date.getMonth() + "  date.getDay() = " + date.getDay());
             addCalendarDays(listAlarmasObj, date.getMonth(), date.getYear());
         }
         return days;
@@ -193,9 +192,6 @@ public class PoblarCalendario implements Callable<HashSet<CalendarDay>> {
                 int ano = Integer.parseInt(alarmaUnica.getAno());
                 int mes = Integer.parseInt(alarmaUnica.getMes());
                 int dia = Integer.parseInt(alarmaUnica.getDia());
-
-                Log.d("POBLAR_CALENDARIO", "ano = " + ano + "  mes = " + mes + "  dia = " + dia);
-                Log.d("POBLAR_CALENDARIO", "date.getYear() = " + date.getYear() + "  date.getMonth() = " + date.getMonth() + "  date.getDay() = " + date.getDay());
 
                 if (alarmaUnica.getActivated()) {
                     days.add(CalendarDay.from(ano, mes, dia));

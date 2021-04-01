@@ -209,8 +209,6 @@ public class TabFragmentCrono extends Fragment {
                 s = String.valueOf(seg);
             }
 
-            //Log.d("TabFragmentCrono", h + ":" + m + ":" + s);
-
             etHoras.setText(h);
             etMinutos.setText(m);
             etSegundos.setText(s);

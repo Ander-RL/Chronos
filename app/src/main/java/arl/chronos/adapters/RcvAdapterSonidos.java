@@ -17,13 +17,12 @@ import arl.chronos.R;
 import arl.chronos.classes.Sonido;
 
 public class RcvAdapterSonidos extends RecyclerView.Adapter<RcvAdapterSonidos.ViewHolderSonidos> {
-    //private Context context;
+
     private Sonido currentSonido;
     private ArrayList<Sonido> sonidoList;
     private OnSonidoClickListener listener;
 
     public RcvAdapterSonidos() {
-        //this.context = context;
     }
 
     public void setSonidos(ArrayList<Sonido> sonidoList) {

@@ -45,8 +45,7 @@ public class NotificationHelper extends ContextWrapper {
     public void crearCanal() {
         NotificationChannel canal = new NotificationChannel(CANAL_ID, CANAL_NOMBRE, NotificationManager.IMPORTANCE_HIGH);
         canal.enableLights(true);
-        canal.enableVibration(false); // No cancela la vibracion por defecto
-        //canal.setVibrationPattern(new long[] {2000,2000,2000,2000,2000}); // No funciona. Vibra igual.
+        canal.enableVibration(false);
         canal.setLightColor(R.color.blue_500);
         canal.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
 
@@ -85,7 +84,6 @@ public class NotificationHelper extends ContextWrapper {
                     .setContentText(mensaje)
                     .setSmallIcon(R.drawable.ic_alarm)
                     .setPriority(Notification.PRIORITY_HIGH)
-                    //.setVibrate(new long[] {2000,2000,2000,2000,2000}) // No funciona. Vibra igual.
                     .setColor(getResources().getColor(R.color.blue_500, getTheme()))
                     .setContentIntent(pendingIntent)
                     .setAutoCancel(true) // Cuando se toca la notificacion se borra/elimina/quita esa notificacion

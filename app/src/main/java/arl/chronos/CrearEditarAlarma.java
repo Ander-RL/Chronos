@@ -254,12 +254,10 @@ public class CrearEditarAlarma extends AppCompatActivity {
                         //Formateo el minuto obtenido: antepone el 0 si son menores de 10
                         String minutoFormateado = (mm < 10) ? (CERO + mm) : String.valueOf(mm);
 
-                        //Toast.makeText(getApplicationContext(), horaFormateada + DOS_PUNTOS + minutoFormateado, Toast.LENGTH_LONG).show();
                         hhmm.setText(horaFormateada + DOS_PUNTOS + minutoFormateado);
 
                         hora = hh;
                         min = mm;
-                        //Toast.makeText(getApplicationContext(), hh + ":" + mm, Toast.LENGTH_LONG).show();
                     }
                 }, horas, mins, true);
                 timePicker.show();
@@ -295,42 +293,7 @@ public class CrearEditarAlarma extends AppCompatActivity {
         selectorSonido.setOnClickListener(view -> {
             Intent intent = new Intent(this, EscogerSonido.class);
             startActivityForResult(intent, ESCOGER_SONIDO_CODE);
-            // TODO NO IMPLEMENTADO TODAVIA
-            // Antes de lanzar la actividad, se comprueba si se tiene permiso para acceder a EXTERNAL_STORAGE.
-            /*if (ContextCompat.checkSelfPermission(getApplicationContext(),
-                    Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-
-                Intent intent = new Intent(this, EscogerSonido.class);
-                startActivityForResult(intent, ESCOGER_SONIDO_CODE);
-
-            } else {
-                requestPermission();
-            }*/
-
         });
-    }
-
-    // TODO Implementar cuando se cree la opción de escoger entre memoria interna y externa
-    private void requestPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-
-            new AlertDialog.Builder(this)
-                    .setTitle(R.string.permiso_storage)
-                    .setMessage(R.string.permiso_mensaje)
-                    .setPositiveButton("Ok", (dialogInterface, i) -> {
-                        ActivityCompat.requestPermissions(
-                                CrearEditarAlarma.this,
-                                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
-                    })
-                    .setNegativeButton("Cancelar", (dialogInterface, i) -> {
-                        dialogInterface.dismiss();
-                    })
-                    .create()
-                    .show();
-
-        } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
-        }
     }
 
     @Override
