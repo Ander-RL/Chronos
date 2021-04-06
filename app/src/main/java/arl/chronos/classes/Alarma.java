@@ -101,8 +101,4 @@ public class Alarma {
     public Boolean getSonar() {
         return sonar;
     }
-
-    public void setSonar(Boolean sonar) {
-        this.sonar = sonar;
-    }
 }

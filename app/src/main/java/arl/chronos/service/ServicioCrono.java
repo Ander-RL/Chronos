@@ -57,15 +57,12 @@ public class ServicioCrono extends Service {
         switch (cronoAccion) {
             case START:
                 startCrono();
-                Log.d("ServicioCrono", "accion = " + cronoAccion + "    timepoRestante = " + tiempoRestante);
                 break;
             case PAUSE:
                 pauseCrono();
-                Log.d("ServicioCrono", "accion = " + cronoAccion);
                 break;
             case STOP:
                 stopCrono();
-                Log.d("ServicioCrono", "accion = " + cronoAccion);
                 break;
         }
         return super.onStartCommand(intent, flags, startId);
@@ -88,7 +85,6 @@ public class ServicioCrono extends Service {
                 tiempoRestante = millisUntilFinished;
                 broadCastIntent.putExtra(CUENTA_ATRAS_BR, tiempoRestante);
                 sendBroadcast(broadCastIntent);
-                Log.d("ServicioCrono", "millisUntilFinished = " + tiempoRestante);
             }
 
             @Override
@@ -102,7 +98,6 @@ public class ServicioCrono extends Service {
                 alertBroadcastIntent.putExtra(TabFragmentCrono.EXTRA_CRONO_TIEMPO, 0);
                 alertBroadcastIntent.putExtra(TabFragmentCrono.EXTRA_CRONO_ACCION, "onFinish");
                 context.sendBroadcast(alertBroadcastIntent);
-                Log.d("ServicioCrono", "onFinish");
             }
 
         }.start();

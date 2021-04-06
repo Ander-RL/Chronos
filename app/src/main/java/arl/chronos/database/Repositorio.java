@@ -59,10 +59,6 @@ public class Repositorio {
         new DeleteAlarmaUnicaAsyncTask(alarmaDAO).execute(alarmaUnica);
     }
 
-    public void deleteCrono(Crono crono){
-        new DeleteCronoAsyncTask(cronoDAO).execute(crono);
-    }
-
     public void deleteTodasAlarmas(){
         new DeleteTodasAlarmaAsyncTask(alarmaDAO).execute();
     }

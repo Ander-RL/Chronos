@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
+import arl.chronos.R;
 import arl.chronos.service.ServicioCrono;
 import arl.chronos.service.ServicioSonido;
 
@@ -54,8 +55,7 @@ public class NotificationReceiverCancelar extends BroadcastReceiver {
 
             notificationManager.cancel(id); // Cierra la notificacion
 
-            Toast.makeText(context, "Alarma cancelada", Toast.LENGTH_SHORT).show();
-            Log.d("NOTIF_RECEIV", "Cancelar -> id = " + id + " / Mensaje = " + mensaje + " / Hora = " + hora);
+            Toast.makeText(context, (R.string.alarma_cancelada), Toast.LENGTH_SHORT).show();
 
         }
 

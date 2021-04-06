@@ -126,7 +126,7 @@ public class TabFragmentAlarmas extends Fragment {
                 } else {
                     myViewModel.deleteUnica((AlarmaUnica) rcvAdapter.getAlarmaAt(viewHolder.getAdapterPosition()));
                 }
-                Snackbar.make(view, "Alarma borrada", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(view, (R.string.alarma_borrada), Snackbar.LENGTH_LONG).show();
             }
         }).attachToRecyclerView(recyclerView);
 
@@ -144,9 +144,6 @@ public class TabFragmentAlarmas extends Fragment {
                     myViewModel.update(alarma);
                 } else { // Si se clicka fuera del switch
                     // Vuelve a la activy de crear alarmas con los datos de la alarma clickada
-
-                    Log.d("TABFRAGMENT_EDITALARMA", alarma.getHora() + ":" + alarma.getMinuto() + " id: " + alarma.getId() +
-                            " Nombre Sonido: " + alarma.getNombreSonido() + " Uri: " + alarma.getSonidoUri() + " Sonar: " + alarma.getSonar() + "  Tipo: semanal");
 
                     Intent intent = new Intent(getContext(), CrearEditarAlarma.class);
                     intent.putExtra(CrearEditarAlarma.EXTRA_ID, alarma.getId());
@@ -183,9 +180,6 @@ public class TabFragmentAlarmas extends Fragment {
                 } else { // Si se clicka fuera del switch
 
                     // Vuelve a la activy de crear alarmas con los datos de la alarma clickada
-                    Log.d("TABFRAGMENT_EDITALARMA", alarma.getHora() + ":" + alarma.getMinuto() + " id: " + alarma.getId() +
-                            " Nombre Sonido: " + alarma.getNombreSonido() + " Uri: " + alarma.getSonidoUri() + " Sonar: " + alarma.getSonar() +
-                            "  Año: " + alarma.getAno() + "  Mes: " + alarma.getMes() + "  Dia: " + alarma.getDia() + "  Tipo: unica");
 
                     Intent intent = new Intent(getContext(), CrearEditarAlarma.class);
                     intent.putExtra(CrearEditarAlarma.EXTRA_ID, alarma.getId());
@@ -211,7 +205,6 @@ public class TabFragmentAlarmas extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // En caso de que se retorne de crear la alarma
-        Log.d("TABFRAGMENT_RESULT", "onActivityResult");
         if (requestCode == ADD_ALARMAS_REQUEST && resultCode == RESULT_OK) {
             hora = data.getIntExtra(CrearEditarAlarma.EXTRA_HORA, 0);
             min = data.getIntExtra(CrearEditarAlarma.EXTRA_MIN, 0);
@@ -240,18 +233,16 @@ public class TabFragmentAlarmas extends Fragment {
             String diaFormateado = (dia < 10) ? (CERO + dia) : String.valueOf(dia);
 
             if ((ano == -1) && (mes == -1) && (dia == -1)) {
-                Log.d("TABFRAGMENT_RESULT", horaFormateada + ":" + minutoFormateado + "    L: " + l + "M: " + m + "X: " + x + "J: " + j + "V: " + v + "S: " + s + "D: " + d);
                 Alarma alarma = new Alarma(horaFormateada, minutoFormateado, l, m, x, j, v, s, d, activar, nombreSonido, sonidoUri.toString(), sonar);
                 myViewModel.insert(alarma);
             }
 
             if ((ano != -1) && (mes != -1) && (dia != -1)) {
-                Log.d("TABFRAGMENT_RESULT", horaFormateada + ":" + minutoFormateado + "    ano: " + ano + "  mes: " + mesFormateado + "  dia: " + diaFormateado);
                 AlarmaUnica alarmaUnica = new AlarmaUnica(horaFormateada, minutoFormateado, String.valueOf(ano), mesFormateado, diaFormateado, activar, nombreSonido, sonidoUri.toString(), sonar);
                 myViewModel.insertUnica(alarmaUnica);
             }
 
-            Snackbar.make(view, "Alarma creada", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(view, (R.string.alarma_creada), Snackbar.LENGTH_LONG).show();
 
             // En caso de que se retorne de modificar la alarma
         } else if (requestCode == EDIT_ALARMAS_REQUEST && resultCode == RESULT_OK) {
@@ -259,7 +250,7 @@ public class TabFragmentAlarmas extends Fragment {
             int id = data.getIntExtra(CrearEditarAlarma.EXTRA_ID, -1);
 
             if (id == -1) {
-                Toast.makeText(getContext(), "No se pudo actualizar la alarma", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), (R.string.no_se_pudo_actualizar), Toast.LENGTH_SHORT).show();
             }
 
             hora = data.getIntExtra(CrearEditarAlarma.EXTRA_HORA, 0);
@@ -289,23 +280,21 @@ public class TabFragmentAlarmas extends Fragment {
             String diaFormateado = (dia < 10) ? (CERO + dia) : String.valueOf(dia);
 
             if ((ano == -1) && (mes == -1) && (dia == -1)) {
-                Log.d("TABFRAGMENT_RESULT_EDIT", horaFormateada + ":" + minutoFormateado + "    L: " + l + "M: " + m + "X: " + x + "J: " + j + "V: " + v + "S: " + s + "D: " + d);
                 Alarma alarma = new Alarma(horaFormateada, minutoFormateado, l, m, x, j, v, s, d, activar, nombreSonido, sonidoUri.toString(), sonar);
                 alarma.setId(id); // Necesario para que ROOM pueda identificar la entrada para actualizar la alarma
                 myViewModel.update(alarma);
             }
 
             if ((ano != -1) && (mes != -1) && (dia != -1)) {
-                Log.d("TABFRAGMENT_RESULT_EDIT", horaFormateada + ":" + minutoFormateado + "    ano: " + ano + "  mes: " + mesFormateado + "  dia: " + diaFormateado);
                 AlarmaUnica alarmaUnica = new AlarmaUnica(horaFormateada, minutoFormateado, String.valueOf(ano), mesFormateado, diaFormateado, activar, nombreSonido, sonidoUri.toString(), sonar);
                 alarmaUnica.setId(id);
                 myViewModel.updateUnica(alarmaUnica);
             }
 
-            Snackbar.make(view, "Alarma actualizada", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(view, (R.string.alarma_actualizada), Snackbar.LENGTH_LONG).show();
 
         } else {
-            Snackbar.make(view, "Alarma no creada", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(view, (R.string.alarma_no_creada), Snackbar.LENGTH_LONG).show();
         }
     }
 }

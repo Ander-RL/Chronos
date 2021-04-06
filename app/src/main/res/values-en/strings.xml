@@ -1,0 +1,120 @@
+<resources>
+    <string name="app_name">Chronos</string>
+
+    <!--//////////////// Encabezados TabFragments /////////////////////-->
+    <string name="tabfragment_alarmas">Alarms</string>
+    <string name="tabfragment_crono">Timer</string>
+    <string name="tabfragment_calendario">Calendar</string>
+    <string name="title_activity_alarmas">AlarmsActivity</string>
+
+    <!--//////////////// Titulos /////////////////////-->
+    <string name="repetir_alarma">Repeat:</string>
+    <string name="activar_alarma">Activate:</string>
+    <string name="activar_sonido">Sound:</string>
+
+    <!--//////////////// Alertas /////////////////////-->
+    <string name="permiso_storage">Permission necessary</string>
+    <string name="permiso_mensaje">
+        In order to select a sound permission to access the device´s storage.
+    </string>
+
+    <!--//////////////// TextView & EditText /////////////////////-->
+    <string name="description_boton_reloj">Clock button</string>
+    <string name="fecha_rcv_tv"></string>
+    <string name="hora_rcv_tv">00:00</string>
+    <string name="lunes_rcv_tv">Mo</string>
+    <string name="martes_rcv_tv">Tu</string>
+    <string name="miercoles_rcv_tv">We</string>
+    <string name="jueves_rcv_tv">Th</string>
+    <string name="viernes_rcv_tv">Fr</string>
+    <string name="sabado_rcv_tv">Sa</string>
+    <string name="domingo_rcv_tv">Su</string>
+    <string name="tv_ningun_sonido">No sound selected</string>
+    <string name="tv_place_holder">Place Holder</string>
+    <string name="et_dos_puntos">:</string>
+    <string name="et_crono">00</string>
+    <string name="tv_crono_hora">Hours</string>
+    <string name="tv_crono_min">Minutes</string>
+    <string name="tv_crono_seg">Second</string>
+    <string name="tv_crono_cuenta_atras">Count Down</string>
+
+    <!--//////////////// Botones /////////////////////-->
+    <string name="btn_radio_l">Mo</string>
+    <string name="btn_radio_m">Tu</string>
+    <string name="btn_radio_x">We</string>
+    <string name="btn_radio_j">Th</string>
+    <string name="btn_radio_v">Fr</string>
+    <string name="btn_radio_s">Sa</string>
+    <string name="btn_radio_d">Su</string>
+    <string name="btn_guardar">Save</string>
+    <string name="btn_cancelar">Cancel</string>
+    <string name="btn_aceptar">Accept</string>
+    <string name="borrar_todas_las_alarmas">Delete all the alarms</string>
+    <string name="hh_mm">hh:mm</string>
+    <string name="yyy_mm_dd">year/month/day</string>
+
+    <!--//////////////// Calendario ///////////////-->
+    <string name="material_calendar_monday">Mo</string>
+    <string name="material_calendar_tuesday">Tu</string>
+    <string name="material_calendar_wednesday">We</string>
+    <string name="material_calendar_thursday">Th</string>
+    <string name="material_calendar_friday">Fr</string>
+    <string name="material_calendar_saturday">Sa</string>
+    <string name="material_calendar_sunday">Su</string>
+
+    <string-array name="material_calendar_day_array">
+        <item>Mo</item>
+        <item>Tu</item>
+        <item>We</item>
+        <item>Th</item>
+        <item>Fr</item>
+        <item>Sa</item>
+        <item>Su</item>
+    </string-array>
+
+    <array name="material_calendar_months_array">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </array>
+
+    <string name="material_calendar_today_button">Today</string>
+    <string name="material_calendar_positive_button">OK</string>
+    <string name="material_calendar_negative_button">Cancel</string>
+
+    <!--//////////////// SnackBar y Toast ///////////////-->
+    <string name="alarma_borrada">Alarm deleted</string>
+    <string name="alarma_creada">Alarm created</string>
+    <string name="no_se_pudo_actualizar">Unable to update alarm</string>
+    <string name="alarma_actualizada">Alarm updated</string>
+    <string name="alarma_no_creada">Alarm not created</string>
+    <string name="inserta_un_valor">Insert a value</string>
+    <string name="alarma_pospuesta">Alarm postponed 15 minutes</string>
+    <string name="alarma_cancelada">Alarm canceled</string>
+    <string name="permiso_concedido">Permission granted</string>
+    <string name="permiso_denegado">Permission denied</string>
+    <string name="error">Error</string>
+
+    <!--//////////////// Notificaciones ///////////////-->
+    <string name="canal_notificaciones_alarma">Alarms notification channel</string>
+    <string name="cancelar">Cancel</string>
+    <string name="posponer">postpone</string>
+    <string name="titulo_notificacion">Alarm</string>
+    <string name="cancelar_cuenta_atras">Cancel count down</string>
+    <string name="cuenta_atras_segundo_plano">Count down in background</string>
+    <string name="pulsar_para_abrir_app">Tap on the notification to open the App</string>
+    <string name="tiempo_agotado">Time´s up!!</string>
+    <string name="cuenta_atras_finalizado">Count down is over</string>
+    <string name="eliminadas_todas_alarmas">All the alarms deleted</string>
+
+
+</resources>

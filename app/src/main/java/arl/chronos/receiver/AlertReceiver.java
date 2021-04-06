@@ -26,7 +26,6 @@ public class AlertReceiver extends BroadcastReceiver {
     private String nombreSonido;
     private String sonidoUri;
     private Boolean sonar;
-    private ServicioSonido servicioSonido;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -42,8 +41,6 @@ public class AlertReceiver extends BroadcastReceiver {
             vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
             vibrator.vibrate(new long[]{500, 1000, 500, 1000}, 0);
 
-            Log.d("AlertReceiver", nombreSonido + " ---> Uri: " + sonidoUri + " ---> Sonar: " + sonar);
-
             // Crea Service para reproducir Musica.
             if (sonar && !nombreSonido.equals("")) {
                 Intent intentServicio = new Intent(context, ServicioSonido.class);
@@ -55,17 +52,13 @@ public class AlertReceiver extends BroadcastReceiver {
 
             NotificationHelper notificationHelper = new NotificationHelper(context, mensaje, id);
             NotificationCompat.Builder nb = notificationHelper.getCanalNotification();
-            Log.d("AlertReceiver", "AlertReceiver -> id = " + id + " / Mensaje = " + mensaje + " / Parar = " + parar);
             notificationHelper.getManager().notify(id, nb.build());
         }
 
         if (intent.getExtras().containsKey(TabFragmentCrono.EXTRA_CRONO_TIEMPO)) {
 
-            Log.d("AlertReceiver", "EXTRA_CRONO_TIEMPO ---> " + intent.getLongExtra(TabFragmentCrono.EXTRA_CRONO_TIEMPO, 0));
-
             long tiempoRestante = intent.getLongExtra(TabFragmentCrono.EXTRA_CRONO_TIEMPO, (long) 0);
             String accion = intent.getStringExtra(TabFragmentCrono.EXTRA_CRONO_ACCION);
-            Log.d("AlertReceiver", "accion ---> " + accion);
 
             if (accion.equals("onFinish")){
                 vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);

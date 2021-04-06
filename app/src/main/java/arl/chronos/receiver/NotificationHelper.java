@@ -1,5 +1,6 @@
 package arl.chronos.receiver;
 
+import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -19,8 +20,6 @@ import arl.chronos.R;
 public class NotificationHelper extends ContextWrapper {
 
     public static final String CANAL_ID = "canal_id";
-    public static final String CANAL_NOMBRE = "Canal Notificaciones Alarma";
-    public static final String TITULO_NOTIF = "Alarma";
     public static final String CANCELAR = "cancelar";
     public static final String CANCELAR_CUENTA_ATRAS = "cancelar cuenta atras";
     public static final String CANCELAR_TIEMPO_AGOTADO = "cancelar tiempo agotado";
@@ -43,7 +42,7 @@ public class NotificationHelper extends ContextWrapper {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void crearCanal() {
-        NotificationChannel canal = new NotificationChannel(CANAL_ID, CANAL_NOMBRE, NotificationManager.IMPORTANCE_HIGH);
+        NotificationChannel canal = new NotificationChannel(CANAL_ID, getString(R.string.canal_notificaciones_alarma), NotificationManager.IMPORTANCE_HIGH);
         canal.enableLights(true);
         canal.enableVibration(false);
         canal.setLightColor(R.color.blue_500);
@@ -60,7 +59,6 @@ public class NotificationHelper extends ContextWrapper {
     }
 
     public NotificationCompat.Builder getCanalNotification() {
-        Log.d("NotificationHelper", "Mensaje = " + mensaje);
         if (!mensaje.equals("foregroundService") && !mensaje.equals("onFinish")) {
             // Se crea un pending intent para abrir la app al clickar en la notificacion
             Intent intent = new Intent(this, MainActivity.class);
@@ -77,18 +75,17 @@ public class NotificationHelper extends ContextWrapper {
             postponerButtonIntent.putExtra(HORA, mensaje);
             postponerButtonIntent.putExtra(ID_ALARMA, id);
             PendingIntent postponerButtonPendingIntent = PendingIntent.getBroadcast(this, id, postponerButtonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            Log.d("NotificationHelper", "Helper -> id = " + id + " / Mensaje = " + mensaje);
             // Se crea y devuelve la notificacion
             return new NotificationCompat.Builder(getApplicationContext(), CANAL_ID)
-                    .setContentTitle(TITULO_NOTIF)
+                    .setContentTitle(getString(R.string.titulo_notificacion))
                     .setContentText(mensaje)
                     .setSmallIcon(R.drawable.ic_alarm)
                     .setPriority(Notification.PRIORITY_HIGH)
                     .setColor(getResources().getColor(R.color.blue_500, getTheme()))
                     .setContentIntent(pendingIntent)
                     .setAutoCancel(true) // Cuando se toca la notificacion se borra/elimina/quita esa notificacion
-                    .addAction(R.mipmap.ic_launcher, CANCELAR, cancelButtonPendingIntent)
-                    .addAction(R.mipmap.ic_launcher, POSPONER, postponerButtonPendingIntent);
+                    .addAction(R.mipmap.ic_launcher, getString(R.string.cancelar), cancelButtonPendingIntent)
+                    .addAction(R.mipmap.ic_launcher, getString(R.string.posponer), postponerButtonPendingIntent);
         }
 
         if (mensaje.equals("foregroundService")) {
@@ -102,14 +99,14 @@ public class NotificationHelper extends ContextWrapper {
             PendingIntent cancelButtonPendingIntent = PendingIntent.getBroadcast(this, id, cancelButtonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             // Se crea y devuelve la notificacion
             return new NotificationCompat.Builder(getApplicationContext(), CANAL_ID)
-                    .setContentTitle("Cuenta atras en segundo plano")
-                    .setContentText("Pulsa sobre la notificacion para abrir la App")
+                    .setContentTitle(getString(R.string.cuenta_atras_segundo_plano))
+                    .setContentText(getString(R.string.pulsar_para_abrir_app))
                     .setSmallIcon(R.drawable.ic_alarm)
                     .setPriority(Notification.PRIORITY_HIGH)
                     .setColor(getResources().getColor(R.color.blue_500, getTheme()))
                     .setContentIntent(pendingIntent)
                     .setAutoCancel(true) // Cuando se toca la notificacion se borra/elimina/quita esa notificacion
-                    .addAction(R.mipmap.ic_launcher, CANCELAR, cancelButtonPendingIntent);
+                    .addAction(R.mipmap.ic_launcher, getString(R.string.cancelar), cancelButtonPendingIntent);
         } else {
             // Se crea un pending intent para abrir la app al clickar en la notificacion
             Intent intent = new Intent(this, MainActivity.class);
@@ -121,14 +118,14 @@ public class NotificationHelper extends ContextWrapper {
             PendingIntent cancelButtonPendingIntent = PendingIntent.getBroadcast(this, id, cancelButtonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             // Se crea y devuelve la notificacion
             return new NotificationCompat.Builder(getApplicationContext(), CANAL_ID)
-                    .setContentTitle("Tiempo agotado!!")
-                    .setContentText("La cuenta atras ha finalizado")
+                    .setContentTitle(getString(R.string.tiempo_agotado))
+                    .setContentText(getString(R.string.cuenta_atras_finalizado))
                     .setSmallIcon(R.drawable.ic_alarm)
                     .setPriority(Notification.PRIORITY_HIGH)
                     .setColor(getResources().getColor(R.color.blue_500, getTheme()))
                     .setContentIntent(pendingIntent)
                     .setAutoCancel(true) // Cuando se toca la notificacion se borra/elimina/quita esa notificacion
-                    .addAction(R.mipmap.ic_launcher, CANCELAR, cancelButtonPendingIntent);
+                    .addAction(R.mipmap.ic_launcher, getString(R.string.cancelar), cancelButtonPendingIntent);
         }
     }
 }

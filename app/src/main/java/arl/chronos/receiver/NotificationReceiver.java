@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
+import arl.chronos.R;
 import arl.chronos.service.ServicioSonido;
 
 
@@ -38,7 +39,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         if (mensaje.equals(NotificationHelper.POSPONER)) {
 
-            Toast.makeText(context, "Alarma postpuesta 15 minutos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, (R.string.alarma_pospuesta), Toast.LENGTH_SHORT).show();
 
             // Se crea una alarma para que suene en 15 minutos
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -58,7 +59,6 @@ public class NotificationReceiver extends BroadcastReceiver {
             notificationManager.cancel(id);
 
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis() + (1000*60*15), pendingIntent); // Se activa en 15 minutos
-            Log.d("NOTIF_RECEIV", "Postponer -> id = " + id + " / Mensaje = " + mensaje + " / Hora = " + hora);
         }
     }
 }

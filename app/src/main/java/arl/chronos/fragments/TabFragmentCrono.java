@@ -112,7 +112,7 @@ public class TabFragmentCrono extends Fragment {
             }
 
             if (h.equals("00") && m.equals("00") && s.equals("00")) {
-                Toast.makeText(getContext(), "Inserta un valor", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), (R.string.inserta_un_valor), Toast.LENGTH_SHORT).show();
             } else {
                 tiempoRestante = convertirAMilis(h, m, s);
                 tvCrono.setText("");
@@ -128,9 +128,6 @@ public class TabFragmentCrono extends Fragment {
                 }
 
                 myViewModel.insertCrono(new Crono(h, m, s));
-
-                Log.d("TabFragmentCrono", h + ":" + m + ":" + s);
-                Log.d("TabFragmentCrono", "tiempoRestante = " + tiempoRestante);
 
                 Intent servicioIntent = new Intent(getContext(), ServicioCrono.class);
                 servicioIntent.putExtra(EXTRA_CRONO_TIEMPO, tiempoRestante);
@@ -187,7 +184,6 @@ public class TabFragmentCrono extends Fragment {
         if (intent.getExtras() != null) {
 
             tiempoRestante = intent.getLongExtra(ServicioCrono.CUENTA_ATRAS_BR, 0);
-            Log.d("TabFragmentCrono", "tiempoRestante = " + tiempoRestante);
 
             hora = (int) tiempoRestante / 1000 / 60 / 60;
             min = (int) (tiempoRestante / 1000 / 60) % 60;
@@ -229,7 +225,6 @@ public class TabFragmentCrono extends Fragment {
         super.onResume();
         requireActivity().registerReceiver(br, new IntentFilter(ServicioCrono.CUENTA_ATRAS_BR));
 
-        Log.d("TabFragmentCrono", "onResume() ---> tiempoRestante = " + tiempoRestante);
         // Si el tiempo llego a 0, vacia el TextView
         if (tiempoRestante == 0) {
             etHoras.setText("");
@@ -262,7 +257,6 @@ public class TabFragmentCrono extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        Log.d("TabFragmentCrono", "onStop()");
     }
 
     @Override

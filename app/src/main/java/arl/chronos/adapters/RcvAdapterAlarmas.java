@@ -162,8 +162,6 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RecyclerView.ViewHol
             MyViewHolderUnica myHolder = (MyViewHolderUnica) holder;
             AlarmaUnica currentAlarma = (AlarmaUnica) dataSet.get(position);
 
-            Log.d("RCV", "mes = " + currentAlarma.getMes() + "  dia = " + currentAlarma.getDia());
-
             myHolder.hora.setText(currentAlarma.getHora() + ":" + currentAlarma.getMinuto());
             ho = currentAlarma.getHora();
             mi = currentAlarma.getMinuto();
@@ -187,7 +185,7 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RecyclerView.ViewHol
             s = false;
             d = false;
 
-            if (currentAlarma.getActivated() == true) {
+            if (currentAlarma.getActivated()) {
                 myHolder.activated.setChecked(true);
                 // Comprueba el día de la semana con los días elegidos para la alarma
                 if (diaAlarmaUnica(currentAlarma)) {
@@ -398,15 +396,9 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RecyclerView.ViewHol
         int month = c.get(Calendar.MONTH) + 1;
         int day = c.get(Calendar.DAY_OF_MONTH);
 
-        Log.d("ADAPTER", "diaAlarmaUnica ---> year = " + year +
-                "  month = " + month + "  day = " + day);
-
         int ano = Integer.parseInt(alarmaUnica.getAno());
         int mes = Integer.parseInt(alarmaUnica.getMes());
         int dia = Integer.parseInt(alarmaUnica.getDia());
-
-        Log.d("ADAPTER", "diaAlarmaUnica ---> ano = " + ano +
-                "  mes = " + mes + "  dia = " + dia);
 
         return (ano == year) && (mes == month) && (dia == day);
 

@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.borrar_todas_alarmas_menu:
                 myViewModel.deleteAll();
                 myViewModel.deleteAllUnica();
-                Snackbar.make(getWindow().getDecorView().getRootView(), "Eliminadas todas las alarmas", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(getWindow().getDecorView().getRootView(), (R.string.eliminadas_todas_alarmas), Snackbar.LENGTH_LONG).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

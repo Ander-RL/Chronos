@@ -53,7 +53,6 @@ public class MyViewModel extends AndroidViewModel {
     public void deleteUnica(AlarmaUnica alarmaUnica){
         repositorio.deleteUnica(alarmaUnica);
     }
-    public void deleteCrono(Crono crono) {repositorio.deleteCrono(crono);}
 
     public void deleteAll(){
         repositorio.deleteTodasAlarmas();

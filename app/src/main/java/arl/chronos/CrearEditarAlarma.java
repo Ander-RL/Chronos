@@ -105,23 +105,6 @@ public class CrearEditarAlarma extends AppCompatActivity {
         Intent intentEditarAlarma = getIntent();
 
         if (intentEditarAlarma.hasExtra(EXTRA_ID)) {
-            Log.d("EDITALARMA",
-                    "L: " + intentEditarAlarma.getBooleanExtra(EXTRA_LUN, false) +
-                            "  M: " + intentEditarAlarma.getBooleanExtra(EXTRA_MAR, false) +
-                            "  X: " + intentEditarAlarma.getBooleanExtra(EXTRA_MIE, false) +
-                            "  J: " + intentEditarAlarma.getBooleanExtra(EXTRA_JUE, false) +
-                            "  V: " + intentEditarAlarma.getBooleanExtra(EXTRA_VIE, false) +
-                            "  S: " + intentEditarAlarma.getBooleanExtra(EXTRA_SAB, false) +
-                            "  D: " + intentEditarAlarma.getBooleanExtra(EXTRA_DOM, false) +
-                            "  Acivar: " + intentEditarAlarma.getBooleanExtra(EXTRA_ACT, false) +
-                            "  Sonido: " + intentEditarAlarma.getStringExtra(EXTRA_SONIDO) +
-                            "  Uri: " + intentEditarAlarma.getStringExtra(EXTRA_URI) +
-                            "  Sonar: " + intentEditarAlarma.getBooleanExtra(EXTRA_SONAR, false) +
-                            "  Hora: " + intentEditarAlarma.getStringExtra(EXTRA_HORA) +
-                            ":" + intentEditarAlarma.getStringExtra(EXTRA_MIN) +
-                            "  Año: " + intentEditarAlarma.getStringExtra(EXTRA_ANO) +
-                            "  Mes: " + intentEditarAlarma.getStringExtra(EXTRA_MES) +
-                            "  Dia: " + intentEditarAlarma.getStringExtra(EXTRA_DIA));
 
             String ho = intentEditarAlarma.getStringExtra(EXTRA_HORA);
             String mi = intentEditarAlarma.getStringExtra(EXTRA_MIN);
@@ -199,8 +182,6 @@ public class CrearEditarAlarma extends AppCompatActivity {
                     mes = -1;
                     dia = -1;
                 }
-
-                Log.d("EDITALARMA", "hora: " + hora + "  min: " + min + "  activar: " + activar + "  sonar: " + sonar + "  año: " + ano + "  mes: " + mes + "  dia: " + dia);
 
                 Intent intent = new Intent(view.getContext(), MainActivity.class);
                 intent.putExtra(EXTRA_HORA, hora);
@@ -300,9 +281,9 @@ public class CrearEditarAlarma extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == STORAGE_PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permiso concedido", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, (R.string.permiso_concedido), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Permiso denegado", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, (R.string.permiso_denegado), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -389,7 +370,6 @@ public class CrearEditarAlarma extends AppCompatActivity {
         if (checked) {
             activar = true;
         }
-        Log.d("EDITALARMA", "hora: " + hora + "  min: " + min + "  activar: " + activar);
     }
 
     public void onActivarSonido(View view) {
@@ -402,7 +382,6 @@ public class CrearEditarAlarma extends AppCompatActivity {
         if (checked) {
             sonar = true;
         }
-        Log.d("EDITALARMA", "hora: " + hora + "  min: " + min + "  sonar: " + sonar);
     }
 
     @Override
@@ -414,7 +393,7 @@ public class CrearEditarAlarma extends AppCompatActivity {
             sonidoUri = Uri.parse(data.getStringExtra(EscogerSonido.EXTRA_URI_SONIDO)); // Se transforma el String de vuelta a URI
             tvNombreSonido.setText(nombreSonido);
         } else {
-            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, (R.string.error), Toast.LENGTH_SHORT).show();
         }
     }
 

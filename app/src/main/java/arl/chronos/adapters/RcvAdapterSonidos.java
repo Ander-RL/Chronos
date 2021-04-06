@@ -69,7 +69,6 @@ public class RcvAdapterSonidos extends RecyclerView.Adapter<RcvAdapterSonidos.Vi
                     if (listener != null && position != RecyclerView.NO_POSITION) {
                         listener.onSonidoClick(sonido.getText().toString(), currentSonido.getUri().toString());
                     }
-                    Log.d("//////////SONIDOS//////", sonido.getText().toString() + " ---> Posicion: " + position + " ---> Uri: " + currentSonido.getUri().toString());
                 }
             });
         }

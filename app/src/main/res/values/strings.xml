@@ -91,4 +91,30 @@
     <string name="material_calendar_positive_button">OK</string>
     <string name="material_calendar_negative_button">Cancelar</string>
 
+    <!--//////////////// SnackBar y Toast ///////////////-->
+    <string name="alarma_borrada">Alarma borrada</string>
+    <string name="alarma_creada">Alarma creada</string>
+    <string name="no_se_pudo_actualizar">No se pudo actualizar la alarma</string>
+    <string name="alarma_actualizada">Alarma actualizada</string>
+    <string name="alarma_no_creada">Alarma no creada</string>
+    <string name="inserta_un_valor">Inserta un valor</string>
+    <string name="alarma_pospuesta">Alarma pospuesta 15 minutos</string>
+    <string name="alarma_cancelada">Alarma cancelada</string>
+    <string name="permiso_concedido">Permiso concedido</string>
+    <string name="permiso_denegado">Permiso denegado</string>
+    <string name="error">Error</string>
+
+    <!--//////////////// Notificaciones ///////////////-->
+    <string name="canal_notificaciones_alarma">Canal Notificaciones Alarma</string>
+    <string name="cancelar">cancelar</string>
+    <string name="posponer">posponer</string>
+    <string name="titulo_notificacion">Alarma</string>
+    <string name="cancelar_cuenta_atras">cancelar cuenta atras</string>
+    <string name="cuenta_atras_segundo_plano">Cuenta atras en segundo plano</string>
+    <string name="pulsar_para_abrir_app">Pulsa sobre la notificacion para abrir la App</string>
+    <string name="tiempo_agotado">Tiempo agotado!!</string>
+    <string name="cuenta_atras_finalizado">La cuenta atras ha finalizado</string>
+    <string name="eliminadas_todas_alarmas">Eliminadas todas las alarmas</string>
+
+
 </resources>
