@@ -42,7 +42,13 @@ public interface AlarmaDAO {
     @Query("SELECT * FROM alarma_tabla ORDER BY hora DESC")
     LiveData<List<Alarma>> getTodasAlarmas(); // LiveData permite observar los cambios automaticamente
 
+    @Query("SELECT * FROM alarma_tabla ORDER BY hora DESC")
+    List<Alarma> getTodaAlarma();
+
     @Query("SELECT * FROM alarma_unica_tabla ORDER BY hora DESC")
     LiveData<List<AlarmaUnica>> getTodasAlarmasUnicas();
+
+    @Query("SELECT * FROM alarma_unica_tabla ORDER BY hora DESC")
+    List<AlarmaUnica> getTodaAlarmaUnica();
 
 }

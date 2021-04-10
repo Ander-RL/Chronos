@@ -19,6 +19,9 @@ public class ServicioSonido extends Service {
     private String nombreSonido;
     private String sonidoUri;
 
+    public static final String EXTRA_NOMBRE_SONIDO = "arl.chronos.EXTRA_NOMBRE_SONIDO";
+    public static final String EXTRA_URI_SONIDO = "arl.chronos.EXTRA_URI_SONIDO";
+
     public ServicioSonido() {
     }
 
@@ -35,8 +38,8 @@ public class ServicioSonido extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        nombreSonido = intent.getStringExtra(EscogerSonido.EXTRA_NOMBRE_SONIDO);
-        sonidoUri = intent.getStringExtra(EscogerSonido.EXTRA_URI_SONIDO);
+        nombreSonido = intent.getStringExtra(EXTRA_NOMBRE_SONIDO);
+        sonidoUri = intent.getStringExtra(EXTRA_URI_SONIDO);
 
         try {
             if (mediaPlayer != null) {

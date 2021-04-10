@@ -27,16 +27,23 @@ public class AlertReceiver extends BroadcastReceiver {
     private String sonidoUri;
     private Boolean sonar;
 
+    public static final String ID_ALARMA = "id_alarma";
+    public static final String EXTRA_SONIDO = "arl.chronos.EXTRA_SONIDO";
+    public static final String EXTRA_SONAR = "arl.chronos.EXTRA_SONAR";
+    public static final String EXTRA_URI = "arl.chronos.EXTRA_URI";
+    public static final String EXTRA_NOMBRE_SONIDO = "arl.chronos.EXTRA_NOMBRE_SONIDO";
+    public static final String EXTRA_URI_SONIDO = "arl.chronos.EXTRA_URI_SONIDO";
+
     @Override
     public void onReceive(Context context, Intent intent) {
 
         if (intent.getExtras().containsKey("mensaje_alarma")) {
             mensaje = intent.getStringExtra("mensaje_alarma");
-            id = intent.getIntExtra(RcvAdapterAlarmas.ID_ALARMA, 0);
+            id = intent.getIntExtra(ID_ALARMA, 0);
             parar = intent.getStringExtra("parar");
-            nombreSonido = intent.getStringExtra(CrearEditarAlarma.EXTRA_SONIDO);
-            sonidoUri = intent.getStringExtra(CrearEditarAlarma.EXTRA_URI);
-            sonar = intent.getBooleanExtra(CrearEditarAlarma.EXTRA_SONAR, false);
+            nombreSonido = intent.getStringExtra(EXTRA_SONIDO);
+            sonidoUri = intent.getStringExtra(EXTRA_URI);
+            sonar = intent.getBooleanExtra(EXTRA_SONAR, false);
 
             vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
             vibrator.vibrate(new long[]{500, 1000, 500, 1000}, 0);
@@ -44,8 +51,8 @@ public class AlertReceiver extends BroadcastReceiver {
             // Crea Service para reproducir Musica.
             if (sonar && !nombreSonido.equals("")) {
                 Intent intentServicio = new Intent(context, ServicioSonido.class);
-                intentServicio.putExtra(EscogerSonido.EXTRA_NOMBRE_SONIDO, nombreSonido);
-                intentServicio.putExtra(EscogerSonido.EXTRA_URI_SONIDO, sonidoUri);
+                intentServicio.putExtra(EXTRA_NOMBRE_SONIDO, nombreSonido);
+                intentServicio.putExtra(EXTRA_URI_SONIDO, sonidoUri);
                 intentServicio.setAction(".classes.ServicioSonido");
                 context.startService(intentServicio);
             }
