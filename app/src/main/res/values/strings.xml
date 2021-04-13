@@ -17,6 +17,10 @@
     <string name="permiso_mensaje">
         Para escoger un sonido, es necesario conceder permiso a la aplicación para acceder a la memoria.
     </string>
+    <string name="titulo_permisos">Acceso a la memoria</string>
+    <string name="mensaje_permisos">Se necesita conceder permiso para acceder a la memoria</string>
+    <string name="ok_permisos">OK</string>
+    <string name="cancelar_permisos">Cancelar</string>
 
     <!--//////////////// TextView & EditText /////////////////////-->
     <string name="description_boton_reloj">Boton reloj</string>
@@ -29,7 +33,7 @@
     <string name="viernes_rcv_tv">V</string>
     <string name="sabado_rcv_tv">S</string>
     <string name="domingo_rcv_tv">D</string>
-    <string name="tv_ningun_sonido">Ningun sonido seleccionado</string>
+    <string name="tv_ningun_sonido">Ningun sonido</string>
     <string name="tv_place_holder">Place Holder</string>
     <string name="et_dos_puntos">:</string>
     <string name="et_crono">00</string>
@@ -52,6 +56,8 @@
     <string name="borrar_todas_las_alarmas">Borrar todas las alarmas</string>
     <string name="hh_mm">hh:mm</string>
     <string name="yyy_mm_dd">año/mes/dia</string>
+    <string name="sonido_sistema">Sistema</string>
+    <string name="acceder_memoria">Memoria</string>
 
     <!--//////////////// Calendario ///////////////-->
     <string name="material_calendar_monday">L</string>

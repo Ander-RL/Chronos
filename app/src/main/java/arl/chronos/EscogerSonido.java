@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -29,6 +30,7 @@ public class EscogerSonido extends AppCompatActivity {
     private RcvAdapterSonidos rcvAdapterSonidos;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<Sonido> sonidoList;
+    private String selector;
 
     public static final String EXTRA_NOMBRE_SONIDO = "arl.chronos.EXTRA_NOMBRE_SONIDO";
     public static final String EXTRA_URI_SONIDO = "arl.chronos.EXTRA_URI_SONIDO";
@@ -37,6 +39,8 @@ public class EscogerSonido extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.escoger_sonido);
+
+        selector = getIntent().getStringExtra("selector");
 
         aceptar = findViewById(R.id.btn_aceptar_sonido);
         cancelar = findViewById(R.id.btn_cancelar_sonido);
@@ -105,7 +109,11 @@ public class EscogerSonido extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             sonidos = MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_INTERNAL);
         } else {
-            sonidos = MediaStore.Audio.Media.INTERNAL_CONTENT_URI;
+            if (selector.equals("system")) {
+                sonidos = MediaStore.Audio.Media.INTERNAL_CONTENT_URI;
+            } else {
+                sonidos = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+            }
         }
 
         String[] columnas = new String[]{

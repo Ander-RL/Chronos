@@ -17,6 +17,10 @@
     <string name="permiso_mensaje">
         In order to select a sound permission to access the device´s storage.
     </string>
+    <string name="titulo_permisos">Access to storage</string>
+    <string name="mensaje_permisos">Permissions needed to access storage</string>
+    <string name="ok_permisos">OK</string>
+    <string name="cancelar_permisos">Cancel</string>
 
     <!--//////////////// TextView & EditText /////////////////////-->
     <string name="description_boton_reloj">Clock button</string>
@@ -29,7 +33,7 @@
     <string name="viernes_rcv_tv">Fr</string>
     <string name="sabado_rcv_tv">Sa</string>
     <string name="domingo_rcv_tv">Su</string>
-    <string name="tv_ningun_sonido">No sound selected</string>
+    <string name="tv_ningun_sonido">No sound</string>
     <string name="tv_place_holder">Place Holder</string>
     <string name="et_dos_puntos">:</string>
     <string name="et_crono">00</string>
@@ -52,6 +56,8 @@
     <string name="borrar_todas_las_alarmas">Delete all the alarms</string>
     <string name="hh_mm">hh:mm</string>
     <string name="yyy_mm_dd">year/month/day</string>
+    <string name="sonido_sistema">System </string>
+    <string name="acceder_memoria">Storage</string>
 
     <!--//////////////// Calendario ///////////////-->
     <string name="material_calendar_monday">Mo</string>

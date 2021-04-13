@@ -14,6 +14,7 @@ import com.google.android.material.tabs.TabLayout;
 import arl.chronos.CrearEditarAlarma;
 import arl.chronos.EscogerSonido;
 import arl.chronos.adapters.RcvAdapterAlarmas;
+import arl.chronos.classes.WakeLocker;
 import arl.chronos.fragments.TabFragmentCrono;
 import arl.chronos.service.ServicioCrono;
 import arl.chronos.service.ServicioSonido;
@@ -38,6 +39,9 @@ public class AlertReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         if (intent.getExtras().containsKey("mensaje_alarma")) {
+
+            WakeLocker.acquire(context);
+
             mensaje = intent.getStringExtra("mensaje_alarma");
             id = intent.getIntExtra(ID_ALARMA, 0);
             parar = intent.getStringExtra("parar");
@@ -60,6 +64,8 @@ public class AlertReceiver extends BroadcastReceiver {
             NotificationHelper notificationHelper = new NotificationHelper(context, mensaje, id);
             NotificationCompat.Builder nb = notificationHelper.getCanalNotification();
             notificationHelper.getManager().notify(id, nb.build());
+
+            WakeLocker.release();
         }
 
         if (intent.getExtras().containsKey(TabFragmentCrono.EXTRA_CRONO_TIEMPO)) {

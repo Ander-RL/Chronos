@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -23,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
@@ -59,6 +61,7 @@ public class CrearEditarAlarma extends AppCompatActivity {
     private String horaFormateada;
     private String minutoFormateado;
     private TextView selectorSonido;
+    private TextView selectorMemoria;
     private TextView tvNombreSonido;
     private String nombreSonido;
     private Boolean sonar;
@@ -98,6 +101,7 @@ public class CrearEditarAlarma extends AppCompatActivity {
         btnCalendario = findViewById(R.id.btn_calendario);
 
         selectorSonido = findViewById(R.id.tv_selector);
+        selectorMemoria = findViewById(R.id.tv_selector_sd);
         sonidoSwitch = findViewById(R.id.sonido);
         tvNombreSonido = findViewById(R.id.tv_nombre_sonido);
 
@@ -273,8 +277,27 @@ public class CrearEditarAlarma extends AppCompatActivity {
         // Se lanza la actividad para escoger el sonido de la alarma
         selectorSonido.setOnClickListener(view -> {
             Intent intent = new Intent(this, EscogerSonido.class);
+            intent.putExtra("selector", "system");
             startActivityForResult(intent, ESCOGER_SONIDO_CODE);
         });
+
+        selectorMemoria.setOnClickListener(view -> {
+            if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+                Intent intent = new Intent(this, EscogerSonido.class);
+                intent.putExtra("selector", "storage");
+                startActivityForResult(intent, ESCOGER_SONIDO_CODE);
+            } else {
+                requestStoragePermission();
+            }
+        });
+    }
+
+    private void requestStoragePermission() {
+        if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)){
+            ActivityCompat.requestPermissions(CrearEditarAlarma.this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+        }
     }
 
     @Override
