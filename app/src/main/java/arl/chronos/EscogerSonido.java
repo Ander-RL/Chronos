@@ -65,6 +65,9 @@ public class EscogerSonido extends AppCompatActivity {
                 sonidoElegido.setText(nombreSonido);
                 aceptar.setEnabled(true);
 
+                Log.d("EscogerSonido", "sonidoElegido = " + sonidoElegido);
+                Log.d("EscogerSonido", "sonidoUri = " + sonidoUri);
+
                 Intent intentServicio = new Intent(getApplicationContext(), ServicioSonido.class);
                 intentServicio.putExtra(EXTRA_NOMBRE_SONIDO, nombreSonido);
                 intentServicio.putExtra(EXTRA_URI_SONIDO, sonidoUri);
@@ -134,7 +137,13 @@ public class EscogerSonido extends AppCompatActivity {
                 long id = cursor.getLong(idColumna);
                 String nombre = cursor.getString(nombreColumna);
 
-                Uri contentUri = ContentUris.withAppendedId(MediaStore.Audio.Media.INTERNAL_CONTENT_URI, id);
+                Uri contentUri = null;
+
+                if (selector.equals("system")) {
+                    contentUri = ContentUris.withAppendedId(MediaStore.Audio.Media.INTERNAL_CONTENT_URI, id);
+                } else {
+                    contentUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id);
+                }
 
                 // Guarda los valores de las columnas de contenUri  en la lista.
                 sonidoList.add(new Sonido(contentUri, nombre));
