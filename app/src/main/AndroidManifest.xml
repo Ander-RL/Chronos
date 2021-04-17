@@ -47,6 +47,7 @@
         </activity>
 
         <receiver android:name=".receiver.AlertReceiver" />
+        <receiver android:name=".receiver.AlarmReceiver" />
         <receiver android:name=".receiver.NotificationReceiver" />
         <receiver android:name=".receiver.NotificationReceiverCancelar" />
 

@@ -1,5 +1,8 @@
 package arl.chronos.fragments;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,6 +34,7 @@ import arl.chronos.adapters.RcvAdapterAlarmas;
 import arl.chronos.classes.Alarma;
 import arl.chronos.classes.AlarmaUnica;
 import arl.chronos.database.MyViewModel;
+import arl.chronos.receiver.AlertReceiver;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -74,8 +78,11 @@ public class TabFragmentAlarmas extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflar el Layout para este Fragment
         view = inflater.inflate(R.layout.fragment_tab_alarmas, container, false);
+
+        Log.d("Tab", "onCreate");
 
         fab = view.findViewById(R.id.fab_alarmas);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -123,8 +130,20 @@ public class TabFragmentAlarmas extends Fragment {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 if (rcvAdapter.getAlarmaAt(viewHolder.getAdapterPosition()) instanceof Alarma) {
                     myViewModel.delete((Alarma) rcvAdapter.getAlarmaAt(viewHolder.getAdapterPosition()));
+
+                    Alarma a = (Alarma) rcvAdapter.getAlarmaAt(viewHolder.getAdapterPosition());
+                    cancelAlarma(a.getId() + 200, view.getContext());
+                    cancelAlarma(a.getId() + 300, view.getContext());
+                    cancelAlarma(a.getId() + 400, view.getContext());
+                    cancelAlarma(a.getId() + 500, view.getContext());
+                    cancelAlarma(a.getId() + 600, view.getContext());
+                    cancelAlarma(a.getId() + 700, view.getContext());
+                    cancelAlarma(a.getId() + 100, view.getContext());
                 } else {
                     myViewModel.deleteUnica((AlarmaUnica) rcvAdapter.getAlarmaAt(viewHolder.getAdapterPosition()));
+
+                    AlarmaUnica a = (AlarmaUnica) rcvAdapter.getAlarmaAt(viewHolder.getAdapterPosition());
+                    cancelAlarma(a.getId(), view.getContext());
                 }
                 Snackbar.make(view, (R.string.alarma_borrada), Snackbar.LENGTH_LONG).show();
             }
@@ -197,7 +216,6 @@ public class TabFragmentAlarmas extends Fragment {
                 }
             }
         });
-
         return view;
     }
 
@@ -243,6 +261,7 @@ public class TabFragmentAlarmas extends Fragment {
             }
 
             Snackbar.make(view, (R.string.alarma_creada), Snackbar.LENGTH_LONG).show();
+            rcvAdapter.notifyDataSetChanged();
 
             // En caso de que se retorne de modificar la alarma
         } else if (requestCode == EDIT_ALARMAS_REQUEST && resultCode == RESULT_OK) {
@@ -296,5 +315,15 @@ public class TabFragmentAlarmas extends Fragment {
         } else {
             Snackbar.make(view, (R.string.alarma_no_creada), Snackbar.LENGTH_LONG).show();
         }
+
+        rcvAdapter.notifyDataSetChanged();
+    }
+
+    private void cancelAlarma(int code, Context context) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, code, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+
+        alarmManager.cancel(pendingIntent);
     }
 }

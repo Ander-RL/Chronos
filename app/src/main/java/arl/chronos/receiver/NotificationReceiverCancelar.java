@@ -44,7 +44,9 @@ public class NotificationReceiverCancelar extends BroadcastReceiver {
             intentCancelar.putExtra("parar", "si");
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intentCancelar, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            alarmManager.cancel(pendingIntent); // Cancela la alarma y ya no vuelve a sonar ese día? Probrar
+            //alarmManager.cancel(pendingIntent); // Cancela la alarma y ya no vuelve a sonar ese día? Probrar
+            Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+            vibrator.cancel();
 
             Intent intentServicio = new Intent(context, ServicioSonido.class);
             intentServicio.setAction(".classes.ServicioSonido");
@@ -55,7 +57,7 @@ public class NotificationReceiverCancelar extends BroadcastReceiver {
 
             notificationManager.cancel(id); // Cierra la notificacion
 
-            Toast.makeText(context, (R.string.alarma_cancelada), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, (R.string.notificacion_cancelada), Toast.LENGTH_SHORT).show();
 
         }
 

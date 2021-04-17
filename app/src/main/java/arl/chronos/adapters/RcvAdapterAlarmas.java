@@ -24,7 +24,10 @@ import arl.chronos.CrearEditarAlarma;
 import arl.chronos.R;
 import arl.chronos.classes.Alarma;
 import arl.chronos.classes.AlarmaUnica;
+import arl.chronos.receiver.AlarmReceiver;
 import arl.chronos.receiver.AlertReceiver;
+import arl.chronos.receiver.BootCompletedReceiver;
+import arl.chronos.service.RestartAlarmsService;
 
 public class RcvAdapterAlarmas extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -138,11 +141,12 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RecyclerView.ViewHol
                 myHolder.domingo.setTextColor(ContextCompat.getColor(context, R.color.blue_500));
                 d = true;
             }
+
             if (currentAlarma.getActivated()) {
                 myHolder.activated.setChecked(true);
 
                 // Comprueba el día de la semana con los días elegidos para la alarma
-                if (diaAlarma(currentAlarma)) {
+                /*if (diaAlarma(currentAlarma)) {
                     // Para que no funcione en caso de que no haya valores
                     if (!ho.isEmpty() && !mi.isEmpty()) {
                         // Para que las alarmas activas con hora anterior a la actual no se ejecuten
@@ -150,10 +154,77 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RecyclerView.ViewHol
                             startAlarma(fechaAlarma(hor, min, seg), currentAlarma.getId());
                         }
                     }
-                }
+                }*/
+
+                Calendar c = null;
+
+                /*if (currentAlarma.getLunes()) {
+                    c = getDiaAlarma("lunes", currentAlarma.getHora(), currentAlarma.getMinuto());
+                    Log.d("Prueba", "Alarma lunes -> " + c.getTimeInMillis());
+                    startAlarma(c, currentAlarma.getId());
+                } else if (currentAlarma.getMartes()) {
+                    c = getDiaAlarma("martes", currentAlarma.getHora(), currentAlarma.getMinuto());
+                    Log.d("Prueba", "Alarma martes -> " + c.getTimeInMillis());
+                    startAlarma(c, currentAlarma.getId());
+                } else if (currentAlarma.getMiercoles()) {
+                    c = getDiaAlarma("miercoles", currentAlarma.getHora(), currentAlarma.getMinuto());
+                    Log.d("Prueba", "Alarma miercoles -> " + c.getTimeInMillis());
+                    startAlarma(c, currentAlarma.getId());
+                } else if (currentAlarma.getJueves()) {
+                    c = getDiaAlarma("jueves", currentAlarma.getHora(), currentAlarma.getMinuto());
+                    Log.d("Prueba", "Alarma jueves -> " + c.getTimeInMillis());
+                    startAlarma(c, currentAlarma.getId());
+                } else if (currentAlarma.getViernes()) {
+                    c = getDiaAlarma("viernes", currentAlarma.getHora(), currentAlarma.getMinuto());
+                    Log.d("Prueba", "Alarma viernes -> " + c.getTimeInMillis());
+                    startAlarma(c, currentAlarma.getId());
+                } else if (currentAlarma.getSabado()) {
+                    c = getDiaAlarma("sabado", currentAlarma.getHora(), currentAlarma.getMinuto());
+                    Log.d("Prueba", "Alarma sabado -> " + c.getTimeInMillis());
+                    Log.d("Prueba", "Alarma domingo -> " + c.getTimeInMillis());
+                    Log.d("Prueba", "Alarma domingo calendar -> " + Calendar.getInstance().getTimeInMillis());
+                    Log.d("Prueba", "Alarma domingo dia -> " + c.get(Calendar.DAY_OF_WEEK) +
+                            " mes -> " + c.get(Calendar.MONTH) +
+                            "  año -> " + c.get(Calendar.YEAR) +
+                            "  hora -> " + c.get(Calendar.HOUR_OF_DAY) +
+                            "  minuto -> " + c.get(Calendar.MINUTE));
+                    Log.d("Prueba", "Alarma domingo calendar dia -> " + Calendar.getInstance().get(Calendar.DAY_OF_WEEK) +
+                            " mes -> " + Calendar.getInstance().get(Calendar.MONTH) +
+                            "  año -> " + Calendar.getInstance().get(Calendar.YEAR) +
+                            "  hora -> " + Calendar.getInstance().get(Calendar.HOUR_OF_DAY) +
+                            "  minuto -> " + Calendar.getInstance().get(Calendar.MINUTE));
+                    startAlarma(c, currentAlarma.getId());
+
+                } else if (currentAlarma.getDomingo()) {
+                    c = getDiaAlarma("domingo", currentAlarma.getHora(), currentAlarma.getMinuto());
+                    Log.d("Prueba", "Alarma domingo -> " + c.getTimeInMillis());
+                    Log.d("Prueba", "Alarma domingo calendar -> " + Calendar.getInstance().getTimeInMillis());
+                    Log.d("Prueba", "Alarma domingo dia -> " + c.get(Calendar.DAY_OF_WEEK) +
+                            " mes -> " + c.get(Calendar.MONTH) +
+                            "  año -> " + c.get(Calendar.YEAR) +
+                            "  hora -> " + c.get(Calendar.HOUR_OF_DAY) +
+                            "  minuto -> " + c.get(Calendar.MINUTE));
+                    Log.d("Prueba", "Alarma domingo calendar dia -> " + Calendar.getInstance().get(Calendar.DAY_OF_WEEK) +
+                            " mes -> " + Calendar.getInstance().get(Calendar.MONTH) +
+                            "  año -> " + Calendar.getInstance().get(Calendar.YEAR) +
+                            "  hora -> " + Calendar.getInstance().get(Calendar.HOUR_OF_DAY) +
+                            "  minuto -> " + Calendar.getInstance().get(Calendar.MINUTE));
+                    //if (!fechaAlarma(hor, min, seg).before(Calendar.getInstance())) {
+                    startAlarma(c, currentAlarma.getId());
+
+                }*/
+
+                startAlarma(Calendar.getInstance(), 0); // No se usa codigo
+
             } else {
                 myHolder.activated.setChecked(false);
-                cancelAlarma(currentAlarma.getId());
+                cancelAlarma(currentAlarma.getId() + 200);
+                cancelAlarma(currentAlarma.getId() + 300);
+                cancelAlarma(currentAlarma.getId() + 400);
+                cancelAlarma(currentAlarma.getId() + 500);
+                cancelAlarma(currentAlarma.getId() + 600);
+                cancelAlarma(currentAlarma.getId() + 700);
+                cancelAlarma(currentAlarma.getId() + 100);
             }
         }
 
@@ -185,10 +256,24 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RecyclerView.ViewHol
             s = false;
             d = false;
 
+            /*Log.d("Prueba", "Fecha actual = " + Calendar.getInstance().getTimeInMillis());
+            Log.d("Prueba", "Fecha alarma = " + getDiaAlarmaUnica(currentAlarma).getTimeInMillis());
+            Log.d("Prueba", "Año = " + getDiaAlarmaUnica(currentAlarma).get(Calendar.YEAR));
+            Log.d("Prueba", "Mes = " + getDiaAlarmaUnica(currentAlarma).get(Calendar.MONTH));
+            Log.d("Prueba", "Dia = " + getDiaAlarmaUnica(currentAlarma).get(Calendar.DAY_OF_MONTH));
+            Log.d("Prueba", "Hora = " + getDiaAlarmaUnica(currentAlarma).get(Calendar.HOUR));
+            Log.d("Prueba", "Min = " + getDiaAlarmaUnica(currentAlarma).get(Calendar.MINUTE));
+            Log.d("Prueba", "Año alarma = " + Calendar.getInstance().get(Calendar.YEAR));
+            Log.d("Prueba", "Mes alarma = " + Calendar.getInstance().get(Calendar.MONTH));
+            Log.d("Prueba", "Dia alarma = " + Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+            Log.d("Prueba", "Hora alarma = " + Calendar.getInstance().get(Calendar.HOUR));
+            Log.d("Prueba", "Min alarma = " + Calendar.getInstance().get(Calendar.MINUTE));*/
+
             if (currentAlarma.getActivated()) {
                 myHolder.activated.setChecked(true);
+                Log.d("Prueba", "Activated");
                 // Comprueba el día de la semana con los días elegidos para la alarma
-                if (diaAlarmaUnica(currentAlarma)) {
+                /*if (diaAlarmaUnica(currentAlarma)) {
                     // Para que no funcione en caso de que no haya valores
                     if (!ho.isEmpty() && !mi.isEmpty()) {
                         // Para que las alarmas activas con hora anterior a la actual no se ejecuten
@@ -196,6 +281,10 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RecyclerView.ViewHol
                             startAlarma(fechaAlarma(hor, min, seg), currentAlarma.getId());
                         }
                     }
+                }*/
+                if (!getDiaAlarmaUnica(currentAlarma).before(Calendar.getInstance())) {
+                    Log.d("Prueba", "Before = " + getDiaAlarmaUnica(currentAlarma).before(Calendar.getInstance()));
+                    startAlarmaUnica(getDiaAlarmaUnica(currentAlarma), currentAlarma.getId());
                 }
             } else {
                 myHolder.activated.setChecked(false);
@@ -344,25 +433,56 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private void startAlarma(Calendar c, int code) {
 
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, AlertReceiver.class);
+        Context ac = context.getApplicationContext();
+
+        AlarmManager alarmManager = (AlarmManager) ac.getSystemService(Context.ALARM_SERVICE);
+        //Intent intent = new Intent(context, AlertReceiver.class);
+        Intent intent = new Intent(ac, AlarmReceiver.class);
+        intent.putExtra("alarma", "activar");
+        /*intent.putExtra(MENSAJE, ho + ":" + mi);
+        intent.putExtra(ID_ALARMA, code);
+        intent.putExtra(PARAR, "no");
+        intent.putExtra(CrearEditarAlarma.EXTRA_SONIDO, nombreSonido);
+        intent.putExtra(CrearEditarAlarma.EXTRA_URI, sonidoUri);
+        intent.putExtra(CrearEditarAlarma.EXTRA_SONAR, sonar);*/
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(ac, code, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT); // FLAG envia la info de putExtra
+
+        //alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+        //alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+        Log.d("Prueba", "Calendar = " + c.getTimeInMillis());
+        Log.d("Prueba", "Codigo = " + code);
+        //alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(c.getTimeInMillis(), pendingIntent), pendingIntent);
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
+
+    private void startAlarmaUnica(Calendar c, int code) {
+
+        Context ac = context.getApplicationContext();
+
+        AlarmManager alarmManager = (AlarmManager) ac.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(ac, AlertReceiver.class);
         intent.putExtra(MENSAJE, ho + ":" + mi);
         intent.putExtra(ID_ALARMA, code);
         intent.putExtra(PARAR, "no");
         intent.putExtra(CrearEditarAlarma.EXTRA_SONIDO, nombreSonido);
         intent.putExtra(CrearEditarAlarma.EXTRA_URI, sonidoUri);
         intent.putExtra(CrearEditarAlarma.EXTRA_SONAR, sonar);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, code, intent, PendingIntent.FLAG_UPDATE_CURRENT); // FLAG envia la info de putExtra
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(ac, code, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT); // FLAG envia la info de putExtra
 
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+        alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(c.getTimeInMillis(), pendingIntent), pendingIntent);
     }
 
     private void cancelAlarma(int code) {
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, AlertReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, code, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Context ac = context.getApplicationContext();
+        AlarmManager alarmManager = (AlarmManager) ac.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(ac, AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(ac, code, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+
+        Log.d("Prueba", "cancelAlarma code = " + code);
+        Log.d("Prueba", "cancelAlarma context = " + ac.toString());
 
         alarmManager.cancel(pendingIntent);
+        pendingIntent.cancel();
     }
 
     private Boolean diaAlarma(Alarma alarma) {
@@ -402,5 +522,58 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         return (ano == year) && (mes == month) && (dia == day);
 
+    }
+
+    private Calendar getDiaAlarmaUnica(AlarmaUnica alarmaUnica) {
+
+        Calendar c = Calendar.getInstance();
+
+        int ano = Integer.parseInt(alarmaUnica.getAno());
+        int mes = Integer.parseInt(alarmaUnica.getMes()) - 1;
+        int dia = Integer.parseInt(alarmaUnica.getDia());
+        int hora = Integer.parseInt(alarmaUnica.getHora());
+        int minuto = Integer.parseInt(alarmaUnica.getMinuto());
+
+        c.set(ano, mes, dia, hora, minuto, 0);
+
+        return c;
+    }
+
+    private Calendar getDiaAlarma(String dia, String hora, String minuto) {
+
+        int h = Integer.parseInt(hora);
+        int m = Integer.parseInt(minuto);
+
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, h);
+        c.set(Calendar.MINUTE, m);
+
+        Log.d("Prueba", "getDiaAlarma  dia = " + dia + "  hora = " + hora + "  minuto = " + minuto);
+
+        switch (dia) {
+            case "lunes":
+                c.set(Calendar.DAY_OF_WEEK, 2);
+                return c;
+            case "martes":
+                c.set(Calendar.DAY_OF_WEEK, 3);
+                return c;
+            case "miercoles":
+                c.set(Calendar.DAY_OF_WEEK, 4);
+                return c;
+            case "jueves":
+                c.set(Calendar.DAY_OF_WEEK, 5);
+                return c;
+            case "viernes":
+                c.set(Calendar.DAY_OF_WEEK, 6);
+                return c;
+            case "sabado":
+                c.set(Calendar.DAY_OF_WEEK, 7);
+                return c;
+            case "domingo":
+                c.set(Calendar.DAY_OF_WEEK, 1);
+                return c;
+            default:
+                return c;
+        }
     }
 }

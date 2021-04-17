@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Vibrator;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
@@ -27,6 +28,7 @@ public class NotificationHelper extends ContextWrapper {
     public static final String HORA = "hora";
     public static final String ID_ALARMA = "id_alarma";
     public static final String ID_INTENT = "id_intent";
+    private Vibrator vibrator;
     private String mensaje;
     private int id;
     private NotificationManager manager;
@@ -75,6 +77,10 @@ public class NotificationHelper extends ContextWrapper {
             postponerButtonIntent.putExtra(HORA, mensaje);
             postponerButtonIntent.putExtra(ID_ALARMA, id);
             PendingIntent postponerButtonPendingIntent = PendingIntent.getBroadcast(this, id, postponerButtonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+            vibrator.vibrate(new long[]{500, 1000, 500, 1000}, 0);
+
             // Se crea y devuelve la notificacion
             return new NotificationCompat.Builder(getApplicationContext(), CANAL_ID)
                     .setContentTitle(getString(R.string.titulo_notificacion))

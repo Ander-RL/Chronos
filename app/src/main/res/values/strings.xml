@@ -121,6 +121,7 @@
     <string name="tiempo_agotado">Tiempo agotado!!</string>
     <string name="cuenta_atras_finalizado">La cuenta atras ha finalizado</string>
     <string name="eliminadas_todas_alarmas">Eliminadas todas las alarmas</string>
+    <string name="notificacion_cancelada">Notificación cancelada</string>
 
 
 </resources>

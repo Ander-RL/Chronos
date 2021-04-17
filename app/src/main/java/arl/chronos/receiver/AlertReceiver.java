@@ -37,7 +37,7 @@ public class AlertReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
+        WakeLocker.acquire(context);
         if (intent.getExtras().containsKey("mensaje_alarma")) {
 
             WakeLocker.acquire(context);
@@ -49,8 +49,8 @@ public class AlertReceiver extends BroadcastReceiver {
             sonidoUri = intent.getStringExtra(EXTRA_URI);
             sonar = intent.getBooleanExtra(EXTRA_SONAR, false);
 
-            vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-            vibrator.vibrate(new long[]{500, 1000, 500, 1000}, 0);
+            //vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+            //vibrator.vibrate(new long[]{500, 1000, 500, 1000}, 0);
 
             // Crea Service para reproducir Musica.
             if (sonar && !nombreSonido.equals("")) {
@@ -67,6 +67,8 @@ public class AlertReceiver extends BroadcastReceiver {
 
             WakeLocker.release();
         }
+
+        WakeLocker.release();
 
         if (intent.getExtras().containsKey(TabFragmentCrono.EXTRA_CRONO_TIEMPO)) {
 
