@@ -78,6 +78,11 @@ public class RestartAlarmsService extends JobIntentService {
                     Calendar c = Calendar.getInstance();
 
                     if (alarma.getLunes()) {
+
+                        if((c.get(Calendar.DAY_OF_WEEK) == Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) && (c.get(Calendar.HOUR_OF_DAY) >= Calendar.getInstance().get(Calendar.HOUR_OF_DAY))){
+                            setAlarmClock(c, ho, mi, nombreSonido, sonidoUri, sonar, code + 200, context);
+                        }
+
                         int d = c.get(Calendar.DAY_OF_MONTH);
                         int dif = Math.abs(c.get(Calendar.DAY_OF_WEEK) - 2);
                         int max = c.getActualMaximum(Calendar.DAY_OF_MONTH);
@@ -92,6 +97,11 @@ public class RestartAlarmsService extends JobIntentService {
                     }
 
                     if (alarma.getMartes()) {
+
+                        if((c.get(Calendar.DAY_OF_WEEK) == Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) && (c.get(Calendar.HOUR_OF_DAY) >= Calendar.getInstance().get(Calendar.HOUR_OF_DAY))){
+                            setAlarmClock(c, ho, mi, nombreSonido, sonidoUri, sonar, code + 300, context);
+                        }
+
                         int d = c.get(Calendar.DAY_OF_MONTH);
                         int dif = Math.abs(c.get(Calendar.DAY_OF_WEEK) - 3);
                         int max = c.getActualMaximum(Calendar.DAY_OF_MONTH);
@@ -106,6 +116,11 @@ public class RestartAlarmsService extends JobIntentService {
                     }
 
                     if (alarma.getMiercoles()) {
+
+                        if((c.get(Calendar.DAY_OF_WEEK) == Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) && (c.get(Calendar.HOUR_OF_DAY) >= Calendar.getInstance().get(Calendar.HOUR_OF_DAY))){
+                            setAlarmClock(c, ho, mi, nombreSonido, sonidoUri, sonar, code + 400, context);
+                        }
+
                         int d = c.get(Calendar.DAY_OF_MONTH);
                         int dif = Math.abs(c.get(Calendar.DAY_OF_WEEK) - 4);
                         int max = c.getActualMaximum(Calendar.DAY_OF_MONTH);
@@ -120,6 +135,11 @@ public class RestartAlarmsService extends JobIntentService {
                     }
 
                     if (alarma.getJueves()) {
+
+                        if((c.get(Calendar.DAY_OF_WEEK) == Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) && (c.get(Calendar.HOUR_OF_DAY) >= Calendar.getInstance().get(Calendar.HOUR_OF_DAY))){
+                            setAlarmClock(c, ho, mi, nombreSonido, sonidoUri, sonar, code + 500, context);
+                        }
+
                         int d = c.get(Calendar.DAY_OF_MONTH);
                         int dif = Math.abs(c.get(Calendar.DAY_OF_WEEK) - 5);
                         int max = c.getActualMaximum(Calendar.DAY_OF_MONTH);
@@ -134,6 +154,11 @@ public class RestartAlarmsService extends JobIntentService {
                     }
 
                     if (alarma.getViernes()) {
+
+                        if((c.get(Calendar.DAY_OF_WEEK) == Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) && (c.get(Calendar.HOUR_OF_DAY) >= Calendar.getInstance().get(Calendar.HOUR_OF_DAY))){
+                            setAlarmClock(c, ho, mi, nombreSonido, sonidoUri, sonar, code + 600, context);
+                        }
+
                         int d = c.get(Calendar.DAY_OF_MONTH);
                         int dif = Math.abs(c.get(Calendar.DAY_OF_WEEK) - 6);
                         int max = c.getActualMaximum(Calendar.DAY_OF_MONTH);
@@ -150,7 +175,7 @@ public class RestartAlarmsService extends JobIntentService {
                     if (alarma.getSabado()) {
 
                         if(c.get(Calendar.DAY_OF_WEEK) == Calendar.getInstance().get(Calendar.DAY_OF_WEEK) && c.get(Calendar.HOUR_OF_DAY) == Calendar.getInstance().get(Calendar.HOUR_OF_DAY)){
-                            setAlarmClock(c, ho, mi, nombreSonido, sonidoUri, sonar, code + 100, context);
+                            setAlarmClock(c, ho, mi, nombreSonido, sonidoUri, sonar, code + 700, context);
                         }
 
                         int d = c.get(Calendar.DAY_OF_MONTH);
@@ -168,7 +193,7 @@ public class RestartAlarmsService extends JobIntentService {
 
                     if (alarma.getDomingo()) {
 
-                        if(c.get(Calendar.DAY_OF_WEEK) == Calendar.getInstance().get(Calendar.DAY_OF_WEEK) && c.get(Calendar.HOUR_OF_DAY) == Calendar.getInstance().get(Calendar.HOUR_OF_DAY)){
+                        if((c.get(Calendar.DAY_OF_WEEK) == Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) && (c.get(Calendar.HOUR_OF_DAY) >= Calendar.getInstance().get(Calendar.HOUR_OF_DAY))){
                             setAlarmClock(c, ho, mi, nombreSonido, sonidoUri, sonar, code + 100, context);
                         }
 
@@ -184,25 +209,6 @@ public class RestartAlarmsService extends JobIntentService {
                         c.set(Calendar.DAY_OF_MONTH, day);
                         setAlarmClock(c, ho, mi, nombreSonido, sonidoUri, sonar, code + 100, context);
                     }
-
-
-                    //c.set(Calendar.DAY_OF_WEEK, diaAlarma(alarma));
-                    /*c.set(Calendar.HOUR_OF_DAY, Integer.parseInt(ho));
-                    c.set(Calendar.MINUTE, Integer.parseInt(mi));
-                    c.set(Calendar.SECOND, 0);
-
-                    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                    Intent intento = new Intent(context, AlertReceiver.class);
-                    intento.putExtra(MENSAJE, ho + ":" + mi);
-                    intento.putExtra(ID_ALARMA, code);
-                    intento.putExtra(PARAR, "no");
-                    intento.putExtra(EXTRA_SONIDO, nombreSonido);
-                    intento.putExtra(EXTRA_URI, sonidoUri);
-                    intento.putExtra(EXTRA_SONAR, sonar);
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, code, intento, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    //alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
-                    alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(c.getTimeInMillis(), pendingIntent), pendingIntent);*/
                 }
             }
         }
@@ -239,7 +245,6 @@ public class RestartAlarmsService extends JobIntentService {
                     intento.putExtra(EXTRA_SONAR, sonar);
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(context, code, intento, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                    //alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
                     alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(c.getTimeInMillis(), pendingIntent), pendingIntent);
                 }
             }
@@ -278,11 +283,6 @@ public class RestartAlarmsService extends JobIntentService {
         }
         Log.d("Prueba", "millis Alarma despues = " + c.getTimeInMillis());
         alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(c.getTimeInMillis(), pendingIntent), pendingIntent);
-
-        try{
-        Thread.sleep(5000);} catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private int diaAlarma(Alarma alarma) {
