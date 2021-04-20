@@ -34,6 +34,7 @@ import arl.chronos.adapters.RcvAdapterAlarmas;
 import arl.chronos.classes.Alarma;
 import arl.chronos.classes.AlarmaUnica;
 import arl.chronos.database.MyViewModel;
+import arl.chronos.receiver.AlarmReceiver;
 import arl.chronos.receiver.AlertReceiver;
 
 import static android.app.Activity.RESULT_OK;
@@ -81,9 +82,6 @@ public class TabFragmentAlarmas extends Fragment {
 
         // Inflar el Layout para este Fragment
         view = inflater.inflate(R.layout.fragment_tab_alarmas, container, false);
-
-        Log.d("Tab", "onCreate");
-
         fab = view.findViewById(R.id.fab_alarmas);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,13 +130,7 @@ public class TabFragmentAlarmas extends Fragment {
                     myViewModel.delete((Alarma) rcvAdapter.getAlarmaAt(viewHolder.getAdapterPosition()));
 
                     Alarma a = (Alarma) rcvAdapter.getAlarmaAt(viewHolder.getAdapterPosition());
-                    cancelAlarma(a.getId() + 200, view.getContext());
-                    cancelAlarma(a.getId() + 300, view.getContext());
-                    cancelAlarma(a.getId() + 400, view.getContext());
-                    cancelAlarma(a.getId() + 500, view.getContext());
-                    cancelAlarma(a.getId() + 600, view.getContext());
-                    cancelAlarma(a.getId() + 700, view.getContext());
-                    cancelAlarma(a.getId() + 100, view.getContext());
+                    cancelAlarma(a.getId(), view.getContext());
                 } else {
                     myViewModel.deleteUnica((AlarmaUnica) rcvAdapter.getAlarmaAt(viewHolder.getAdapterPosition()));
 
@@ -321,9 +313,15 @@ public class TabFragmentAlarmas extends Fragment {
 
     private void cancelAlarma(int code, Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, AlertReceiver.class);
+        Intent intent = new Intent(context, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, code, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
 
         alarmManager.cancel(pendingIntent);
+
+        AlarmManager alarmManager2 = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent2 = new Intent(context, AlertReceiver.class);
+        PendingIntent pendingIntent2 = PendingIntent.getBroadcast(context, code, intent2, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+
+        alarmManager2.cancel(pendingIntent2);
     }
 }

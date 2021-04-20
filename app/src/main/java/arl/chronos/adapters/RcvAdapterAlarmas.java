@@ -145,17 +145,18 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RecyclerView.ViewHol
             if (currentAlarma.getActivated()) {
                 myHolder.activated.setChecked(true);
 
-                startAlarma(Calendar.getInstance(), 0); // No se usa codigo
+                String ho = currentAlarma.getHora();
+                String mi = currentAlarma.getMinuto();
+
+                Calendar c = Calendar.getInstance();
+                c.set(Calendar.HOUR_OF_DAY, Integer.parseInt(ho));
+                c.set(Calendar.MINUTE, Integer.parseInt(mi));
+
+                startAlarma(c, currentAlarma.getId());
 
             } else {
                 myHolder.activated.setChecked(false);
-                cancelAlarma(currentAlarma.getId() + 200);
-                cancelAlarma(currentAlarma.getId() + 300);
-                cancelAlarma(currentAlarma.getId() + 400);
-                cancelAlarma(currentAlarma.getId() + 500);
-                cancelAlarma(currentAlarma.getId() + 600);
-                cancelAlarma(currentAlarma.getId() + 700);
-                cancelAlarma(currentAlarma.getId() + 100);
+                cancelAlarma(currentAlarma.getId());
             }
         }
 
@@ -187,24 +188,9 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RecyclerView.ViewHol
             s = false;
             d = false;
 
-            /*Log.d("Prueba", "Fecha actual = " + Calendar.getInstance().getTimeInMillis());
-            Log.d("Prueba", "Fecha alarma = " + getDiaAlarmaUnica(currentAlarma).getTimeInMillis());
-            Log.d("Prueba", "Año = " + getDiaAlarmaUnica(currentAlarma).get(Calendar.YEAR));
-            Log.d("Prueba", "Mes = " + getDiaAlarmaUnica(currentAlarma).get(Calendar.MONTH));
-            Log.d("Prueba", "Dia = " + getDiaAlarmaUnica(currentAlarma).get(Calendar.DAY_OF_MONTH));
-            Log.d("Prueba", "Hora = " + getDiaAlarmaUnica(currentAlarma).get(Calendar.HOUR));
-            Log.d("Prueba", "Min = " + getDiaAlarmaUnica(currentAlarma).get(Calendar.MINUTE));
-            Log.d("Prueba", "Año alarma = " + Calendar.getInstance().get(Calendar.YEAR));
-            Log.d("Prueba", "Mes alarma = " + Calendar.getInstance().get(Calendar.MONTH));
-            Log.d("Prueba", "Dia alarma = " + Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
-            Log.d("Prueba", "Hora alarma = " + Calendar.getInstance().get(Calendar.HOUR));
-            Log.d("Prueba", "Min alarma = " + Calendar.getInstance().get(Calendar.MINUTE));*/
-
             if (currentAlarma.getActivated()) {
                 myHolder.activated.setChecked(true);
-                Log.d("Prueba", "Activated");
                 if (!getDiaAlarmaUnica(currentAlarma).before(Calendar.getInstance())) {
-                    Log.d("Prueba", "Before = " + getDiaAlarmaUnica(currentAlarma).before(Calendar.getInstance()));
                     startAlarmaUnica(getDiaAlarmaUnica(currentAlarma), currentAlarma.getId());
                 }
             } else {
@@ -343,15 +329,6 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RecyclerView.ViewHol
         return viewType;
     }
 
-    private Calendar fechaAlarma(int hora, int min, int seg) {
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.HOUR_OF_DAY, hora);
-        c.set(Calendar.MINUTE, min);
-        c.set(Calendar.SECOND, seg);
-
-        return c;
-    }
-
     private void startAlarma(Calendar c, int code) {
 
         Context ac = context.getApplicationContext();
@@ -361,9 +338,7 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RecyclerView.ViewHol
         intent.putExtra("alarma", "activar");
         PendingIntent pendingIntent = PendingIntent.getBroadcast(ac, code, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT); // FLAG envia la info de putExtra
 
-        Log.d("Prueba", "Calendar = " + c.getTimeInMillis());
-        Log.d("Prueba", "Codigo = " + code);
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(c.getTimeInMillis(),pendingIntent), pendingIntent);
     }
 
     private void startAlarmaUnica(Calendar c, int code) {
@@ -386,53 +361,11 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RecyclerView.ViewHol
     private void cancelAlarma(int code) {
         Context ac = context.getApplicationContext();
         AlarmManager alarmManager = (AlarmManager) ac.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(ac, AlertReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(ac, code, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Log.d("Prueba", "cancelAlarma code = " + code);
-        Log.d("Prueba", "cancelAlarma context = " + ac.toString());
+        Intent intent = new Intent(ac, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(ac, code, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
 
         alarmManager.cancel(pendingIntent);
         pendingIntent.cancel();
-    }
-
-    private Boolean diaAlarma(Alarma alarma) {
-        Calendar c = Calendar.getInstance();
-        int dia = c.get(Calendar.DAY_OF_WEEK);
-
-        switch (dia) {
-            case Calendar.MONDAY:
-                return alarma.getLunes();
-            case Calendar.TUESDAY:
-                return alarma.getMartes();
-            case Calendar.WEDNESDAY:
-                return alarma.getMiercoles();
-            case Calendar.THURSDAY:
-                return alarma.getJueves();
-            case Calendar.FRIDAY:
-                return alarma.getViernes();
-            case Calendar.SATURDAY:
-                return alarma.getSabado();
-            case Calendar.SUNDAY:
-                return alarma.getDomingo();
-            default:
-                return false;
-        }
-    }
-
-    private Boolean diaAlarmaUnica(AlarmaUnica alarmaUnica) {
-
-        Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH) + 1;
-        int day = c.get(Calendar.DAY_OF_MONTH);
-
-        int ano = Integer.parseInt(alarmaUnica.getAno());
-        int mes = Integer.parseInt(alarmaUnica.getMes());
-        int dia = Integer.parseInt(alarmaUnica.getDia());
-
-        return (ano == year) && (mes == month) && (dia == day);
-
     }
 
     private Calendar getDiaAlarmaUnica(AlarmaUnica alarmaUnica) {
@@ -448,43 +381,5 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RecyclerView.ViewHol
         c.set(ano, mes, dia, hora, minuto, 0);
 
         return c;
-    }
-
-    private Calendar getDiaAlarma(String dia, String hora, String minuto) {
-
-        int h = Integer.parseInt(hora);
-        int m = Integer.parseInt(minuto);
-
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.HOUR_OF_DAY, h);
-        c.set(Calendar.MINUTE, m);
-
-        Log.d("Prueba", "getDiaAlarma  dia = " + dia + "  hora = " + hora + "  minuto = " + minuto);
-
-        switch (dia) {
-            case "lunes":
-                c.set(Calendar.DAY_OF_WEEK, 2);
-                return c;
-            case "martes":
-                c.set(Calendar.DAY_OF_WEEK, 3);
-                return c;
-            case "miercoles":
-                c.set(Calendar.DAY_OF_WEEK, 4);
-                return c;
-            case "jueves":
-                c.set(Calendar.DAY_OF_WEEK, 5);
-                return c;
-            case "viernes":
-                c.set(Calendar.DAY_OF_WEEK, 6);
-                return c;
-            case "sabado":
-                c.set(Calendar.DAY_OF_WEEK, 7);
-                return c;
-            case "domingo":
-                c.set(Calendar.DAY_OF_WEEK, 1);
-                return c;
-            default:
-                return c;
-        }
     }
 }
