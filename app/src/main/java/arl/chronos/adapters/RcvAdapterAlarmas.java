@@ -151,6 +151,7 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RecyclerView.ViewHol
                 Calendar c = Calendar.getInstance();
                 c.set(Calendar.HOUR_OF_DAY, Integer.parseInt(ho));
                 c.set(Calendar.MINUTE, Integer.parseInt(mi));
+                c.set(Calendar.SECOND, 0);
 
                 startAlarma(c, currentAlarma.getId());
 
@@ -336,6 +337,7 @@ public class RcvAdapterAlarmas extends RecyclerView.Adapter<RecyclerView.ViewHol
         AlarmManager alarmManager = (AlarmManager) ac.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(ac, AlarmReceiver.class);
         intent.putExtra("alarma", "activar");
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(ac, code, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT); // FLAG envia la info de putExtra
 
         alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(c.getTimeInMillis(),pendingIntent), pendingIntent);
