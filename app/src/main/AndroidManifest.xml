@@ -47,7 +47,12 @@
                 android:value=".CrearEditarAlarma" />
         </activity>
 
-        <receiver android:name=".receiver.AlertReceiver" />
+        <receiver android:name=".receiver.AlertReceiver"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
         <receiver android:name=".receiver.AlarmReceiver" />
         <receiver android:name=".receiver.NotificationReceiver" />
         <receiver android:name=".receiver.NotificationReceiverCancelar" />

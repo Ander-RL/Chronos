@@ -37,23 +37,26 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        PowerManager powerManager = (PowerManager) context.getSystemService(POWER_SERVICE);
-        PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-                "Chronos::MyWakelockTag");
-        wakeLock.acquire(5*60*1000L /*5 minutes*/);
+        if (intent.getExtras().containsKey("android.intent.action.BOOT_COMPLETED") || intent.getExtras().containsKey("alarma")) {
 
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                BaseDatos baseDatos = BaseDatos.getInstance(MyApplication.get());
-                alarmaDAO = baseDatos.alarmaDAO();
-                alarmas = (ArrayList<Alarma>) alarmaDAO.getTodaAlarma();
-                checkIfActiveAndNotify(context, intent);
-            }
-        };
+            PowerManager powerManager = (PowerManager) context.getSystemService(POWER_SERVICE);
+            PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                    "Chronos::MyWakelockTag");
+            wakeLock.acquire(5 * 60 * 1000L /*5 minutes*/);
 
-        thread.start();
-        thread.interrupt();
+            Thread thread = new Thread() {
+                @Override
+                public void run() {
+                    BaseDatos baseDatos = BaseDatos.getInstance(MyApplication.get());
+                    alarmaDAO = baseDatos.alarmaDAO();
+                    alarmas = (ArrayList<Alarma>) alarmaDAO.getTodaAlarma();
+                    checkIfActiveAndNotify(context, intent);
+                }
+            };
+
+            thread.start();
+            thread.interrupt();
+        }
     }
 
     private void checkIfActiveAndNotify(Context context, Intent intent) {
@@ -112,7 +115,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         intento.putExtra(EXTRA_SONAR, sonar);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, code, intento, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(Calendar.getInstance().getTimeInMillis(),pendingIntent), pendingIntent);
+        alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(Calendar.getInstance().getTimeInMillis(), pendingIntent), pendingIntent);
     }
 }
 
