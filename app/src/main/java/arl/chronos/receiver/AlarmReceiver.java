@@ -37,12 +37,10 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        if (intent.getExtras().containsKey("android.intent.action.BOOT_COMPLETED") || intent.getExtras().containsKey("alarma")) {
-
-            PowerManager powerManager = (PowerManager) context.getSystemService(POWER_SERVICE);
-            PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-                    "Chronos::MyWakelockTag");
-            wakeLock.acquire(5 * 60 * 1000L /*5 minutes*/);
+        PowerManager powerManager = (PowerManager) context.getSystemService(POWER_SERVICE);
+        PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                "Chronos::MyWakelockTag");
+        wakeLock.acquire(5 * 60 * 1000L /*5 minutes*/);
 
             Thread thread = new Thread() {
                 @Override
@@ -56,6 +54,21 @@ public class AlarmReceiver extends BroadcastReceiver {
 
             thread.start();
             thread.interrupt();
+
+        if (intent.getExtras().containsKey("android.intent.action.BOOT_COMPLETED")) {
+
+            Thread thread2 = new Thread() {
+                @Override
+                public void run() {
+                    BaseDatos baseDatos = BaseDatos.getInstance(MyApplication.get());
+                    alarmaDAO = baseDatos.alarmaDAO();
+                    alarmas = (ArrayList<Alarma>) alarmaDAO.getTodaAlarma();
+                    checkIfActiveAndNotify(context, intent);
+                }
+            };
+
+            thread2.start();
+            thread2.interrupt();
         }
     }
 
