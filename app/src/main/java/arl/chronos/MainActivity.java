@@ -3,10 +3,16 @@ package arl.chronos;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,17 +20,30 @@ import android.view.MenuItem;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import arl.chronos.adapters.PagerAdapter;
+import arl.chronos.classes.Alarma;
+import arl.chronos.classes.AlarmaUnica;
+import arl.chronos.classes.MyApplication;
+import arl.chronos.database.AlarmaDAO;
+import arl.chronos.database.BaseDatos;
 import arl.chronos.database.MyViewModel;
+import arl.chronos.receiver.AlarmReceiver;
+import arl.chronos.receiver.AlertReceiver;
 
 public class MainActivity extends AppCompatActivity {
 
     private MyViewModel myViewModel;
+    private Context myContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        myContext = this;
 
         // Borrar el titulo de la Appbar.
         setTitle("");
@@ -84,12 +103,54 @@ public class MainActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.borrar_todas_alarmas_menu:
-                myViewModel.deleteAll();
-                myViewModel.deleteAllUnica();
+
+                Thread thread = new Thread() {
+                    @Override
+                    public void run() {
+                        BaseDatos baseDatos = BaseDatos.getInstance(MyApplication.get());
+                        AlarmaDAO alarmaDAO = baseDatos.alarmaDAO();
+
+                        ArrayList<Alarma> alarmas = (ArrayList<Alarma>) alarmaDAO.getTodaAlarma();
+                        ArrayList<AlarmaUnica> alarmasUnicas = (ArrayList<AlarmaUnica>) alarmaDAO.getTodaAlarmaUnica();
+
+                        for(Alarma alarma : alarmas) {
+                            Log.d("Cancel", "bucle for");
+                            Log.d("Cancel", "id -> " + alarma.getId());
+                            cancelAlarma(alarma.getId(), myContext);
+                        }
+                        for(AlarmaUnica alarma : alarmasUnicas) {
+                            Log.d("Cancel", "bucle for");
+                            Log.d("Cancel", "id -> " + alarma.getId());
+                            cancelAlarma(alarma.getId(), myContext);
+                        }
+
+                        myViewModel.deleteAll();
+                        myViewModel.deleteAllUnica();
+                    }
+                };
+
+                thread.start();
+                thread.interrupt();
+
                 Snackbar.make(getWindow().getDecorView().getRootView(), (R.string.eliminadas_todas_alarmas), Snackbar.LENGTH_LONG).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void cancelAlarma(int code, Context context) {
+        Log.d("Cancel", "cancelAlarma");
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, code, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+
+        alarmManager.cancel(pendingIntent);
+
+        AlarmManager alarmManager2 = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent2 = new Intent(context, AlertReceiver.class);
+        PendingIntent pendingIntent2 = PendingIntent.getBroadcast(context, code, intent2, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+
+        alarmManager2.cancel(pendingIntent2);
     }
 }

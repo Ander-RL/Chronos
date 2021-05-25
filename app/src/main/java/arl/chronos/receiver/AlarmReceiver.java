@@ -42,18 +42,18 @@ public class AlarmReceiver extends BroadcastReceiver {
                 "Chronos::MyWakelockTag");
         wakeLock.acquire(5 * 60 * 1000L /*5 minutes*/);
 
-            Thread thread = new Thread() {
-                @Override
-                public void run() {
-                    BaseDatos baseDatos = BaseDatos.getInstance(MyApplication.get());
-                    alarmaDAO = baseDatos.alarmaDAO();
-                    alarmas = (ArrayList<Alarma>) alarmaDAO.getTodaAlarma();
-                    checkIfActiveAndNotify(context, intent);
-                }
-            };
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                BaseDatos baseDatos = BaseDatos.getInstance(MyApplication.get());
+                alarmaDAO = baseDatos.alarmaDAO();
+                alarmas = (ArrayList<Alarma>) alarmaDAO.getTodaAlarma();
+                checkIfActiveAndNotify(context, intent);
+            }
+        };
 
-            thread.start();
-            thread.interrupt();
+        thread.start();
+        thread.interrupt();
 
         if (intent.getExtras().containsKey("android.intent.action.BOOT_COMPLETED")) {
 
